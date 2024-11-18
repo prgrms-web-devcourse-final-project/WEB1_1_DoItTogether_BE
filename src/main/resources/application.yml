@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: local
+
+  application:
+    name: DoItTogether
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${HOME_URL}
+    username: ${HOME_USERNAME}
+    password: ${HOME_PASSWORD}
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+            format_sql: true
+    database: mysql
