@@ -1,0 +1,23 @@
+enable:
+  issues: true
+  prs: true
+
+labels:
+  'Bug':
+    include:
+      - 'fix'
+  'Feature':
+    include:
+      - 'feat'
+  'Documentation':
+    include:
+      - 'docs'
+  'Release':
+    include:
+      - 'release'
+  'Refactoring':
+    include:
+      - 'refactor'
+  'Test':
+    include:
+      - 'test'
