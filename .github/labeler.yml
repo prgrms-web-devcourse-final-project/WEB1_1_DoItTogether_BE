@@ -21,3 +21,6 @@ labels:
   'Test':
     include:
       - 'test'
+  'Chore':
+    include:
+      - 'chore'
