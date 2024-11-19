@@ -17,3 +17,12 @@ spring:
       hibernate:
             format_sql: true
     database: mysql
+
+springdoc:
+  api-docs:
+    path: /api-docs  # API 문서의 기본 경로
+  swagger-ui:
+    path: /swagger-ui.html  # Swagger UI에 접근하기 위한 URL 경로
+    operationsSorter: alpha  # API 정렬 기준 (alpha: 알파벳순)
+    tagsSorter: alpha        # 태그 정렬 기준
+    disable-swagger-default-url: true # Swagger 기본 URL 표시 비활성화
