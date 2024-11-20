@@ -17,14 +17,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionAdvice {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> exception(Exception e) {
+    public ResponseEntity<ApiResponse<Object>> handleUnexpectedException(Exception e) {
         ApiResponse<Object> body = ApiResponse.onFailure(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "INTERNAL_SERVER_ERROR",
+                "COMMON_500",
                 "처리되지 않은 오류가 발생했습니다.",
                 null
         );
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // 언체크 예외 핸들링
+    @ExceptionHandler(GeneralException.class)
+    public ResponseEntity<ApiResponse<Object>> handleGeneralException(GeneralException generalException) {
+        ApiResponse<Object> body = ApiResponse.onFailure(
+                generalException.getErrorReasonHttpStatus().getHttpStatus(),
+                generalException.getErrorReasonHttpStatus().getCode(),
+                generalException.getErrorReasonHttpStatus().getMessage(),
+                null
+        );
+        return new ResponseEntity<>(body, generalException.getErrorReasonHttpStatus().getHttpStatus());
     }
 }

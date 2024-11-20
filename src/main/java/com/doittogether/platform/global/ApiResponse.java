@@ -4,6 +4,7 @@ import com.doittogether.platform.global.success.SuccessStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -12,7 +13,8 @@ import org.springframework.http.ResponseEntity;
  *
  * @author ycjung
  */
-@JsonPropertyOrder
+@JsonPropertyOrder({ "isSuccess", "httpStatus", "code", "message", "result" })
+@Getter
 public class ApiResponse<T> {
     @JsonProperty("isSuccess")
     private final Boolean isSuccess;
@@ -34,7 +36,7 @@ public class ApiResponse<T> {
 
     // 성공한 경우 응답 생성
     public static <T> ResponseEntity<ApiResponse<T>> onSuccess(T result) {
-        return ResponseEntity.ok(new ApiResponse<>(true, HttpStatus.OK, "COMMON200", SuccessStatus._OK.getMessage(), result));
+        return ResponseEntity.ok(new ApiResponse<>(true, HttpStatus.OK, "COMMON_200", SuccessStatus._OK.getMessage(), result));
     }
 
     // 커스텀한 성공시 response 반환값
@@ -45,7 +47,7 @@ public class ApiResponse<T> {
 
     // 반환할 result data가 없는 경우
     public static ResponseEntity<ApiResponse<Void>> onSuccess() {
-        return ResponseEntity.ok(new ApiResponse<>(true, HttpStatus.OK, "COMMON200", SuccessStatus._OK.getMessage(), null));
+        return ResponseEntity.ok(new ApiResponse<>(true, HttpStatus.OK, "COMMON_200", SuccessStatus._OK.getMessage(), null));
     }
 
     // 실패한 경우 응답 생성
