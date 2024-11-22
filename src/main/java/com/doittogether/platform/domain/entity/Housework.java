@@ -32,4 +32,8 @@ public class Housework extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "channel_id")
     private Channel channel;
+
+    public boolean isAllocator(User user) {
+        return this.user == user;
+    }
 }
