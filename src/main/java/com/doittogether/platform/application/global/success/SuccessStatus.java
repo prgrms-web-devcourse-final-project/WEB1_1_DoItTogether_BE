@@ -10,15 +10,17 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 public enum SuccessStatus {
-    _OK(HttpStatus.OK, "성공입니다."), // 일반적인 성공 응답
-    _CREATED(HttpStatus.CREATED, "리소스가 성공적으로 생성되었습니다."), // 리소스가 생성된 경우
-    _NO_CONTENT(HttpStatus.NO_CONTENT, "콘텐츠가 없습니다."); // 요청이 성공적으로 처리되었지만, 콘텐츠가 없는 경우
+    _OK(HttpStatus.OK, "COMMON_200", "성공입니다."), // 일반적인 성공 응답
+    _CREATED(HttpStatus.CREATED, "COMMON_201", "리소스가 성공적으로 생성되었습니다."), // 리소스 생성
+    _NO_CONTENT(HttpStatus.NO_CONTENT, "COMMON_204", "콘텐츠가 없습니다."); // 요청 성공, 콘텐츠 없음
 
-    private final HttpStatus httpStatus;
-    private final String message;
+    private final HttpStatus httpStatus; // HTTP 상태 코드
+    private final String code; // 응답 코드
+    private final String message; // 응답 메시지
 
-    SuccessStatus(HttpStatus httpStatus, String message) {
+    SuccessStatus(HttpStatus httpStatus, String code, String message) {
         this.httpStatus = httpStatus;
+        this.code = code;
         this.message = message;
     }
 }

@@ -22,10 +22,9 @@ public class ApiResponse<T> {
     private final String code;
     private final String message;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL) //이 설정으로 null 값이 들어오면 자동으로 출력에서 제외된다.
+    @JsonInclude(JsonInclude.Include.NON_NULL) // 이 설정으로 null 값이 들어오면 자동으로 출력에서 제외된다.
     private final T result;
 
-    // 생성자
     private ApiResponse(Boolean isSuccess, HttpStatus httpStatus, String code, String message, T result) {
         this.isSuccess = isSuccess;
         this.httpStatus = httpStatus;
@@ -36,18 +35,17 @@ public class ApiResponse<T> {
 
     // 성공한 경우 응답 생성
     public static <T> ResponseEntity<ApiResponse<T>> onSuccess(T result) {
-        return ResponseEntity.ok(new ApiResponse<>(true, HttpStatus.OK, "COMMON_200", SuccessStatus._OK.getMessage(), result));
+        return ResponseEntity.ok(new ApiResponse<>(true, HttpStatus.OK, SuccessStatus._OK.getCode(), SuccessStatus._OK.getMessage(), result));
     }
 
     // 커스텀한 성공시 response 반환값
-    public static <T> ResponseEntity<ApiResponse<T>> onSuccess(HttpStatus httpStatus, String code, String message,
-                                                               T result) {
+    public static <T> ResponseEntity<ApiResponse<T>> onSuccess(HttpStatus httpStatus, String code, String message, T result) {
         return new ResponseEntity<>(new ApiResponse<>(true, httpStatus, code, message, result), httpStatus);
     }
 
     // 반환할 result data가 없는 경우
     public static ResponseEntity<ApiResponse<Void>> onSuccess() {
-        return ResponseEntity.ok(new ApiResponse<>(true, HttpStatus.OK, "COMMON_200", SuccessStatus._OK.getMessage(), null));
+        return ResponseEntity.ok(new ApiResponse<>(true, HttpStatus.OK, SuccessStatus._OK.getCode(), SuccessStatus._OK.getMessage(), null));
     }
 
     // 실패한 경우 응답 생성
