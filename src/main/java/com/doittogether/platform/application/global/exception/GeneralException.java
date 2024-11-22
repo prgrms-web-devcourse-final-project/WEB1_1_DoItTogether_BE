@@ -1,6 +1,6 @@
-package com.doittogether.platform.global.exception;
+package com.doittogether.platform.application.global.exception;
 
-import com.doittogether.platform.infrastructure.util.StringUtil;
+import com.doittogether.platform.application.util.StringUtil;
 import lombok.Getter;
 
 /**

@@ -1,6 +1,6 @@
-package com.doittogether.platform.global.exception;
+package com.doittogether.platform.application.global.exception;
 
-import com.doittogether.platform.global.ApiResponse;
+import com.doittogether.platform.application.global.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

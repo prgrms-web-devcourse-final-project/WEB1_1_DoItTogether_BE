@@ -1,4 +1,4 @@
-package com.doittogether.platform.global.success;
+package com.doittogether.platform.application.global.success;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.doittogether.platform.global.exception;
+package com.doittogether.platform.application.global.exception;
 
 /**
  * 사용자 정의한 예외 코드를 얻기 위한 메소드 제공 인터페이스

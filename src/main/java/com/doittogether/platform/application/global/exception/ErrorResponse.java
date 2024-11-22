@@ -1,4 +1,4 @@
-package com.doittogether.platform.global.exception;
+package com.doittogether.platform.application.global.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

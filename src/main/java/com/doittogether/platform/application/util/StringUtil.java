@@ -1,4 +1,4 @@
-package com.doittogether.platform.infrastructure.util;
+package com.doittogether.platform.application.util;
 
 public class StringUtil {
 

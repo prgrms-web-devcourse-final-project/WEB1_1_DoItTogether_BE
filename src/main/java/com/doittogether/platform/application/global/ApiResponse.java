@@ -1,6 +1,6 @@
-package com.doittogether.platform.global;
+package com.doittogether.platform.application.global;
 
-import com.doittogether.platform.global.success.SuccessStatus;
+import com.doittogether.platform.application.global.success.SuccessStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

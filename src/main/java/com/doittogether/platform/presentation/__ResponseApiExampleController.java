@@ -1,8 +1,8 @@
-package com.doittogether.platform.api.controller;
+package com.doittogether.platform.presentation;
 
-import com.doittogether.platform.global.ApiResponse;
-import com.doittogether.platform.global.exception.ErrorStatus;
-import com.doittogether.platform.global.exception.GeneralException;
+import com.doittogether.platform.application.global.ApiResponse;
+import com.doittogether.platform.application.global.exception.ErrorStatus;
+import com.doittogether.platform.application.global.exception.GeneralException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/v1/exception")
-public class ResponseApiExampleController {
+public class __ResponseApiExampleController {
 
     @GetMapping("/success") // 일반적인 성공 처리
     public ResponseEntity<ApiResponse<Object>> shouldReturnSuccess() {
