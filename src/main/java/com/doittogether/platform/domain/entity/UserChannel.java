@@ -8,22 +8,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.RequiredArgsConstructor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
-@RequiredArgsConstructor
-public class UserGroup extends BaseEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class UserChannel extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private final Long userGroupId;
+    private Long userGroupId;
 
-    private final Role role;
+    private Role role;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private final User user;
+    private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "group_id", nullable = false)
-    private final Group group;
+    @JoinColumn(name = "channel_id", nullable = false)
+    private Channel channel;
 }
