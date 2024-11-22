@@ -23,10 +23,6 @@ public class GeneralException extends RuntimeException {
         this.code = errorCode;
     }
 
-    public ErrorResponse getErrorReasonHttpStatus() {
-        return this.code.getResponseWithHttpStatus();
-    }
-
     private void extractSourceInfo() {
         StackTraceElement[] stackTrace = this.getStackTrace();
         if (stackTrace.length > 1) {
@@ -42,5 +38,9 @@ public class GeneralException extends RuntimeException {
         }
 
         this.sourceAddress = StringUtil.joinWithDot(sourcePackage, sourceClass, sourceMethod);
+    }
+
+    public ErrorResponse getErrorReasonHttpStatus() {
+        return this.code.getResponseWithHttpStatus();
     }
 }
