@@ -24,6 +24,6 @@ public class HouseWork extends BaseEntity {
     private Status status;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "group_id", nullable = false)
-    private Group group;
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
 }
