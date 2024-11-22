@@ -10,18 +10,24 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HouseWork extends BaseEntity {
+public class Housework extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long houseWorkId;
+    private Long houseworkId;
 
     private LocalDateTime startDateTime;
 
     private Status status;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "channel_id")
