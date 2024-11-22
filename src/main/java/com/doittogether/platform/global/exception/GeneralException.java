@@ -1,5 +1,6 @@
 package com.doittogether.platform.global.exception;
 
+import com.doittogether.platform.infrastructure.util.StringUtil;
 import lombok.Getter;
 
 /**
@@ -29,18 +30,17 @@ public class GeneralException extends RuntimeException {
     private void extractSourceInfo() {
         StackTraceElement[] stackTrace = this.getStackTrace();
         if (stackTrace.length > 1) {
-            StackTraceElement element = stackTrace[1];  // [0]는 현재 생성자, [1]은 CustomException을 발생시킨 메서드
+            StackTraceElement element = stackTrace[1];
             this.sourceClass = element.getClassName();
             this.sourceMethod = element.getMethodName();
 
-            // 패키지 정보는 클래스 이름에서 추출
+            this.sourcePackage = "Unknown";
             int lastDotIndex = this.sourceClass.lastIndexOf('.');
             if (lastDotIndex > 0) {
                 this.sourcePackage = this.sourceClass.substring(0, lastDotIndex);
-            } else {
-                this.sourcePackage = "Unknown";
             }
         }
-        this.sourceAddress = sourcePackage + "." + sourceClass + "." + sourceMethod;
+
+        this.sourceAddress = StringUtil.joinWithDot(sourcePackage, sourceClass, sourceMethod);
     }
 }
