@@ -1,8 +1,13 @@
-package com.doittogether.platform.global.exception;
+package com.doittogether.platform.application.global.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+/**
+ * 공통 에러 Api Response 정의
+ *
+ * @author ycjung
+ */
 @Getter
 public class ErrorResponse {
     private final boolean isSuccess;

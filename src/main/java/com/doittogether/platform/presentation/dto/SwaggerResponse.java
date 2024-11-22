@@ -1,4 +1,4 @@
-package com.doittogether.platform.api.controller.dto;
+package com.doittogether.platform.presentation.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
