@@ -1,12 +1,14 @@
 package com.doittogether.platform.domain.entity;
 
 import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -26,14 +28,15 @@ public class User extends BaseEntity {
 
     private String nickName;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = ALL, fetch = LAZY)
+    @JoinColumn(name = "profile_image_id")
     private ProfileImage profileImage;
 
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<Personality> personalities = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = ALL)
-    private List<UserGroup> userGroups = new ArrayList<>();
+    private List<UserChannel> userChannels = new ArrayList<>();
 
     @Builder
     public User(String nickName, ProfileImage profileImage) {
