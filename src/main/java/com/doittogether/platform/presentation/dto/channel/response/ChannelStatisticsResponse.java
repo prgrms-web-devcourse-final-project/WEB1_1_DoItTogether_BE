@@ -6,11 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
-/**
- * 채널 - 통계 데이터 반환
- *
- * @author ycjung
- */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(description = "채널의 집안일 통계 응답")
 @Builder
