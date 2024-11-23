@@ -15,8 +15,8 @@ public class ExceptionAdvice {
         return new ResponseEntity<>(body, undefinedExceptionCode.getHttpStatus());
     }
 
-    @ExceptionHandler(GrobalException.class)
-    public ResponseEntity<ApiResponse<Void>> handleGeneralException(final GrobalException exception) {
+    @ExceptionHandler(GlobalException.class)
+    public ResponseEntity<ApiResponse<Void>> handleGeneralException(final GlobalException exception) {
         ApiResponse<Void> body = ApiResponse.onFailure(exception.getExceptionCode());
         return new ResponseEntity<>(body, exception.getExceptionCode().getHttpStatus());
     }
