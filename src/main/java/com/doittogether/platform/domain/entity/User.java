@@ -38,10 +38,4 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<UserChannel> userChannels = new ArrayList<>();
-
-    @Builder
-    public User(String nickName, ProfileImage profileImage) {
-        this.nickName = nickName;
-        this.profileImage = profileImage;
-    }
 }
