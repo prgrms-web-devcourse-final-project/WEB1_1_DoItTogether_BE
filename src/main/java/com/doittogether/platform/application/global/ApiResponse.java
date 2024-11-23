@@ -4,6 +4,7 @@ import com.doittogether.platform.application.global.success.SuccessStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,19 @@ import org.springframework.http.ResponseEntity;
  */
 @JsonPropertyOrder({ "isSuccess", "httpStatus", "code", "message", "result" })
 @Getter
+@Schema(description = "공통 API 응답 객체")
 public class ApiResponse<T> {
+    @Schema(description = "요청 성공 여부", allowableValues = {"true", "false"}, example = "true")
     @JsonProperty("isSuccess")
     private final Boolean isSuccess;
+
+    @Schema(description = "HTTP 상태 코드")
     private final HttpStatus httpStatus;
+    
+    @Schema(description = "응답 코드(비즈니스 로직에서 정의된 코드)", example = "COMMON_200")
     private final String code;
+
+    @Schema(description = "응답 메세지(비즈니스 로직에서 정의된 메세지)", example = "성공입니다")
     private final String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL) // 이 설정으로 null 값이 들어오면 자동으로 출력에서 제외된다.
