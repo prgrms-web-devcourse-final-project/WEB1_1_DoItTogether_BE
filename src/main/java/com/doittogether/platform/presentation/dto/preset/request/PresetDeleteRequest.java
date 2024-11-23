@@ -6,11 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
-/**
- * 프리셋 리스트 삭제에 대한 요청(detail)
- *
- * @author ycjung
- */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(description = "프리셋 상세 삭제 요청")
 public record PresetDeleteRequest(

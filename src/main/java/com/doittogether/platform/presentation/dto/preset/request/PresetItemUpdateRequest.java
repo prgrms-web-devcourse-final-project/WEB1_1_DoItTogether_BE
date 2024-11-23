@@ -6,11 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
-/**
- * 프리셋 아이템 수정에 대한 요청 매핑
- *
- * @author ycjung
- */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(description = "프리셋 아이템 수정 요청")
 public record PresetItemUpdateRequest(

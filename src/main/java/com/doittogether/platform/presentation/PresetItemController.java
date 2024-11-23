@@ -13,11 +13,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * 프리셋 컨트롤러
- *
- * @author ycjung
- */
 @RestController
 @RequestMapping("/api/v1/preset")
 @Tag(name = "프리셋 아이템 API", description = "프리셋 아이템 관리 API")
