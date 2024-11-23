@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 @Getter
 @Schema(description = "공통 API 응답 객체")
 public class ApiResponse<T> {
-    @Schema(description = "요청 성공 여부", allowableValues = {"true", "false"}, example = "true")
     @JsonProperty("isSuccess")
     @Schema(description = "요청 성공 여부", allowableValues = {"true", "false"}, example = "true")
     private final Boolean isSuccess;
