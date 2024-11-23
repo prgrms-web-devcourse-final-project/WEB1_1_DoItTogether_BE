@@ -17,12 +17,14 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class ApiResponse<T> {
     @JsonProperty("isSuccess")
+    @Schema(description = "요청 성공 여부", allowableValues = {"true", "false"}, example = "true")
     private final Boolean isSuccess;
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL) // 이 설정으로 null 값이 들어오면 자동으로 출력에서 제외된다.
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(description = "응답 데이터 (제네릭: 다양 형태의 응답 제공)", nullable = true)
     private final T result;
 
     private ApiResponse(Boolean isSuccess, HttpStatus httpStatus, String code, String message, T result) {
