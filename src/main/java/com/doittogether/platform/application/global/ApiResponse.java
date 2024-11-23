@@ -18,8 +18,8 @@ import org.springframework.http.ResponseEntity;
 @Getter
 @Schema(description = "공통 API 응답 객체")
 public class ApiResponse<T> {
-    @Schema(description = "요청 성공 여부", allowableValues = {"true", "false"}, example = "true")
     @JsonProperty("isSuccess")
+    @Schema(description = "요청 성공 여부", allowableValues = {"true", "false"}, example = "true")
     private final Boolean isSuccess;
 
     @Schema(description = "HTTP 상태 코드")
@@ -31,7 +31,8 @@ public class ApiResponse<T> {
     @Schema(description = "응답 메세지(비즈니스 로직에서 정의된 메세지)", example = "성공입니다")
     private final String message;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL) // 이 설정으로 null 값이 들어오면 자동으로 출력에서 제외된다.
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(description = "응답 데이터 (제네릭: 다양 형태의 응답 제공)", nullable = true)
     private final T result;
 
     private ApiResponse(Boolean isSuccess, HttpStatus httpStatus, String code, String message, T result) {
