@@ -22,8 +22,8 @@ public record ChannelUserListResponse(
 ) {
     public static ChannelUserListResponse from(Channel channel) {
         return ChannelUserListResponse.builder()
-                .userList(channel.getUserChannels().stream().
-                        map(UserChannel::getUser)
+                .userList(channel.getUserChannels().stream()
+                        .map(UserChannel::getUser)
                         .toList())
                 .build();
     }

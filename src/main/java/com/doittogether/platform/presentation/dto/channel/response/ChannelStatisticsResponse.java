@@ -19,7 +19,7 @@ public record ChannelStatisticsResponse (
         @Schema(description = "집안일 전체 미완료 수")
         int totalIncomplete
 ){
-    public static ChannelStatisticsResponse from(Channel channel, int totalCompleted, int totalIncomplete) {
+    public static ChannelStatisticsResponse of(Channel channel, int totalCompleted, int totalIncomplete) {
         return ChannelStatisticsResponse.builder()
                 .channelId(channel.getChannelId())
                 .totalCompleted(totalCompleted)
