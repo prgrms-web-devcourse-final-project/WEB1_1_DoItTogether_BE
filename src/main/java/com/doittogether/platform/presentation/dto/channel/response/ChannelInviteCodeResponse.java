@@ -16,7 +16,7 @@ public record ChannelInviteCodeResponse (
         @Schema(description = "초대 코드")
         String inviteCode
 ) {
-    public static ChannelInviteCodeResponse from(Channel channel, String inviteCode) {
+    public static ChannelInviteCodeResponse of(Channel channel, String inviteCode) {
         return ChannelInviteCodeResponse.builder()
                 .channelId(channel.getChannelId())
                 .inviteCode(inviteCode)
