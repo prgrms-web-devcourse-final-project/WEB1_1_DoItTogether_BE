@@ -1,4 +1,6 @@
 package com.doittogether.platform.domain.entity;
 
-public class Example {
+public enum Status {
+    UN_COMPLETE,
+    COMPLETE
 }
