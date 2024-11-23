@@ -4,25 +4,20 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "preset_item")
+@Table(name = "preset")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PresetItem extends BaseEntity {
+public class Preset extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long presetItemId;
+    private Long presetId;
 
-    private String category;
+    private String value;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "channel_id")
-    private Channel channel;
-
-    @OneToMany(mappedBy = "presetItem", cascade = CascadeType.ALL)
-    private List<Preset> presets;
+    @JoinColumn(name = "preset_item_id", nullable = true)
+    private PresetItem presetItem;
 }
