@@ -10,13 +10,13 @@ public record ChannelRegisterRequest(
         @Schema(description = "채널명")
         String name
 ) {
-        public static ChannelRegisterRequest of(String name) {
-                return new ChannelRegisterRequest(name);
-        }
+    public static ChannelRegisterRequest of(String name) {
+        return new ChannelRegisterRequest(name);
+    }
 
-        public static Channel toEntity(ChannelRegisterRequest channelRegisterRequest) {
-                return Channel.builder()
-                        .name(channelRegisterRequest.name)
-                        .build();
-        }
+    public static Channel toEntity(ChannelRegisterRequest channelRegisterRequest) {
+        return Channel.builder()
+                .name(channelRegisterRequest.name)
+                .build();
+    }
 }
