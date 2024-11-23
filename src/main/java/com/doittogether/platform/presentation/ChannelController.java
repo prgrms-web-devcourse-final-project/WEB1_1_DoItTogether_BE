@@ -11,11 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * 채널 컨트롤러
- * 
- * @author ycjung
- */
 @RestController
 @RequestMapping("/api/v1/channel")
 @Tag(name = "채널 API", description = "채널 관리 API")

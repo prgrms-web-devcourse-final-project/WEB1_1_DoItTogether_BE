@@ -2,11 +2,6 @@ package com.doittogether.platform.presentation.dto.channel.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-/**
- * 채널 입장에 대한 응답
- *
- * @author ycjung
- */
 @Schema(description = "채널 입장 응답")
 public record ChannelJoinResponse(
         @Schema(description = "채널 아이디")
