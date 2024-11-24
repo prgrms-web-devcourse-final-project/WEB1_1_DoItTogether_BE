@@ -4,10 +4,12 @@ import com.doittogether.platform.domain.entity.Channel;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(description = "채널 등록 요청")
 public record ChannelRegisterRequest(
+        @NotBlank(message = "채널명은 필수 입력 값입니다.")
         @Schema(description = "채널명")
         String name
 ) {
