@@ -20,7 +20,7 @@ public class Channel extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long channelId;
 
-    @NotNull
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
