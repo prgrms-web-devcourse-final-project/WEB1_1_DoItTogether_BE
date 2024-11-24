@@ -5,6 +5,12 @@ spring:
   application:
     name: DoItTogether
 
+  data:
+    redis:
+      host: localhost # redis 서버의 호스트 이름
+      port: 6379 # redis 서버의 포트 번호
+      connect-timeout: 3000ms
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${HOME_URL}
@@ -28,3 +34,5 @@ springdoc:
     operationsSorter: alpha  # API 정렬 기준 (alpha: 알파벳순)
     tagsSorter: alpha        # 태그 정렬 기준
     disable-swagger-default-url: true # Swagger 기본 URL 표시 비활성화
+
+
