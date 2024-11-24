@@ -17,6 +17,7 @@ public class PresetItem extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long presetItemId;
 
+    @Column(nullable = false)
     private String category;
 
     @ManyToOne(fetch = LAZY)

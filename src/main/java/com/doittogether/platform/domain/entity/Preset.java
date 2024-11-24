@@ -15,6 +15,7 @@ public class Preset extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long presetId;
 
+    @Column(nullable = false)
     private String value;
 
     @ManyToOne(fetch = LAZY)
