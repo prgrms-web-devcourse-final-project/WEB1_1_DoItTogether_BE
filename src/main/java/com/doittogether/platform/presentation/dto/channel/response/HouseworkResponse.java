@@ -1,14 +1,11 @@
 package com.doittogether.platform.presentation.dto.channel.response;
 
 import com.doittogether.platform.domain.entity.Housework;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(description = "집안일 응답")
 @Builder
 public record HouseworkResponse(
