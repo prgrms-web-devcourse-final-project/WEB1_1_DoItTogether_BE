@@ -1,11 +1,17 @@
 package com.doittogether.platform.presentation;
 
 import com.doittogether.platform.application.global.ApiResponse;
-import com.doittogether.platform.presentation.dto.channel.request.*;
+import com.doittogether.platform.presentation.dto.channel.request.ChannelJoinRequest;
+import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
+import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
+import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateRequest;
 import com.doittogether.platform.presentation.dto.channel.response.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +23,7 @@ public class ChannelController {
     @PostMapping
     @Operation(summary = "채널 생성", description = "관리자 유저가 새로운 채널을 생성합니다.")
     public ResponseEntity<ApiResponse<ChannelRegisterResponse>> createChannel(
-            @RequestBody @Valid ChannelRegisterRequest request
-    ) {
+            @RequestBody @Valid ChannelRegisterRequest request) {
 
         return ApiResponse.onSuccess(null);
     }
@@ -58,17 +63,20 @@ public class ChannelController {
     @PostMapping("/join")
     @Operation(summary = "초대 링크로 방 입장", description = "초대 링크를 통해 채널에 입장합니다.")
     public ResponseEntity<ApiResponse<ChannelJoinResponse>> joinChannelViaInviteLink(
-            @Valid @RequestBody ChannelJoinRequest channelJoinRequest) {
-
+            @Valid @RequestBody ChannelJoinRequest request) {
 
         return ApiResponse.onSuccess(null);
     }
 
     @GetMapping("/{channelId}/housework")
-    @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록 및 완료/미완료 개수를 조회합니다.")
+    @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
     public ResponseEntity<ApiResponse<ChannelHouseworkListResponse>> getHouseworkByDate(
             @PathVariable Long channelId,
-            @Valid @RequestBody ChannelSelectRequest request) {
+            @RequestParam
+            @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25")
+            @NotBlank(message = "선택 날짜는 필수 입력 값입니다.")
+            @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "날짜 형식은 yyyy-MM-dd여야 합니다.")
+            String targetDate) {
 
         return ApiResponse.onSuccess(null);
     }
