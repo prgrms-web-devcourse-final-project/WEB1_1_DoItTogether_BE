@@ -1,8 +1,6 @@
 package com.doittogether.platform.presentation.dto.channel.response;
 
 import com.doittogether.platform.domain.entity.Channel;
-import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.domain.entity.UserChannel;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,12 +16,12 @@ public record ChannelUserListResponse(
         Long channelId,
 
         @Schema(description = "채널 내의 모든 회원 리스트")
-        List<User> userList
+        List<UserResponse> userList
 ) {
     public static ChannelUserListResponse from(Channel channel) {
         return ChannelUserListResponse.builder()
                 .userList(channel.getUserChannels().stream()
-                        .map(UserChannel::getUser)
+                        .map(userChannel -> UserResponse.from(userChannel.getUser()))
                         .toList())
                 .build();
     }
