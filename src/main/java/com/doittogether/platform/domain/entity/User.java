@@ -4,13 +4,8 @@ import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -27,6 +22,10 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long userId;
 
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
     private String nickName;
 
     @OneToOne(cascade = ALL, fetch = LAZY)
