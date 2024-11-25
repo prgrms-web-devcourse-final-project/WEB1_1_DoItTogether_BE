@@ -52,7 +52,7 @@ public class ChannelController {
         return ApiResponse.onSuccess(null);
     }
 
-    @DeleteMapping("/{channelId}/kick")
+    @PostMapping("/{channelId}/kick")
     @Operation(summary = "특정 유저 추방", description = "특정 유저를 채널에서 강퇴합니다.")
     public ResponseEntity<ApiResponse<ChannelKickUserResponse>> kickUserFromChannel(
             @PathVariable Long channelId, @Valid @RequestBody ChannelKickUserRequest request) {
