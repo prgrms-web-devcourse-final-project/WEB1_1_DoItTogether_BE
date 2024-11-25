@@ -12,7 +12,10 @@ public enum ExceptionCode implements GlobalCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_403", "금지된 요청입니다."),
 
     // 집안일 등록 관련
-    CHORE_NOT_FOUND(HttpStatus.NOT_FOUND, "CHORE_404", "요청한 집안일을 찾을 수 없습니다.");
+    CHORE_NOT_FOUND(HttpStatus.NOT_FOUND, "CHORE_404", "요청한 집안일을 찾을 수 없습니다."),
+
+    //임시로그인
+    TEMPORARY_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "LOGIN_404", "백엔드야!! TemporaryLoginSaveTest에 있는 데이터 넣어라@@@@@!!");
 
     private final HttpStatus httpStatus; // HTTP 상태 코드
     private final String code; // 응답 코드
