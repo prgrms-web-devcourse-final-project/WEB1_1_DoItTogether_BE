@@ -18,4 +18,19 @@ public enum SuccessCode implements GlobalCode {
         this.code = code;
         this.message = message;
     }
+
+    @Override
+    public HttpStatus getHttpStatus() {
+        return this.httpStatus;
+    }
+
+    @Override
+    public String getCode() {
+        return this.code;
+    }
+
+    @Override
+    public String getMessage() {
+        return this.message;
+    }
 }

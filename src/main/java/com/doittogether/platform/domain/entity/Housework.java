@@ -23,17 +23,21 @@ public class Housework extends BaseEntity {
 
     private LocalDateTime startDateTime;
 
+    private String task;
+
+    private HouseworkCategory category;
+
     private Status status;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User assignee;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
     public boolean isAllocator(User user) {
-        return this.user == user;
+        return this.assignee == user;
     }
 }
