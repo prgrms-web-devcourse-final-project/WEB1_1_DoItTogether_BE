@@ -6,17 +6,17 @@ import lombok.Builder;
 
 @Schema(description = "채널의 초대링크 응답")
 @Builder
-public record ChannelInviteCodeResponse (
+public record ChannelInviteLinkResponse(
         @Schema(description = "채널 아이디")
         Long channelId,
 
-        @Schema(description = "초대 코드")
-        String inviteCode
+        @Schema(description = "초대 링크")
+        String inviteLink
 ) {
-    public static ChannelInviteCodeResponse of(Channel channel, String inviteCode) {
-        return ChannelInviteCodeResponse.builder()
+    public static ChannelInviteLinkResponse of(Channel channel, String inviteLink) {
+        return ChannelInviteLinkResponse.builder()
                 .channelId(channel.getChannelId())
-                .inviteCode(inviteCode)
+                .inviteLink(inviteLink)
                 .build();
     }
 }

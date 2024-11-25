@@ -46,7 +46,7 @@ public class ChannelController {
 
     @PostMapping("/{channelId}/invite-link")
     @Operation(summary = "초대 링크 생성", description = "특정 채널에 대한 초대 링크를 생성합니다.")
-    public ResponseEntity<ApiResponse<ChannelInviteCodeResponse>> generateInviteLink(
+    public ResponseEntity<ApiResponse<ChannelInviteLinkResponse>> generateInviteLink(
             @PathVariable Long channelId) {
 
         return ApiResponse.onSuccess(null);
