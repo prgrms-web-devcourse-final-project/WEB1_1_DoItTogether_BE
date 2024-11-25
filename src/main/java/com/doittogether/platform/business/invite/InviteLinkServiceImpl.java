@@ -1,19 +1,19 @@
 package com.doittogether.platform.business.invite;
 
+import com.doittogether.platform.business.redis.RedisSingleDataService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
 public class InviteLinkServiceImpl implements InviteLinkService {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisSingleDataService redisSingleDataService;
 
     private static final String INVITE_LINK_PREFIX = "invite:";
     private static final int INVITE_LINK_TTL_MINUTES = 10;
@@ -36,26 +36,29 @@ public class InviteLinkServiceImpl implements InviteLinkService {
 
     @Override
     public String generateInviteLink(Long channelId) {
+        // 1. 기존 초대 코드 조회
         String existingInviteCode = findInviteCodeByChannelId(channelId);
 
         if (existingInviteCode != null) {
+            // 기존 초대 코드의 TTL 갱신
             String redisKey = INVITE_LINK_PREFIX + existingInviteCode;
-            redisTemplate.expire(redisKey, INVITE_LINK_TTL_MINUTES, TimeUnit.MINUTES);
+            redisSingleDataService.setSingleData(redisKey, channelId.toString(), Duration.ofMinutes(INVITE_LINK_TTL_MINUTES));
             return baseInviteUrl + existingInviteCode;
         }
 
+        // 2. 새로운 초대 코드 생성
         String newInviteCode = RandomAuthCode.generate();
         String redisKey = INVITE_LINK_PREFIX + newInviteCode;
-        redisTemplate.opsForValue().set(redisKey, channelId.toString(), INVITE_LINK_TTL_MINUTES, TimeUnit.MINUTES);
+        redisSingleDataService.setSingleData(redisKey, channelId.toString(), Duration.ofMinutes(INVITE_LINK_TTL_MINUTES));
         return baseInviteUrl + newInviteCode;
     }
 
     @Override
     public Long validateInviteLink(String inviteCode) {
         String redisKey = INVITE_LINK_PREFIX + inviteCode;
-        String channelId = redisTemplate.opsForValue().get(redisKey);
+        String channelId = redisSingleDataService.getSingleData(redisKey);
 
-        if (channelId == null) {
+        if (channelId == null || channelId.isEmpty()) {
             // TODO : 공통 API 로 수정 필요
             throw new IllegalArgumentException("유효하지 않거나 만료된 초대 코드입니다.");
         }
@@ -64,15 +67,14 @@ public class InviteLinkServiceImpl implements InviteLinkService {
     }
 
     /**
-     * 해당 channelId에 이미 생성된 초대 코드를 Redis에서 검색
+     * Redis에서 channelId와 연결된 초대 코드를 검색
      *
      * @param channelId 채널 ID
      * @return 초대 코드 (없으면 null 반환)
      */
     private String findInviteCodeByChannelId(Long channelId) {
-        // Redis에서 모든 invite:* 키를 검색
-        for (String key : redisTemplate.keys(INVITE_LINK_PREFIX + "*")) {
-            String value = redisTemplate.opsForValue().get(key);
+        for (String key : redisSingleDataService.getKeys(INVITE_LINK_PREFIX + "*")) {
+            String value = redisSingleDataService.getSingleData(key);
             if (value != null && value.equals(channelId.toString())) {
                 return key.replace(INVITE_LINK_PREFIX, ""); // 초대 코드 반환
             }
