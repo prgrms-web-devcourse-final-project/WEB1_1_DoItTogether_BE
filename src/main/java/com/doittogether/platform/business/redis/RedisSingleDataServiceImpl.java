@@ -48,8 +48,10 @@ public class RedisSingleDataServiceImpl implements RedisSingleDataService {
      */
     @Override
     public String getSingleData(String key) {
-        if (redisHandler.getValueOperations().get(key) == null) return "";
-        return String.valueOf(redisHandler.getValueOperations().get(key));
+        Object value = redisHandler.getValueOperations().get(key);
+        if (value == null) return "";
+
+        return String.valueOf(value);
     }
 
     /**
