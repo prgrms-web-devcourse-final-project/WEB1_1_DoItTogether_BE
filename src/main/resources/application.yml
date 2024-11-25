@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   profiles:
     active: local
@@ -34,5 +37,4 @@ springdoc:
     operationsSorter: alpha  # API 정렬 기준 (alpha: 알파벳순)
     tagsSorter: alpha        # 태그 정렬 기준
     disable-swagger-default-url: true # Swagger 기본 URL 표시 비활성화
-
 
