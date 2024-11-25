@@ -35,7 +35,7 @@ public class HouseworkController {
     @PostMapping
     @Operation(summary = "집안일 추가", description = "집안일 카테고리, 작업, 담당자를 설정하여 추가합니다.")
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "수정 성공", content =
+            @ApiResponse(responseCode = "200", description = "수정 성공", content =
             @Content(schema = @Schema(implementation = SuccessResponse.class))
             )
     })
