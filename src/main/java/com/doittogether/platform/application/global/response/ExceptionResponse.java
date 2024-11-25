@@ -24,7 +24,7 @@ public record ExceptionResponse<T>(
         @Schema(description = "예외 메시지", example = "입력값이 유효하지 않습니다.")
         String message,
 
-        @Schema(description = "결과")
+        @Schema(description = "응답 데이터 (제네릭: 다양 형태의 응답 제공)", nullable = true)
         T result
 ) implements BaseResponse<T> {
     public ExceptionResponse(ExceptionCode exceptionCode) {
