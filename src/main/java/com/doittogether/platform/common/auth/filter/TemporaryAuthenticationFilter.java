@@ -5,8 +5,10 @@ import com.doittogether.platform.common.exception.TemporaryLoginException;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,16 +23,22 @@ public class TemporaryAuthenticationFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
-        String token = request.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/")) {
+            String token = request.getHeader("Authorization");
 
-        if (token != null && !token.isBlank()) {
-            User temporaryUser = userRepository.findByEmail("doto@gmail.com").orElseThrow(() ->
-                    new TemporaryLoginException(ExceptionCode.TEMPORARY_USER_NOT_FOUND));
+            if (token != null && !token.isBlank()) {
+                User temporaryUser = userRepository.findByEmail("doto@gmail.com").orElseThrow(() ->
+                        new TemporaryLoginException(ExceptionCode.TEMPORARY_USER_NOT_FOUND));
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    temporaryUser, null, null);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        temporaryUser, null, null);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
+        chain.doFilter(request, response);
     }
+
 }
