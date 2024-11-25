@@ -37,7 +37,6 @@ public class TemporaryLoginSaveTest {
         userRepository.save(
                 User.builder()
                         .email("doto@gmail.com")
-                        .password("qwer1234@")
                         .profileImage(profileImage)
                         .build()
         );
