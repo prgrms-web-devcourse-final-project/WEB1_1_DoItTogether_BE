@@ -29,6 +29,10 @@ public class User extends BaseEntity {
 
     private String nickName;
 
+    private String email;
+
+    private String password;
+
     @OneToOne(cascade = ALL, fetch = LAZY)
     @JoinColumn(name = "profile_image_id")
     private ProfileImage profileImage;
@@ -40,8 +44,10 @@ public class User extends BaseEntity {
     private List<UserChannel> userChannels = new ArrayList<>();
 
     @Builder
-    public User(String nickName, ProfileImage profileImage) {
+    public User(String nickName, String email, String password, ProfileImage profileImage) {
         this.nickName = nickName;
+        this.email = email;
+        this.password = password;
         this.profileImage = profileImage;
     }
 }
