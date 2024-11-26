@@ -1,12 +1,13 @@
 package com.doittogether.platform.presentation;
 
 import com.doittogether.platform.application.global.code.SuccessCode;
-import com.doittogether.platform.application.global.response.BaseResponse;
 import com.doittogether.platform.application.global.response.ExceptionResponse;
 import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.business.housework.HouseworkServiceImpl;
+import com.doittogether.platform.domain.entity.Housework;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
+import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,11 +36,9 @@ public class HouseworkController {
     @PostMapping
     @Operation(summary = "집안일 추가", description = "집안일 카테고리, 작업, 담당자를 설정하여 추가합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "수정 성공", content =
-            @Content(schema = @Schema(implementation = SuccessResponse.class))
-            )
+            @ApiResponse(responseCode = "200", description = "수정 성공")
     })
-    public ResponseEntity<BaseResponse<Void>> addHousework(@AuthenticationPrincipal User user,
+    public ResponseEntity<SuccessResponse<Void>> addHousework(@AuthenticationPrincipal User user,
                                                            @RequestBody HouseworkRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.onSuccess());
@@ -58,7 +57,7 @@ public class HouseworkController {
             @Content(schema = @Schema(implementation = ExceptionResponse.class))
             )
     })
-    public ResponseEntity<BaseResponse<Void>> updateHousework(
+    public ResponseEntity<SuccessResponse<Void>> updateHousework(
             @AuthenticationPrincipal User user,
             @PathVariable(name = "houseworkId") Long id,
             @RequestBody @Valid HouseworkRequest request) {
@@ -79,7 +78,7 @@ public class HouseworkController {
             @Content(schema = @Schema(implementation = ExceptionResponse.class))
             )
     })
-    public ResponseEntity<BaseResponse<Void>> deleteHousework(@AuthenticationPrincipal User user,
+    public ResponseEntity<SuccessResponse<Void>> deleteHousework(@AuthenticationPrincipal User user,
                                                               @PathVariable(name = "houseworkId") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._NO_CONTENT));

@@ -26,12 +26,12 @@ public record ExceptionResponse<T>(
 
         @Schema(description = "응답 데이터 (제네릭: 다양 형태의 응답 제공)", nullable = true)
         T result
-) implements BaseResponse<T> {
+) {
     public ExceptionResponse(ExceptionCode exceptionCode) {
         this(false, exceptionCode.getHttpStatus(), exceptionCode.getCode(), exceptionCode.getMessage(), null);
     }
 
-    public static BaseResponse<Void> onFailure(ExceptionCode exceptionCode) {
+    public static ExceptionResponse<Void> onFailure(ExceptionCode exceptionCode) {
         return new ExceptionResponse<>(exceptionCode);
     }
 }
