@@ -28,7 +28,6 @@ public class TemporaryAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         if (path.startsWith("/api/")) {
             String token = request.getHeader("Authorization");
-
             if (token != null && !token.isBlank()) {
                 User temporaryUser = userRepository.findByEmail("doto@gmail.com").orElseThrow(() ->
                         new TemporaryLoginException(ExceptionCode.TEMPORARY_USER_NOT_FOUND));
@@ -40,5 +39,4 @@ public class TemporaryAuthenticationFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
-
 }
