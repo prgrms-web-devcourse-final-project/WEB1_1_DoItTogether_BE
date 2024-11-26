@@ -23,11 +23,11 @@ public record SuccessResponse<T>(
         String message,
 
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        @Schema(description = "결과", example = "응답에는 result가 null이면 필드가 사라집니다.")
+        @Schema(description = "응답 데이터")
         T result
-) implements BaseResponse<T> {
+) {
 
-    public static <T> BaseResponse<T> onSuccess(final SuccessCode successCode, T result) {
+    public static <T> SuccessResponse<T> onSuccess(final SuccessCode successCode, T result) {
         return SuccessResponse.<T>builder()
                 .isSuccess(true)
                 .httpStatus(successCode.getHttpStatus())
@@ -37,19 +37,19 @@ public record SuccessResponse<T>(
                 .build();
     }
 
-    public static BaseResponse<Void> onSuccess(final SuccessCode successCode) {
-        SuccessResponse<Void> successResponse = SuccessResponse.<Void>builder()
+    public static SuccessResponse<Void> onSuccess(final SuccessCode successCode) {
+       return SuccessResponse.<Void>builder()
                 .isSuccess(true)
                 .httpStatus(successCode.getHttpStatus())
                 .code(successCode.getCode())
                 .message(successCode.getMessage())
                 .result(null)
                 .build();
-        return successResponse;
+
     }
 
-    public static BaseResponse<Void> onSuccess() {
-        SuccessCode successCode = SuccessCode._OK;
+    public static SuccessResponse<Void> onSuccess() {
+        final SuccessCode successCode = SuccessCode._OK;
         return SuccessResponse.<Void>builder()
                 .httpStatus(successCode.getHttpStatus())
                 .isSuccess(true)
