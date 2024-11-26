@@ -1,42 +1,33 @@
 package com.doittogether.platform.application.global.exception;
 
-import com.doittogether.platform.application.global.ApiResponse;
-import org.springframework.http.HttpStatus;
+import com.doittogether.platform.application.global.response.BaseResponse;
+import com.doittogether.platform.application.global.response.ExceptionResponse;
+import com.doittogether.platform.application.global.code.ExceptionCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/**
- * 공통 Exception Advice 정의
- * 모든 상위 에러를 잡아서 이 곳에서 커스텀 Api Response 로 매핑해준다.
- *
- * @author ycjung
- */
-@RestControllerAdvice(annotations = {RestController.class})
+@RestControllerAdvice
 public class ExceptionAdvice {
-
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> handleUnexpectedException(Exception e) {
-        ApiResponse<Object> body = ApiResponse.onFailure(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "COMMON_500",
-                "처리되지 않은 오류가 발생했습니다.",
-                null
-        );
-
-        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<BaseResponse<Void>> handleUnexpectedException(final Exception exception) {
+        final ExceptionCode undefinedExceptionCode = ExceptionCode._INTERNAL_SERVER_ERROR;
+        final BaseResponse<Void> body = ExceptionResponse.onFailure(undefinedExceptionCode);
+        return new ResponseEntity<>(body, undefinedExceptionCode.getHttpStatus());
     }
 
-    // 언체크 예외 핸들링
-    @ExceptionHandler(GeneralException.class)
-    public ResponseEntity<ApiResponse<Object>> handleGeneralException(GeneralException generalException) {
-        ApiResponse<Object> body = ApiResponse.onFailure(
-                generalException.getErrorReasonHttpStatus().getHttpStatus(),
-                generalException.getErrorReasonHttpStatus().getCode(),
-                generalException.getErrorReasonHttpStatus().getMessage(),
-                null
-        );
-        return new ResponseEntity<>(body, generalException.getErrorReasonHttpStatus().getHttpStatus());
+    @ExceptionHandler(GlobalException.class)
+    public ResponseEntity<BaseResponse<Void>> handleGeneralException(final GlobalException exception) {
+        final BaseResponse<Void> body = ExceptionResponse.onFailure(exception.getExceptionCode());
+        return new ResponseEntity<>(body, exception.getExceptionCode().getHttpStatus());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<BaseResponse<Void>> handleValidException(final MethodArgumentNotValidException exception) {
+        final ExceptionCode validExceptionCode = ExceptionCode.NOT_VALIDATE_FILED;
+        final ExceptionCode validExceptionCodeWithFieldMessage = validExceptionCode.withUpdateMessage(exception.getMessage());
+        final BaseResponse<Void> body = ExceptionResponse.onFailure(validExceptionCodeWithFieldMessage);
+        return new ResponseEntity<>(body, validExceptionCodeWithFieldMessage.getHttpStatus());
     }
 }

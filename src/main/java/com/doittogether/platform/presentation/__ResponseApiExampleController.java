@@ -3,7 +3,6 @@ package com.doittogether.platform.presentation;
 import com.doittogether.platform.application.global.ApiResponse;
 import com.doittogether.platform.application.global.exception.ErrorStatus;
 import com.doittogether.platform.application.global.exception.GeneralException;
-import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,6 @@ import java.util.List;
  *
  * @author ycjung
  */
-@Hidden
 @RestController
 @RequestMapping("/api/v1/exception")
 public class __ResponseApiExampleController {

@@ -1,6 +1,7 @@
 package com.doittogether.platform.presentation.dto.channel.response;
 
 import com.doittogether.platform.domain.entity.Channel;
+import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
