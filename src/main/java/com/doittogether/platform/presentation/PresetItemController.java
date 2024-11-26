@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/preset")
+@RequestMapping("/api/v1/presets")
 @Tag(name = "프리셋 아이템 API", description = "프리셋 아이템 관리 API")
 public class PresetItemController {
 
