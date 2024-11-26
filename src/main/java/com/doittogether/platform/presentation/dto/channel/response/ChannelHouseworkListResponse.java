@@ -16,12 +16,10 @@ public record ChannelHouseworkListResponse(
         @Schema(description = "채널 내의 집안일 리스트")
         List<HouseworkResponse> houseworkList
 ) {
-    public static ChannelHouseworkListResponse from(Channel channel) {
+    public static ChannelHouseworkListResponse of(Channel channel, List<HouseworkResponse> houseworkList) {
         return ChannelHouseworkListResponse.builder()
                 .channelId(channel.getChannelId())
-                .houseworkList(channel.getHouseworks().stream()
-                        .map(HouseworkResponse::from)
-                        .toList())
+                .houseworkList(houseworkList)
                 .build();
     }
 }

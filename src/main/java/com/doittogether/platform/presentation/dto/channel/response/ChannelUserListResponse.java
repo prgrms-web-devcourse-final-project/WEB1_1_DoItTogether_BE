@@ -15,11 +15,10 @@ public record ChannelUserListResponse(
         @Schema(description = "채널 내의 모든 회원 리스트")
         List<UserResponse> userList
 ) {
-    public static ChannelUserListResponse from(Channel channel) {
+    public static ChannelUserListResponse of(Channel channel, List<UserResponse> userList) {
         return ChannelUserListResponse.builder()
-                .userList(channel.getUserChannels().stream()
-                        .map(userChannel -> UserResponse.from(userChannel.getUser()))
-                        .toList())
+                .channelId(channel.getChannelId())
+                .userList(userList)
                 .build();
     }
 }
