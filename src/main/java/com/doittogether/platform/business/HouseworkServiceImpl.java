@@ -6,22 +6,27 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HouseworkService {
+public class HouseworkServiceImpl implements HouseworkService {
+    @Override
     public List<Housework> getAllHouseworks() {
         return null;
     }
 
-    public List<Housework> getHouseworksByCategory(String category) {
+    @Override
+    public List<Housework> getHouseworksByCategory(final String category) {
         return null;
     }
 
-    public Housework addHousework(Housework housework) {
+    @Override
+    public Housework addHousework(final Housework housework) {
         return null;
     }
 
-    public void updateHousework(Long id, HouseworkRequest request) {
+    @Override
+    public void updateHousework(final Long id, final HouseworkRequest request) {
     }
 
-    public void deleteHousework(Long id) {
+    @Override
+    public void deleteHousework(final Long id) {
     }
 }

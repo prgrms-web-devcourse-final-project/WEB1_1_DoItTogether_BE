@@ -4,7 +4,7 @@ import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.BaseResponse;
 import com.doittogether.platform.application.global.response.ExceptionResponse;
 import com.doittogether.platform.application.global.response.SuccessResponse;
-import com.doittogether.platform.business.HouseworkService;
+import com.doittogether.platform.business.HouseworkServiceImpl;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/houseworks")
 public class HouseworkController {
 
-    private final HouseworkService houseworkService;
+    private final HouseworkServiceImpl houseworkService;
 
     @PostMapping
     @Operation(summary = "집안일 추가", description = "집안일 카테고리, 작업, 담당자를 설정하여 추가합니다.")
