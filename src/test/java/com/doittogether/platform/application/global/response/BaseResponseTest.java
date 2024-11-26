@@ -1,20 +1,14 @@
-package com.doittogether.platform.application.global;
+package com.doittogether.platform.application.global.response;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.code.GlobalCode;
 import com.doittogether.platform.application.global.code.SuccessCode;
-import com.doittogether.platform.application.global.response.BaseResponse;
-import com.doittogether.platform.application.global.response.ExceptionResponse;
-import com.doittogether.platform.application.global.response.SuccessResponse;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.mockito.Mock;
 
-class ApiResponseTest {
-    @Mock
-    private BaseResponse apiResponse;
+class BaseResponseTest {
 
     @ParameterizedTest
     @EnumSource(SuccessCode.class)
