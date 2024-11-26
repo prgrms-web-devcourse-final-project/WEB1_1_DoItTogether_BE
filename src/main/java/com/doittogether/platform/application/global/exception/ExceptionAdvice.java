@@ -4,6 +4,7 @@ import com.doittogether.platform.application.global.response.BaseResponse;
 import com.doittogether.platform.application.global.response.ExceptionResponse;
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -18,7 +19,15 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<BaseResponse<Void>> handleGeneralException(final GlobalException exception) {
-        BaseResponse<Void> body = ExceptionResponse.onFailure(exception.getExceptionCode());
+        final BaseResponse<Void> body = ExceptionResponse.onFailure(exception.getExceptionCode());
         return new ResponseEntity<>(body, exception.getExceptionCode().getHttpStatus());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<BaseResponse<Void>> handleValidException(final MethodArgumentNotValidException exception) {
+        final ExceptionCode validExceptionCode = ExceptionCode.NOT_VALIDATE_FILED;
+        final ExceptionCode validExceptionCodeWithFieldMessage = validExceptionCode.withUpdateMessage(exception.getMessage());
+        final BaseResponse<Void> body = ExceptionResponse.onFailure(validExceptionCodeWithFieldMessage);
+        return new ResponseEntity<>(body, validExceptionCodeWithFieldMessage.getHttpStatus());
     }
 }

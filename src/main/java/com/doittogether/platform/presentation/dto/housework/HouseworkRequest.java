@@ -7,25 +7,25 @@ import java.time.LocalDateTime;
 
 @Schema(description = "집안일 요청 DTO")
 public record HouseworkRequest(
-        @NotBlank
+        @NotBlank(message = "카테고리 이름을 입력해주세요.")
         @Schema(description = "카테고리 이름", example = "거실")
         String category,
 
-        @NotBlank
+        @NotBlank(message = "작업 이름을 입력해주세요.")
         @Schema(description = "작업 이름", example = "먼지 닦기")
         String task,
 
-        @NotBlank
+        @NotBlank(message = "시작 날짜와 시간을 입력해주세요. 패턴은 yyyy-MM-dd HH:mm과 같습니다.")
         @Schema(description = "시작 날짜와 시간", example = "2021-11-30 00:00:00", type = "string")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         LocalDateTime startDateTime,
 
-        @NotBlank
+        @NotBlank(message = "하루 종일 여부를 입력해주세요.")
         @Schema(description = "하루 종일 여부", example = "true")
         Boolean isAllDay,
 
-        @NotBlank
-        @Schema(description = "작업 담당자 이름", example = "1")
+        @NotBlank(message = "작업 담당자 ID를 입력해주세요.")
+        @Schema(description = "작업 담당자 ID", example = "1")
         Long assigneeId
 ) {
 }
