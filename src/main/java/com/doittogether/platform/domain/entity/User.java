@@ -22,10 +22,6 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long userId;
 
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @Column(nullable = false)
     private String nickName;
 
     private String email;
