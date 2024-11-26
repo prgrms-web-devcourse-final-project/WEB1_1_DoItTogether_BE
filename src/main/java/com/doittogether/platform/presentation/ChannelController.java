@@ -3,6 +3,7 @@ package com.doittogether.platform.presentation;
 import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.BaseResponse;
 import com.doittogether.platform.application.global.response.SuccessResponse;
+import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelJoinRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
@@ -12,20 +13,26 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/v1/channels")
+@RequiredArgsConstructor
 @Tag(name = "채널 API", description = "채널 관리 API")
 public class ChannelController {
 
     @PostMapping
     @Operation(summary = "채널 생성", description = "관리자 유저가 새로운 채널을 생성합니다.")
     public ResponseEntity<BaseResponse<ChannelRegisterResponse>> createChannel(
+            @AuthenticationPrincipal User user,
             @RequestBody @Valid ChannelRegisterRequest request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -44,7 +51,8 @@ public class ChannelController {
     @GetMapping("/{channelId}/users")
     @Operation(summary = "채널 사용자 조회", description = "채널에 포함된 모든 사용자를 조회합니다.")
     public ResponseEntity<BaseResponse<ChannelUserListResponse>> getChannelUsers(
-            @PathVariable("channelId") Long channelId) {
+            @PathVariable("channelId") Long channelId,
+            Pageable pageable) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,null));
@@ -82,10 +90,9 @@ public class ChannelController {
     public ResponseEntity<BaseResponse<ChannelHouseworkListResponse>> getHouseworkByDate(
             @PathVariable("channelId") Long channelId,
             @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // yyyy-MM-dd 형식을 지원
             @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25")
-            @NotBlank(message = "선택 날짜는 필수 입력 값입니다.")
-            @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "날짜 형식은 yyyy-MM-dd여야 합니다.")
-            String targetDate) {
+            LocalDate targetDate) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,null));
