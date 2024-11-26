@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Table(name = "user")
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
     @Id
@@ -42,11 +41,4 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<UserChannel> userChannels = new ArrayList<>();
-
-    @Builder
-    public User(String nickName, String email, ProfileImage profileImage) {
-        this.nickName = nickName;
-        this.email = email;
-        this.profileImage = profileImage;
-    }
 }
