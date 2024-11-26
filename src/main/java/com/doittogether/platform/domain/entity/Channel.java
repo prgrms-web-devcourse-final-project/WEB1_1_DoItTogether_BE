@@ -1,21 +1,15 @@
 package com.doittogether.platform.domain.entity;
 
-import static jakarta.persistence.CascadeType.ALL;
-import static jakarta.persistence.GenerationType.IDENTITY;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import java.util.List;
-import lombok.AccessLevel;
+import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "channel")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Channel extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
