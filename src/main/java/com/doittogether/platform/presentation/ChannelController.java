@@ -35,7 +35,7 @@ public class ChannelController {
     @PutMapping("/{channelId}/name")
     @Operation(summary = "채널명 변경", description = "관리자 유저가 채널명을 변경합니다.")
     public ResponseEntity<BaseResponse<Void>> updateChannelName(
-            @PathVariable Long channelId, @RequestBody @Valid ChannelUpdateRequest request) {
+            @PathVariable("channelId") Long channelId, @RequestBody @Valid ChannelUpdateRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess());
@@ -44,7 +44,7 @@ public class ChannelController {
     @GetMapping("/{channelId}/users")
     @Operation(summary = "채널 사용자 조회", description = "채널에 포함된 모든 사용자를 조회합니다.")
     public ResponseEntity<BaseResponse<ChannelUserListResponse>> getChannelUsers(
-            @PathVariable Long channelId) {
+            @PathVariable("channelId") Long channelId) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,null));
@@ -53,7 +53,7 @@ public class ChannelController {
     @PostMapping("/{channelId}/invite-link")
     @Operation(summary = "초대 링크 생성", description = "특정 채널에 대한 초대 링크를 생성합니다.")
     public ResponseEntity<BaseResponse<ChannelInviteLinkResponse>> generateInviteLink(
-            @PathVariable Long channelId) {
+            @PathVariable("channelId") Long channelId) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,null));
@@ -62,7 +62,7 @@ public class ChannelController {
     @PostMapping("/{channelId}/kick")
     @Operation(summary = "특정 유저 추방", description = "특정 유저를 채널에서 강퇴합니다.")
     public ResponseEntity<BaseResponse<Void>> kickUserFromChannel(
-            @PathVariable Long channelId, @Valid @RequestBody ChannelKickUserRequest request) {
+            @PathVariable("channelId") Long channelId, @Valid @RequestBody ChannelKickUserRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,null));
@@ -80,7 +80,7 @@ public class ChannelController {
     @GetMapping("/{channelId}/housework")
     @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
     public ResponseEntity<BaseResponse<ChannelHouseworkListResponse>> getHouseworkByDate(
-            @PathVariable Long channelId,
+            @PathVariable("channelId") Long channelId,
             @RequestParam
             @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25")
             @NotBlank(message = "선택 날짜는 필수 입력 값입니다.")
