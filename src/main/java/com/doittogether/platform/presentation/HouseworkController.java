@@ -4,7 +4,7 @@ import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.BaseResponse;
 import com.doittogether.platform.application.global.response.ExceptionResponse;
 import com.doittogether.platform.application.global.response.SuccessResponse;
-import com.doittogether.platform.business.HouseworkServiceImpl;
+import com.doittogether.platform.business.housework.HouseworkServiceImpl;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import io.swagger.v3.oas.annotations.Operation;

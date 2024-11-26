@@ -1,4 +1,4 @@
-package com.doittogether.platform.business;
+package com.doittogether.platform.business.housework;
 
 import com.doittogether.platform.domain.entity.Housework;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
