@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/houseworks")
+@RequestMapping("/api/v1/groups/{groupId}/houseworks")
 public class HouseworkController {
 
     private final HouseworkServiceImpl houseworkService;
