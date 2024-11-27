@@ -20,7 +20,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Getter
 @Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
@@ -41,4 +40,17 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<UserChannel> userChannels = new ArrayList<>();
+
+    public Long retrieveUserId() {
+        return userId;
+    }
+
+    public String retrieveEmail() {
+        return email;
+    }
+
+
+    public String retrieveNickName() {
+        return nickName;
+    }
 }
