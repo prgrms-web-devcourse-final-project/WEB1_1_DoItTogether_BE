@@ -49,8 +49,6 @@ public class Housework extends BaseEntity {
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
-    public boolean isAllocator(User user) {
-        return this.assignee == user;
     public static Housework of(LocalDateTime startDateTime, String task, HouseworkCategory category, Assignee assignee,
                                Channel channel) {
         final Housework housework = new Housework();
