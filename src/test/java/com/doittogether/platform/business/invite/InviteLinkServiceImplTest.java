@@ -3,10 +3,12 @@ package com.doittogether.platform.business.invite;
 import com.doittogether.platform.business.redis.RedisSingleDataService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.Duration;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,34 +20,36 @@ public class InviteLinkServiceImplTest {
     @Mock
     private RedisSingleDataService redisSingleDataService;
 
-    @Spy
-    @InjectMocks
     private InviteLinkServiceImpl inviteLinkService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // ReflectionTestUtils를 사용하여 @Value 필드에 값을 설정
-        ReflectionTestUtils.setField(inviteLinkService, "inviteLinkUrl", "localhost:8080");
-        ReflectionTestUtils.setField(inviteLinkService, "inviteLinkTtlMinutes", 10);
+        // 직접 객체 생성 및 의존성 주입
+        inviteLinkService = new InviteLinkServiceImpl(
+                redisSingleDataService,
+                "localhost:8080",
+                10
+        );
 
-        // initBaseInviteUrl() 호출
+        // 생성자 이후 초기화 메서드 실행
         ReflectionTestUtils.invokeMethod(inviteLinkService, "initBaseInviteUrl");
     }
 
     @Test
-    void 기본_초대_링크_URL_초기화_테스트() {
-        // baseInviteUrl이 올바르게 초기화되었는지 검증
-        String expectedUrl = "http://localhost:8080/";
-        assertEquals(expectedUrl, ReflectionTestUtils.getField(inviteLinkService, "baseInviteUrl"));
+    void 생성자_초기화_테스트() {
+        // 필드 값 검증
+        assertEquals("localhost:8080", ReflectionTestUtils.getField(inviteLinkService, "inviteLinkUrl"));
+        assertEquals(10, ReflectionTestUtils.getField(inviteLinkService, "inviteLinkTtlMinutes"));
     }
 
     @Test
-    void 초대_링크_TTL_값_검증_테스트() {
-        // inviteLinkTtlMinutes가 설정된 값을 가지고 있는지 검증
-        int expectedTtl = 10;
-        assertEquals(expectedTtl, ReflectionTestUtils.getField(inviteLinkService, "inviteLinkTtlMinutes"));
+    void 초대링크_베이스_URL생성_테스트() {
+        // baseInviteUrl 값 검증
+        String expectedBaseInviteUrl = "http://localhost:8080/";
+        String actualBaseInviteUrl = (String) ReflectionTestUtils.getField(inviteLinkService, "baseInviteUrl");
+        assertEquals(expectedBaseInviteUrl, actualBaseInviteUrl);
     }
 
     @Test
@@ -54,17 +58,17 @@ public class InviteLinkServiceImplTest {
         String existingInviteLink = "existingCode";
         String redisKey = "invite:" + existingInviteLink;
 
-        // Spy 객체 내부 메서드 Mock 설정
-        doReturn(existingInviteLink).when(inviteLinkService).findInviteLinkByChannelId(channelId);
+        when(redisSingleDataService.findKeysByPattern("invite:*")).thenReturn(Set.of(redisKey));
+        when(redisSingleDataService.fetchData(redisKey)).thenReturn(channelId.toString());
 
-        // Redis 호출 Mock 설정
-        when(redisSingleDataService.setSingleData(eq(redisKey), eq(channelId.toString()), eq(Duration.ofMinutes(10))))
+        when(redisSingleDataService.storeDataWithExpiration(eq(redisKey), eq(channelId.toString()), eq(Duration.ofMinutes(10))))
                 .thenReturn(1);
 
         String result = inviteLinkService.generateInviteLink(channelId);
 
         assertEquals("http://localhost:8080/" + existingInviteLink, result);
-        verify(redisSingleDataService).setSingleData(eq(redisKey), eq(channelId.toString()), eq(Duration.ofMinutes(10)));
+        verify(redisSingleDataService).storeDataWithExpiration(eq(redisKey), eq(channelId.toString()), eq(Duration.ofMinutes(10)));
+        verify(redisSingleDataService, times(1)).fetchData(redisKey);
     }
 
     @Test
@@ -73,12 +77,13 @@ public class InviteLinkServiceImplTest {
         String redisKey = "invite:" + inviteLink;
         String channelId = "123";
 
-        when(redisSingleDataService.getSingleData(redisKey)).thenReturn(channelId);
+        when(redisSingleDataService.fetchData(redisKey)).thenReturn(channelId);
 
         Long result = inviteLinkService.validateInviteLink(inviteLink);
 
         assertNotNull(result);
         assertEquals(123L, result);
-        verify(redisSingleDataService).getSingleData(redisKey);
+        verify(redisSingleDataService).fetchData(redisKey);
     }
+
 }
