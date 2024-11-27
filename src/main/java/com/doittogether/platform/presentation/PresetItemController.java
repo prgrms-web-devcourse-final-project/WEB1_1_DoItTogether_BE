@@ -46,7 +46,7 @@ public class PresetItemController {
 
     @GetMapping("/categories")
     @Operation(summary = "모든 카테고리 이름 조회", description = "중복 없이 모든 카테고리 이름을 페이지네이션 형태로 반환합니다.")
-    public ResponseEntity<SuccessResponse<AllCategoriesResponse>> getAllCategories(
+    public ResponseEntity<SuccessResponse<CategoryListResponse>> getAllCategories(
             @PathVariable("channelId") Long channelId,
             @ParameterObject @Schema(description = "페이지네이션 정보") Pageable pageable
     ) {

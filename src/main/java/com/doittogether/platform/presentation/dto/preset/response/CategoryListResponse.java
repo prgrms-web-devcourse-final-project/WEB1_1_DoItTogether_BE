@@ -7,13 +7,13 @@ import java.util.List;
 
 @Schema(description = "모든 카테고리 이름 응답")
 @Builder
-public record AllCategoriesResponse(
+public record CategoryListResponse(
         @Schema(description = "카테고리 이름 리스트", example = "[\"거실\", \"침실\", \"부엌\"]")
-        List<String> categories
+        List<CategoryResponse> categoryList
 ) {
-    public static AllCategoriesResponse of(List<String> categories) {
-        return AllCategoriesResponse.builder()
-                .categories(categories)
+    public static CategoryListResponse of(List<CategoryResponse> categoryList) {
+        return CategoryListResponse.builder()
+                .categoryList(categoryList)
                 .build();
     }
 }
