@@ -28,4 +28,8 @@ public record HouseworkRequest(
         @Schema(description = "작업 담당자 ID", example = "1")
         Long assigneeId
 ) {
+    public static HouseworkRequest of(String category, String task, LocalDateTime startDateTime, Boolean isAllDay,
+                               Long userId) {
+        return new HouseworkRequest(category, task, startDateTime, isAllDay, userId);
+    }
 }
