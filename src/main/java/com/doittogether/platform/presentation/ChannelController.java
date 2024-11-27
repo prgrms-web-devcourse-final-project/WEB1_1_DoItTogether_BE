@@ -77,8 +77,24 @@ public class ChannelController {
     public ResponseEntity<BaseResponse<ChannelInviteLinkResponse>> generateInviteLink(
             @PathVariable("channelId") Long channelId) {
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        channelService.generateInviteLink(channelId)
+                ));
+    }
+
+    @PostMapping("/join")
+    @Operation(summary = "초대 링크로 방 입장", description = "초대 링크를 통해 채널에 입장합니다.")
+    public ResponseEntity<BaseResponse<ChannelJoinResponse>> joinChannelViaInviteLink(
+            @AuthenticationPrincipal User user,
+            @Valid @RequestBody ChannelJoinRequest request) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        channelService.joinChannelViaInviteLink(user.getEmail(), request)
+                ));
     }
 
     @PostMapping("/{channelId}/kick")
@@ -94,15 +110,6 @@ public class ChannelController {
                 ));
     }
 
-    @PostMapping("/join")
-    @Operation(summary = "초대 링크로 방 입장", description = "초대 링크를 통해 채널에 입장합니다.")
-    public ResponseEntity<BaseResponse<ChannelJoinResponse>> joinChannelViaInviteLink(
-            @Valid @RequestBody ChannelJoinRequest request) {
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
-    }
-
     @GetMapping("/{channelId}/housework")
     @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
     public ResponseEntity<BaseResponse<ChannelHouseworkListResponse>> getHouseworkByDate(
@@ -110,9 +117,13 @@ public class ChannelController {
             @RequestParam
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // yyyy-MM-dd 형식을 지원
             @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25")
-            LocalDate targetDate) {
+            LocalDate targetDate,
+            Pageable pageable) {
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        channelService.getHouseworkByDate(channelId, targetDate, pageable)
+                ));
     }
 }
