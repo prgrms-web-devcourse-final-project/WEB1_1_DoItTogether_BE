@@ -42,11 +42,9 @@ public class TemporaryLoginSaveTest {
     @Test
     @Order(value = 1)
     public void 홍길동_계정_저장() {
-        user = User.builder()
-                .email("doto@gmail.com")
-                .profileImage(profileImage)
-                .build();
-        userRepository.save(user);
+        userRepository.save(
+                User.of("doto", "doto@gmail.com", profileImage)
+        );
     }
 
     @Test

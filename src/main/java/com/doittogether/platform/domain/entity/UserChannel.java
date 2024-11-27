@@ -2,7 +2,6 @@ package com.doittogether.platform.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,18 +26,12 @@ public class UserChannel extends BaseEntity {
     @JoinColumn(name = "channel_id", nullable = false)
     private Channel channel;
 
-    @Builder
-    public UserChannel(Role role, User user, Channel channel) {
-        this.role = role;
-        this.user = user;
-        this.channel = channel;
-    }
-
     public static UserChannel of(User user, Channel channel, Role role) {
-        return UserChannel.builder()
-                .user(user)
-                .channel(channel)
-                .role(role)
-                .build();
+        UserChannel userChannel = new UserChannel();
+
+        userChannel.user = user;
+        userChannel.channel = channel;
+        userChannel.role = role;
+        return userChannel;
     }
 }
