@@ -12,8 +12,10 @@ public enum ExceptionCode implements GlobalCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_403", "금지된 요청입니다."),
 
     // 집안일 등록 관련
-    CHORE_NOT_FOUND(HttpStatus.NOT_FOUND, "CHORE_404", "요청한 집안일을 찾을 수 없습니다."),
+    HOUSEWORK_NOT_FOUND(HttpStatus.NOT_FOUND, "HOUSEWORK_404", "요청한 집안일을 찾을 수 없습니다."),
+    HOUSEWORK_NOT_NULL(HttpStatus.UNPROCESSABLE_ENTITY, "HOUSEWORK_422", "집안일 객체가 null일 수는 없습니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "CATEGORY_404", "요청한 집안일 카테고리를 찾을 수 없습니다."),
+
 
     //임시로그인
     TEMPORARY_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "LOGIN_404", "백엔드야!! TemporaryLoginSaveTest에 있는 데이터 넣어라@@@@@!!"),
