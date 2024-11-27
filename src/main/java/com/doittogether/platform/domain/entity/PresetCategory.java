@@ -12,10 +12,10 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "preset_item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PresetItem extends BaseEntity {
+public class PresetCategory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long presetItemId;
+    private Long presetCategoryId;
 
     @Column(nullable = false)
     private String category;

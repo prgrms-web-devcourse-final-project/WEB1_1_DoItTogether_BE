@@ -31,7 +31,7 @@ public class Channel extends BaseEntity {
     private List<Housework> houseworks;
 
     @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
-    private List<PresetItem> presetItems;
+    private List<PresetCategory> presetCategories;
 
     @Builder
     public Channel(String name) {
