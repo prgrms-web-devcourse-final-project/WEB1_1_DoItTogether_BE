@@ -3,6 +3,7 @@ package com.doittogether.platform.presentation.dto.channel.response;
 import com.doittogether.platform.domain.entity.Channel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -13,12 +14,21 @@ public record ChannelUserListResponse(
         Long channelId,
 
         @Schema(description = "채널 내의 모든 회원 리스트")
-        List<UserResponse> userList
+        List<UserChannelResponse> userList,
+
+        @Schema(description = "총 사용자 수")
+        long totalElements,
+
+        @Schema(description = "총 페이지 수")
+        int totalPages
 ) {
-    public static ChannelUserListResponse of(Channel channel, List<UserResponse> userList) {
+    public static ChannelUserListResponse of(Channel channel, Page<UserChannelResponse> userChannelPage) {
         return ChannelUserListResponse.builder()
                 .channelId(channel.getChannelId())
-                .userList(userList)
+                .userList(userChannelPage.getContent())
+                .totalElements(userChannelPage.getTotalElements())
+                .totalPages(userChannelPage.getTotalPages())
                 .build();
     }
+
 }
