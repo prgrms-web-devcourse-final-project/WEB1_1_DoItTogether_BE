@@ -30,6 +30,7 @@ public class ChannelServiceImpl implements ChannelService {
     private final UserChannelRepository userChannelRepository;
     private final ChannelRepository channelRepository;
     // private final HouseowrkRepository houseowrkRepository;
+    // private final InviteLinkService inviteLinkService;
 
     @Override
     @Transactional
@@ -91,6 +92,36 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public ChannelInviteLinkResponse generateInviteLink(Long channelId) {
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new ChannelException(ExceptionCode.CHANNEL_NOT_FOUND));
+
+//        String inviteLink = inviteLinkService.generateInviteLink(channelId);
+//
+//        return ChannelInviteLinkResponse.of(channel, inviteLink);
+
+        return null;
+    }
+
+    @Override
+    public ChannelJoinResponse joinChannelViaInviteLink(String email, ChannelJoinRequest request) {
+//        Long channelId = inviteLinkService.validateInviteLink(request.inviteLink());
+//
+//        Channel channel = channelRepository.findById(channelId)
+//                .orElseThrow(() -> new ChannelException(ExceptionCode.CHANNEL_NOT_FOUND));
+//
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
+//
+//        boolean isUserInChannel = userChannelRepository.existsByUserAndChannel(user, channel);
+//        if (isUserInChannel) {
+//            throw new ChannelException(ExceptionCode.USER_ALREADY_IN_CHANNEL);
+//        }
+//
+//        UserChannel userChannel = UserChannel.of(user, channel, Role.PARTICIPANT);
+//        userChannelRepository.save(userChannel);
+//
+//        return ChannelJoinResponse.of(channel, true);
+
         return null;
     }
 
@@ -118,12 +149,6 @@ public class ChannelServiceImpl implements ChannelService {
         userChannelRepository.delete(targetUserChannel);
 
         return ChannelKickUserResponse.from(targetUser);
-    }
-
-    @Override
-    public ChannelJoinResponse joinChannelViaInviteLink(ChannelJoinRequest request) {
-
-        return null;
     }
 
     @Override
