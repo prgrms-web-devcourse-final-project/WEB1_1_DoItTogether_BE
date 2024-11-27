@@ -14,6 +14,10 @@ import lombok.Builder;
 @Schema(description = "작업 리스트와 담당자 정보 응답")
 public record HouseworkResponse(
         @NotBlank
+        @Schema(description = "집안일 ID", example = "1")
+        Long houseworkId,
+
+        @NotBlank
         @Schema(description = "카테고리 이름", example = "거실")
         String category,
 
