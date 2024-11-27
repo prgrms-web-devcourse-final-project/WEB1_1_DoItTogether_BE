@@ -1,4 +1,4 @@
-package com.doittogether.platform.presentation;
+package com.doittogether.platform.presentation.controller.housework;
 
 import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.ExceptionResponse;
