@@ -14,11 +14,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -37,6 +39,9 @@ public class ChannelController {
             @AuthenticationPrincipal User user,
             @RequestBody @Valid ChannelRegisterRequest request) {
 
+        if(user.getEmail() == null) // 임시 로그인
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
@@ -50,6 +55,9 @@ public class ChannelController {
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId, @RequestBody @Valid ChannelUpdateRequest request) {
 
+        if(user.getEmail() == null) // 임시 로그인
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
@@ -62,7 +70,10 @@ public class ChannelController {
     public ResponseEntity<SuccessResponse<ChannelUserListResponse>> getChannelUsers(
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId,
-            @RequestParam("pageable") Pageable pageable) {
+            @ParameterObject Pageable pageable) {
+
+        if(user.getEmail() == null) // 임시 로그인
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
@@ -89,6 +100,9 @@ public class ChannelController {
             @AuthenticationPrincipal User user,
             @Valid @RequestBody ChannelJoinRequest request) {
 
+        if(user.getEmail() == null) // 임시 로그인
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
@@ -101,6 +115,9 @@ public class ChannelController {
     public ResponseEntity<SuccessResponse<ChannelKickUserResponse>> kickUserFromChannel(
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId, @Valid @RequestBody ChannelKickUserRequest request) {
+
+        if(user.getEmail() == null) // 임시 로그인
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
@@ -116,7 +133,7 @@ public class ChannelController {
             @RequestParam("targetDate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // yyyy-MM-dd 형식을 지원
             @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate,
-            @RequestParam("pageable") Pageable pageable) {
+            @ParameterObject Pageable pageable) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
