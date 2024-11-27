@@ -37,8 +37,12 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
+
     // 테스트 코드에서 .env 찾기 위한 라이브러리
     testImplementation 'io.github.cdimascio:dotenv-java:3.0.0'
+
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {
