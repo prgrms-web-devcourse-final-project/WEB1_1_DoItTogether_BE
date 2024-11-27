@@ -5,20 +5,42 @@ import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.presentation.dto.preset.request.PresetDeleteRequest;
 import com.doittogether.platform.presentation.dto.preset.request.PresetItemRegisterRequest;
 import com.doittogether.platform.presentation.dto.preset.request.PresetItemUpdateRequest;
-import com.doittogether.platform.presentation.dto.preset.response.PresetDeleteResponse;
-import com.doittogether.platform.presentation.dto.preset.response.PresetItemDeleteResponse;
-import com.doittogether.platform.presentation.dto.preset.response.PresetItemRegisterResponse;
-import com.doittogether.platform.presentation.dto.preset.response.PresetItemUpdateResponse;
+import com.doittogether.platform.presentation.dto.preset.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.awt.print.Pageable;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/presets/{channelId}")
 @Tag(name = "프리셋 아이템 API", description = "프리셋 아이템 관리 API")
 public class PresetItemController {
+
+    @GetMapping
+    @Operation(summary = "프리셋 아이템 리스트 조회", description = "지정된 채널 ID 의 모든 프리셋 아이템을 조회합니다.")
+    public ResponseEntity<SuccessResponse<List<PresetItemListResponse>>> getPresetItemList(
+            @PathVariable("channelId") Long channelId,
+            @ParameterObject Pageable pageable
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
+    }
+
+    // 2. 프리셋 아이템 상세 조회
+    @GetMapping("/{presetItemId}")
+    @Operation(summary = "프리셋 아이템 상세 조회", description = "지정된 채널 ID 및 프리셋 아이템 ID의 세부 정보를 조회합니다.")
+    public ResponseEntity<SuccessResponse<PresetItemDetailResponse>> getPresetItemDetail(
+            @PathVariable("channelId") Long channelId, @PathVariable Long presetItemId,
+            @ParameterObject Pageable pageable
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
+    }
 
     @PostMapping
     @Operation(summary = "프리셋 아이템 생성", description = "지정된 채널 ID에 새로운 프리셋 아이템을 생성합니다.")
