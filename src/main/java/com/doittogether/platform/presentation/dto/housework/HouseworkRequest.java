@@ -17,7 +17,7 @@ public record HouseworkRequest(
 
         @NotBlank(message = "시작 날짜와 시간을 입력해주세요. 패턴은 yyyy-MM-dd HH:mm과 같습니다.")
         @Schema(description = "시작 날짜와 시간", example = "2021-11-30 00:00:00", type = "string")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime startDateTime,
 
         @NotBlank(message = "하루 종일 여부를 입력해주세요.")
