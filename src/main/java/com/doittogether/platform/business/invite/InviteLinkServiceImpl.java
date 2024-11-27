@@ -4,7 +4,6 @@ import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.redis.InviteException;
 import com.doittogether.platform.business.redis.RedisSingleDataService;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -51,14 +50,14 @@ public class InviteLinkServiceImpl implements InviteLinkService {
             if (existingInviteLink != null) {
                 // 기존 초대 링크의 TTL 갱신
                 String redisKey = INVITE_LINK_PREFIX + existingInviteLink;
-                redisSingleDataService.setSingleData(redisKey, channelId.toString(), Duration.ofMinutes(inviteLinkTtlMinutes));
+                redisSingleDataService.storeDataWithExpiration(redisKey, channelId.toString(), Duration.ofMinutes(inviteLinkTtlMinutes));
                 return baseInviteUrl + existingInviteLink;
             }
 
             // 2. 새로운 초대 링크 생성
             String newInviteLink = RandomAuthCode.generate();
             String redisKey = INVITE_LINK_PREFIX + newInviteLink;
-            redisSingleDataService.setSingleData(redisKey, channelId.toString(), Duration.ofMinutes(inviteLinkTtlMinutes));
+            redisSingleDataService.storeDataWithExpiration(redisKey, channelId.toString(), Duration.ofMinutes(inviteLinkTtlMinutes));
             return baseInviteUrl + newInviteLink;
         } catch (Exception e) {
             throw new InviteException(ExceptionCode.INVITE_LINK_GENERATION_FAILED);
@@ -69,7 +68,7 @@ public class InviteLinkServiceImpl implements InviteLinkService {
     public Long validateInviteLink(String inviteLink) {
         try {
             String redisKey = INVITE_LINK_PREFIX + inviteLink;
-            String channelId = redisSingleDataService.getSingleData(redisKey);
+            String channelId = redisSingleDataService.fetchData(redisKey);
 
             if (channelId == null || channelId.isEmpty()) {
                 throw new InviteException(ExceptionCode.INVITE_LINK_INVALID);
@@ -89,8 +88,8 @@ public class InviteLinkServiceImpl implements InviteLinkService {
      */
     public String findInviteLinkByChannelId(Long channelId) {
         try {
-            for (String key : redisSingleDataService.getKeys(INVITE_LINK_PREFIX + "*")) {
-                String value = redisSingleDataService.getSingleData(key);
+            for (String key : redisSingleDataService.findKeysByPattern(INVITE_LINK_PREFIX + "*")) {
+                String value = redisSingleDataService.fetchData(key);
                 if (value != null && value.equals(channelId.toString())) {
                     return key.replace(INVITE_LINK_PREFIX, ""); // 초대 코드 반환
                 }

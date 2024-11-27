@@ -33,7 +33,7 @@ class RedisSingleDataServiceImplTest {
         when(redisHandler.executeOperation(Mockito.any()))
                 .thenReturn(1);
 
-        int result = redisSingleDataService.setSingleData("testKey", "testValue");
+        int result = redisSingleDataService.storeData("testKey", "testValue");
 
         assertEquals(1, result);
         verify(redisHandler).executeOperation(Mockito.any());
@@ -44,7 +44,7 @@ class RedisSingleDataServiceImplTest {
         when(redisHandler.executeOperation(Mockito.any()))
                 .thenReturn(1);
 
-        int result = redisSingleDataService.setSingleData("testKey", "testValue", Duration.ofMinutes(5));
+        int result = redisSingleDataService.storeDataWithExpiration("testKey", "testValue", Duration.ofMinutes(5));
 
         assertEquals(1, result);
         verify(redisHandler).executeOperation(Mockito.any());
@@ -57,7 +57,7 @@ class RedisSingleDataServiceImplTest {
         when(redisHandler.getValueOperations()).thenReturn(valueOperations);
         when(valueOperations.get("testKey")).thenReturn("testValue");
 
-        String result = redisSingleDataService.getSingleData("testKey");
+        String result = redisSingleDataService.fetchData("testKey");
 
         assertEquals("testValue", result);
         verify(valueOperations).get("testKey");
@@ -67,7 +67,7 @@ class RedisSingleDataServiceImplTest {
     void 레디스_데이터_삭제_성공_테스트() {
         when(redisHandler.executeOperation(Mockito.any())).thenReturn(1);
 
-        int result = redisSingleDataService.deleteSingleData("testKey");
+        int result = redisSingleDataService.removeData("testKey");
 
         assertEquals(1, result);
     }
@@ -78,7 +78,7 @@ class RedisSingleDataServiceImplTest {
 
         when(redisHandler.getKeys("auth:*")).thenReturn(mockKeys);
 
-        Set<String> result = redisSingleDataService.getKeys("auth:*");
+        Set<String> result = redisSingleDataService.findKeysByPattern("auth:*");
 
         assertNotNull(result); // 반환값이 null이 아닌지 확인
         assertEquals(3, result.size()); // 키 개수 확인

@@ -4,9 +4,9 @@ import java.time.Duration;
 import java.util.Set;
 
 public interface RedisSingleDataService {
-    int setSingleData(String key, Object value);
-    int setSingleData(String key, Object value, Duration duration);
-    String getSingleData(String key);
-    int deleteSingleData(String key);
-    Set<String> getKeys(String pattern);
+    int storeData(String key, Object value);
+    int storeDataWithExpiration(String key, Object value, Duration duration);
+    String fetchData(String key);
+    int removeData(String key);
+    Set<String> findKeysByPattern(String pattern);
 }

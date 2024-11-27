@@ -23,7 +23,7 @@ public class RedisSingleDataServiceImpl implements RedisSingleDataService {
      * @return {int} 성공(1), 실패(0)
      */
     @Override
-    public int setSingleData(String key, Object value) {
+    public int storeData(String key, Object value) {
         return redisHandler.executeOperation(() -> redisHandler.getValueOperations().set(key, value));
     }
 
@@ -36,7 +36,7 @@ public class RedisSingleDataServiceImpl implements RedisSingleDataService {
      * @return {int} 성공(1), 실패(0)
      */
     @Override
-    public int setSingleData(String key, Object value, Duration duration) {
+    public int storeDataWithExpiration(String key, Object value, Duration duration) {
         return redisHandler.executeOperation(() -> redisHandler.getValueOperations().set(key, value, duration));
     }
 
@@ -47,7 +47,7 @@ public class RedisSingleDataServiceImpl implements RedisSingleDataService {
      * @return {String} redis value 값 반환 or 미 존재시 null 반환
      */
     @Override
-    public String getSingleData(String key) {
+    public String fetchData(String key) {
         Object value = redisHandler.getValueOperations().get(key);
         if (value == null) return "";
 
@@ -61,7 +61,7 @@ public class RedisSingleDataServiceImpl implements RedisSingleDataService {
      * @return {int} 성공(1), 실패(0)
      */
     @Override
-    public int deleteSingleData(String key) {
+    public int removeData(String key) {
         return redisHandler.executeOperation(() -> redisConfig.redisTemplate().delete(key));
     }
 
@@ -72,7 +72,7 @@ public class RedisSingleDataServiceImpl implements RedisSingleDataService {
      * @return 키 Set
      */
     @Override
-    public Set<String> getKeys(String pattern) {
+    public Set<String> findKeysByPattern(String pattern) {
         return redisHandler.getKeys(pattern);
     }
 }
