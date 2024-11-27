@@ -41,6 +41,14 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<UserChannel> userChannels = new ArrayList<>();
 
+    public static User of(String nickName, String email, ProfileImage profileImage) {
+        User user = new User();
+        user.nickName = nickName;
+        user.email = email;
+        user.profileImage = profileImage;
+        return user;
+    }
+
     public Long retrieveUserId() {
         return userId;
     }
