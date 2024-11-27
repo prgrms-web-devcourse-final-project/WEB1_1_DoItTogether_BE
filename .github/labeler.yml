@@ -5,22 +5,24 @@ enable:
 labels:
   'Bug':
     include:
-      - '[BUG]','bug'
+    - 'BUG'
   'Feature':
     include:
-      - '[FEAT]','feat'
+    - 'FEAT'
   'Documentation':
     include:
-      - '[DOCS]','docs'
+      - 'DOCS'
   'Style':
     include:
-      - '[STYLE]','style'
+      - 'STYLE'
   'Refactoring':
     include:
-      - '[REFACTOR]','refactor'
+      - 'REFACTOR'
   'Test':
     include:
-      - '[TEST]','test'
+      - 'TEST'
   'Chore':
     include:
-      - '[CHORE]','chore'
+      - 'CHORE'
+
+
