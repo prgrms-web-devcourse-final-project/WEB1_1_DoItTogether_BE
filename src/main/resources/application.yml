@@ -15,10 +15,10 @@ spring:
     show-sql: true
     properties:
       hibernate:
-            format_sql: true
+        format_sql: true
     database: mysql
-    hibernate:
-      ddl-auto: create
+#    hibernate:
+#      ddl-auto: create
 
 springdoc:
   api-docs:

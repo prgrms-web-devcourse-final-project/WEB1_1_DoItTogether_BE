@@ -1,17 +1,15 @@
 package com.doittogether.platform.domain.entity;
 
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -23,17 +21,21 @@ public class Housework extends BaseEntity {
 
     private LocalDateTime startDateTime;
 
+    private String task;
+
+    private HouseworkCategory category;
+
     private Status status;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User assignee;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
     public boolean isAllocator(User user) {
-        return this.user == user;
+        return this.assignee == user;
     }
 }
