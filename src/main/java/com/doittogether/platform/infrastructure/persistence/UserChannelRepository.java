@@ -13,4 +13,6 @@ public interface UserChannelRepository extends JpaRepository<UserChannel, Long> 
     Optional<UserChannel> findByUserAndChannel(User user, Channel channel);
 
     Page<UserChannel> findByChannel(Channel channel, Pageable pageable);
+
+    boolean existsByUserAndChannel(User user, Channel channel);
 }
