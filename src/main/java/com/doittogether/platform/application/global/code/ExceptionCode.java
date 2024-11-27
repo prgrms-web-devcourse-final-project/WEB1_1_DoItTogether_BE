@@ -17,6 +17,12 @@ public enum ExceptionCode implements GlobalCode {
     //임시로그인
     TEMPORARY_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "LOGIN_404", "백엔드야!! TemporaryLoginSaveTest에 있는 데이터 넣어라@@@@@!!"),
 
+    // 초대 링크 관련
+    INVITE_LINK_INVALID(HttpStatus.BAD_REQUEST, "INVITE_400", "유효하지 않거나 만료된 초대 링크입니다."),
+    INVITE_LINK_CHANNEL_ID_PARSE_FAILED(HttpStatus.BAD_REQUEST, "INVITE_401", "초대 링크의 채널 ID를 파싱할 수 없습니다."),
+    INVITE_LINK_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "INVITE_500", "초대 링크 생성에 실패하였습니다."),
+    REDIS_KEY_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_500", "Redis 키 검색 중 오류가 발생하였습니다."),
+
     //Validation
     NOT_VALIDATE_FILED(HttpStatus.BAD_REQUEST, "VALID_400", "유효성 검증에 실패하였습니다.");
 
