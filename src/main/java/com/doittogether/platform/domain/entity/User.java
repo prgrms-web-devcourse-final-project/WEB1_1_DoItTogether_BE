@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,8 @@ public class User extends BaseEntity {
 
     private String nickName;
 
+    private String email;
+
     @OneToOne(cascade = ALL, fetch = LAZY)
     @JoinColumn(name = "profile_image_id")
     private ProfileImage profileImage;
@@ -38,10 +41,4 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<UserChannel> userChannels = new ArrayList<>();
-
-    @Builder
-    public User(String nickName, ProfileImage profileImage) {
-        this.nickName = nickName;
-        this.profileImage = profileImage;
-    }
 }
