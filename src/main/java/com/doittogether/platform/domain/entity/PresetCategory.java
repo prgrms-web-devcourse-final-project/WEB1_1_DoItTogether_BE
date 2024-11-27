@@ -10,7 +10,7 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "preset_item")
+@Table(name = "preset_category")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PresetCategory extends BaseEntity {
     @Id
@@ -24,6 +24,6 @@ public class PresetCategory extends BaseEntity {
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
-    @OneToMany(mappedBy = "presetItem", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "presetCategory", cascade = CascadeType.ALL)
     private List<Preset> presets;
 }

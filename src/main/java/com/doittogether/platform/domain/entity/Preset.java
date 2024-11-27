@@ -19,6 +19,6 @@ public class Preset extends BaseEntity {
     private String value;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "preset_item_id", nullable = true)
+    @JoinColumn(name = "preset_category_id")
     private PresetCategory presetCategory;
 }
