@@ -14,7 +14,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class UserChannel extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long userGroupId;
+    private Long userChannelId;
 
     private Role role;
 
