@@ -3,6 +3,7 @@ package com.doittogether.platform.presentation;
 import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.BaseResponse;
 import com.doittogether.platform.application.global.response.SuccessResponse;
+import com.doittogether.platform.business.channel.ChannelService;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelJoinRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
@@ -29,33 +30,46 @@ import java.time.LocalDate;
 @Tag(name = "채널 API", description = "채널 관리 API")
 public class ChannelController {
 
+    private final ChannelService channelService;
+
     @PostMapping
     @Operation(summary = "채널 생성", description = "관리자 유저가 새로운 채널을 생성합니다.")
     public ResponseEntity<BaseResponse<ChannelRegisterResponse>> createChannel(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid ChannelRegisterRequest request) {
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        channelService.createChannel(user.getEmail(), request)
+                ));
     }
 
     @PutMapping("/{channelId}/name")
     @Operation(summary = "채널명 변경", description = "관리자 유저가 채널명을 변경합니다.")
-    public ResponseEntity<BaseResponse<Void>> updateChannelName(
+    public ResponseEntity<BaseResponse<ChannelUpdateResponse>> updateChannelName(
+            @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId, @RequestBody @Valid ChannelUpdateRequest request) {
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(SuccessResponse.onSuccess());
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        channelService.updateChannelName(user.getEmail(), channelId, request)
+                ));
     }
 
     @GetMapping("/{channelId}/users")
     @Operation(summary = "채널 사용자 조회", description = "채널에 포함된 모든 사용자를 조회합니다.")
     public ResponseEntity<BaseResponse<ChannelUserListResponse>> getChannelUsers(
+            @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId,
             Pageable pageable) {
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(SuccessResponse.onSuccess(SuccessCode._OK,null));
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        channelService.getChannelUsers(user.getEmail(), channelId, pageable)
+                ));
     }
 
     @PostMapping("/{channelId}/invite-link")
@@ -64,16 +78,20 @@ public class ChannelController {
             @PathVariable("channelId") Long channelId) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(SuccessResponse.onSuccess(SuccessCode._OK,null));
+                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
     }
 
     @PostMapping("/{channelId}/kick")
     @Operation(summary = "특정 유저 추방", description = "특정 유저를 채널에서 강퇴합니다.")
-    public ResponseEntity<BaseResponse<Void>> kickUserFromChannel(
+    public ResponseEntity<BaseResponse<ChannelKickUserResponse>> kickUserFromChannel(
+            @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId, @Valid @RequestBody ChannelKickUserRequest request) {
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(SuccessResponse.onSuccess(SuccessCode._OK,null));
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        channelService.kickUserFromChannel(user.getEmail(), channelId, request)
+                ));
     }
 
     @PostMapping("/join")
@@ -82,7 +100,7 @@ public class ChannelController {
             @Valid @RequestBody ChannelJoinRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(SuccessResponse.onSuccess(SuccessCode._OK,null));
+                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
     }
 
     @GetMapping("/{channelId}/housework")
@@ -95,6 +113,6 @@ public class ChannelController {
             LocalDate targetDate) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(SuccessResponse.onSuccess(SuccessCode._OK,null));
+                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
     }
 }
