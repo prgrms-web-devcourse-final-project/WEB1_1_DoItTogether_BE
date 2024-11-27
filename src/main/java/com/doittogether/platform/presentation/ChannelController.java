@@ -1,7 +1,6 @@
 package com.doittogether.platform.presentation;
 
 import com.doittogether.platform.application.global.code.SuccessCode;
-import com.doittogether.platform.application.global.response.BaseResponse;
 import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.business.channel.ChannelService;
 import com.doittogether.platform.domain.entity.User;
@@ -34,7 +33,7 @@ public class ChannelController {
 
     @PostMapping
     @Operation(summary = "채널 생성", description = "관리자 유저가 새로운 채널을 생성합니다.")
-    public ResponseEntity<BaseResponse<ChannelRegisterResponse>> createChannel(
+    public ResponseEntity<SuccessResponse<ChannelRegisterResponse>> createChannel(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid ChannelRegisterRequest request) {
 
@@ -47,7 +46,7 @@ public class ChannelController {
 
     @PutMapping("/{channelId}/name")
     @Operation(summary = "채널명 변경", description = "관리자 유저가 채널명을 변경합니다.")
-    public ResponseEntity<BaseResponse<ChannelUpdateResponse>> updateChannelName(
+    public ResponseEntity<SuccessResponse<ChannelUpdateResponse>> updateChannelName(
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId, @RequestBody @Valid ChannelUpdateRequest request) {
 
@@ -60,10 +59,10 @@ public class ChannelController {
 
     @GetMapping("/{channelId}/users")
     @Operation(summary = "채널 사용자 조회", description = "채널에 포함된 모든 사용자를 조회합니다.")
-    public ResponseEntity<BaseResponse<ChannelUserListResponse>> getChannelUsers(
+    public ResponseEntity<SuccessResponse<ChannelUserListResponse>> getChannelUsers(
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId,
-            Pageable pageable) {
+            @RequestParam("pageable") Pageable pageable) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
@@ -74,7 +73,7 @@ public class ChannelController {
 
     @PostMapping("/{channelId}/invite-link")
     @Operation(summary = "초대 링크 생성", description = "특정 채널에 대한 초대 링크를 생성합니다.")
-    public ResponseEntity<BaseResponse<ChannelInviteLinkResponse>> generateInviteLink(
+    public ResponseEntity<SuccessResponse<ChannelInviteLinkResponse>> generateInviteLink(
             @PathVariable("channelId") Long channelId) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -86,7 +85,7 @@ public class ChannelController {
 
     @PostMapping("/join")
     @Operation(summary = "초대 링크로 방 입장", description = "초대 링크를 통해 채널에 입장합니다.")
-    public ResponseEntity<BaseResponse<ChannelJoinResponse>> joinChannelViaInviteLink(
+    public ResponseEntity<SuccessResponse<ChannelJoinResponse>> joinChannelViaInviteLink(
             @AuthenticationPrincipal User user,
             @Valid @RequestBody ChannelJoinRequest request) {
 
@@ -99,7 +98,7 @@ public class ChannelController {
 
     @PostMapping("/{channelId}/kick")
     @Operation(summary = "특정 유저 추방", description = "특정 유저를 채널에서 강퇴합니다.")
-    public ResponseEntity<BaseResponse<ChannelKickUserResponse>> kickUserFromChannel(
+    public ResponseEntity<SuccessResponse<ChannelKickUserResponse>> kickUserFromChannel(
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId, @Valid @RequestBody ChannelKickUserRequest request) {
 
@@ -112,13 +111,12 @@ public class ChannelController {
 
     @GetMapping("/{channelId}/housework")
     @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
-    public ResponseEntity<BaseResponse<ChannelHouseworkListResponse>> getHouseworkByDate(
+    public ResponseEntity<SuccessResponse<ChannelHouseworkListResponse>> getHouseworkByDate(
             @PathVariable("channelId") Long channelId,
-            @RequestParam
+            @RequestParam("targetDate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // yyyy-MM-dd 형식을 지원
-            @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25")
-            LocalDate targetDate,
-            Pageable pageable) {
+            @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate,
+            @RequestParam("pageable") Pageable pageable) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
