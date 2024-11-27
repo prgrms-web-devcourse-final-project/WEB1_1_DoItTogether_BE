@@ -15,8 +15,6 @@ public record ChannelRegisterRequest(
     }
 
     public static Channel toEntity(ChannelRegisterRequest channelRegisterRequest) {
-        return Channel.builder()
-                .name(channelRegisterRequest.name)
-                .build();
+        return Channel.of(channelRegisterRequest.name);
     }
 }
