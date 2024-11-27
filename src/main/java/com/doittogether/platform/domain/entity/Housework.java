@@ -60,6 +60,22 @@ public class Housework extends BaseEntity {
         housework.channel = channel;
         return housework;
     }
+
+    public Housework update(HouseworkRequest request, Assignee assignee) {
+        this.startDateTime = request.startDateTime();
+        this.task = request.task();
+        this.category = HouseworkCategory.from(request.category());
+        this.status = Status.valueOf(request.category());
+        this.assignee = assignee;
+        return this;
+    }
+
+    public void updateStatus() {
+        if (this.status == Status.UN_COMPLETE) {
+            this.status = Status.COMPLETE;
+            return;
+        }
+        this.status = Status.UN_COMPLETE;
     }
 
     public LocalDateTime retrieveStartDateTime() {
