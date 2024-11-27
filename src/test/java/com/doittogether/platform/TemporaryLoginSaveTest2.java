@@ -45,5 +45,13 @@ public class TemporaryLoginSaveTest2 {
         userRepository.save(
                 User.of("doto", "doto@gmail.com", profileImage)
         );
+
+        userRepository.save(
+                User.of("ycjung", "ycjung@gmail.com", null)
+        );
+
+        userRepository.save(
+                User.of("dong", "123@gmail.com", null)
+        );
     }
 }
