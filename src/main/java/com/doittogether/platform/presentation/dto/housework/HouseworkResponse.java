@@ -40,9 +40,11 @@ public record HouseworkResponse(
 ) {
     public static HouseworkResponse from(Housework housework) {
         return HouseworkResponse.builder()
-                .category(housework.getCategory().getDisplayName())
-                .task(housework.getTask())
-                .assignee(housework.getAssignee().getNickName())
+                .category(housework.retrieveCategory().getDisplayName())
+                .task(housework.retrieveTask())
+                .startDateTime(housework.retrieveStartDateTime())
+                .isAllDay(housework.isAllDay())
+                .assignee(housework.retrieveAssignee().retrieveUser().retrieveNickName())
                 .build();
     }
 }
