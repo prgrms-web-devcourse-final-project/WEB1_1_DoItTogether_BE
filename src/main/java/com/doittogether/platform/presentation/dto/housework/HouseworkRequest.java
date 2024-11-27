@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
-@Schema(description = "집안일 요청 DTO")
+@Schema(description = "집안일 수정 요청 DTO")
 public record HouseworkRequest(
         @NotBlank(message = "카테고리 이름을 입력해주세요.")
         @Schema(description = "카테고리 이름", example = "거실")
@@ -24,9 +24,9 @@ public record HouseworkRequest(
         @Schema(description = "하루 종일 여부", example = "true")
         Boolean isAllDay,
 
-        @NotBlank(message = "작업 담당자 ID를 입력해주세요.")
+        @NotBlank(message = "담당자의 유저ID를 입력해주세요.")
         @Schema(description = "작업 담당자 ID", example = "1")
-        Long assigneeId
+        Long userId
 ) {
     public static HouseworkRequest of(String category, String task, LocalDateTime startDateTime, Boolean isAllDay,
                                Long userId) {
