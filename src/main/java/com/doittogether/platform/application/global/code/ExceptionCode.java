@@ -24,7 +24,14 @@ public enum ExceptionCode implements GlobalCode {
     REDIS_KEY_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_500", "Redis 키 검색 중 오류가 발생하였습니다."),
 
     //Validation
-    NOT_VALIDATE_FILED(HttpStatus.BAD_REQUEST, "VALID_400", "유효성 검증에 실패하였습니다.");
+    NOT_VALIDATE_FILED(HttpStatus.BAD_REQUEST, "VALID_400", "유효성 검증에 실패하였습니다."),
+
+    // Redis 관련 에러 코드
+    EMBEDDED_REDIS_START_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_500", "Redis 서버 시작에 실패했습니다."),
+    EMBEDDED_REDIS_STOP_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_501", "Redis 서버 중지에 실패했습니다."),
+    EMBEDDED_REDIS_PORT_UNAVAILABLE(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_502", "사용 가능한 포트를 찾을 수 없습니다."),
+    EMBEDDED_REDIS_PROCESS_CHECK_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_503", "Redis 프로세스 확인 중 오류가 발생했습니다."),
+    EMBEDDED_REDIS_EXECUTABLE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_504", "Redis 실행 파일을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus; // HTTP 상태 코드
     private final String code; // 응답 코드
