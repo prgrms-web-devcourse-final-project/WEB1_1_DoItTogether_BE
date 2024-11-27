@@ -2,7 +2,10 @@ package com.doittogether.platform.business.channel;
 
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.channel.ChannelException;
-import com.doittogether.platform.domain.entity.*;
+import com.doittogether.platform.domain.entity.Channel;
+import com.doittogether.platform.domain.entity.Role;
+import com.doittogether.platform.domain.entity.User;
+import com.doittogether.platform.domain.entity.UserChannel;
 import com.doittogether.platform.infrastructure.persistence.ChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
@@ -11,16 +14,17 @@ import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUse
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateRequest;
 import com.doittogether.platform.presentation.dto.channel.response.*;
-import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -81,13 +85,12 @@ public class ChannelServiceImpl implements ChannelService {
         userChannelRepository.findByUserAndChannel(user, channel)
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_IN_CHANNEL));
 
-        Page<UserChannel> userChannels = userChannelRepository.findByChannel(channel, pageable);
+        Pageable resolvedPageable = resolveSort(pageable);
+        Page<UserChannel> userChannels = userChannelRepository.findByChannel(channel, resolvedPageable);
 
-        List<UserResponse> userResponses = userChannels.stream()
-                .map(userChannel -> UserResponse.from(userChannel.getUser()))
-                .toList();
+        Page<UserChannelResponse> userChannelResponses = userChannels.map(UserChannelResponse::from);
 
-        return ChannelUserListResponse.of(channel, userResponses);
+        return ChannelUserListResponse.of(channel, userChannelResponses);
     }
 
     @Override
@@ -168,5 +171,22 @@ public class ChannelServiceImpl implements ChannelService {
 //        return ChannelHouseworkListResponse.of(channel, houseworkResponses);
 
         return null;
+    }
+
+    private Pageable resolveSort(Pageable pageable) {
+        Map<String, String> fieldMapping = Map.of(
+                "userId", "user.userId",
+                "nickName", "user.nickName",
+                "email", "user.email"
+        );
+
+        List<Sort.Order> orders = pageable.getSort().stream()
+                .map(order -> {
+                    String mappedProperty = fieldMapping.getOrDefault(order.getProperty(), order.getProperty());
+                    return new Sort.Order(order.getDirection(), mappedProperty);
+                })
+                .toList();
+
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(orders));
     }
 }
