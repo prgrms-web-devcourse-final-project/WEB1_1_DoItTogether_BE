@@ -58,7 +58,7 @@ public class InviteLinkServiceImplTest {
         doReturn(existingInviteLink).when(inviteLinkService).findInviteLinkByChannelId(channelId);
 
         // Redis 호출 Mock 설정
-        Mockito.when(redisSingleDataService.setSingleData(eq(redisKey), eq(channelId.toString()), eq(Duration.ofMinutes(10))))
+        when(redisSingleDataService.setSingleData(eq(redisKey), eq(channelId.toString()), eq(Duration.ofMinutes(10))))
                 .thenReturn(1);
 
         String result = inviteLinkService.generateInviteLink(channelId);
