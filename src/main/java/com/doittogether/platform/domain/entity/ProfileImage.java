@@ -8,8 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,8 +23,9 @@ public class ProfileImage extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String url;
 
-    @Builder
-    public ProfileImage(String url) {
-        this.url = url;
+    public static ProfileImage from(final String url) {
+        final ProfileImage profileImage = new ProfileImage();
+        profileImage.url = url;
+        return profileImage;
     }
 }
