@@ -36,3 +36,6 @@ src/main/resources/.env
 
 ### VS Code ###
 .vscode/
+
+### QClass ###
+src/main/generated
