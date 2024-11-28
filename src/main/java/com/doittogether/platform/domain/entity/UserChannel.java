@@ -14,8 +14,11 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class UserChannel extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "user_channel_id")
     private Long userChannelId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
     private Role role;
 
     @ManyToOne(fetch = LAZY)
@@ -33,5 +36,9 @@ public class UserChannel extends BaseEntity {
         userChannel.channel = channel;
         userChannel.role = role;
         return userChannel;
+    }
+
+    public boolean isRoleAdmin() {
+        return role.isAdmin();
     }
 }
