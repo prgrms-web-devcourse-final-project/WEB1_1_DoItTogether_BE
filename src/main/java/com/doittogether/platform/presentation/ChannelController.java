@@ -32,6 +32,22 @@ public class ChannelController {
 
     private final ChannelService channelService;
 
+    @GetMapping("/my")
+    @Operation(summary = "나의 채널 목록 조회", description = "내가 속한 채널 목록을 조회합니다.")
+    public ResponseEntity<SuccessResponse<ChannelListResponse>> getChannel(
+            @AuthenticationPrincipal User user,
+            @ParameterObject Pageable pageable) {
+
+        if(user.getEmail() == null) // 임시 로그인
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        channelService.getMyChannels(user.getEmail(), pageable)
+                ));
+    }
+
     @PostMapping
     @Operation(summary = "채널 생성", description = "관리자 유저가 새로운 채널을 생성합니다.")
     public ResponseEntity<SuccessResponse<ChannelRegisterResponse>> createChannel(

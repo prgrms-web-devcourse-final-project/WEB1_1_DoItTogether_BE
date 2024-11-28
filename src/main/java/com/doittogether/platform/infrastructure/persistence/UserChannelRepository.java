@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface UserChannelRepository extends JpaRepository<UserChannel, Long> {
+    Page<UserChannel> findByUser(User user, Pageable pageable);
+
     Optional<UserChannel> findByUserAndChannel(User user, Channel channel);
 
     Page<UserChannel> findByChannel(Channel channel, Pageable pageable);

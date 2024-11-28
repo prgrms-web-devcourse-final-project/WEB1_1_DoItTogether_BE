@@ -37,6 +37,19 @@ public class ChannelServiceImpl implements ChannelService {
     private final InviteLinkService inviteLinkService;
 
     @Override
+    public ChannelListResponse getMyChannels(String email, Pageable pageable) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
+
+        Pageable resolvedPageable = resolveSort(pageable);
+        Page<UserChannel> userChannels = userChannelRepository.findByUser(user, resolvedPageable);
+
+        Page<ChannelResponse> channelResponses = userChannels.map(ChannelResponse::from);
+
+        return ChannelListResponse.of(user, channelResponses);
+    }
+
+    @Override
     @Transactional
     public ChannelRegisterResponse createChannel(String email, ChannelRegisterRequest request) {
         User user = userRepository.findByEmail(email)
@@ -173,7 +186,10 @@ public class ChannelServiceImpl implements ChannelService {
         Map<String, String> fieldMapping = Map.of(
                 "userId", "user.userId",
                 "nickName", "user.nickName",
-                "email", "user.email"
+                "email", "user.email",
+
+                "channelId", "channel.channelId",
+                "name", "channel.name"
         );
 
         List<Sort.Order> orders = pageable.getSort().stream()

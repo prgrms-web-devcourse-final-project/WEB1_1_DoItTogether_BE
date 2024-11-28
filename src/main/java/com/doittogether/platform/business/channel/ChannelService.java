@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 public interface ChannelService {
 
+    ChannelListResponse getMyChannels(String email, Pageable pageable);
     ChannelRegisterResponse createChannel(String email, ChannelRegisterRequest request);
     ChannelUpdateResponse updateChannelName(String email, Long channelId, ChannelUpdateRequest request);
     ChannelUserListResponse getChannelUsers(String email, Long channelId, Pageable pageable);
