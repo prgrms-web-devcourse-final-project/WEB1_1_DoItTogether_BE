@@ -43,6 +43,16 @@ dependencies {
 
     // validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // redis - embedded local
+    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+
+    // junit
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
+    testImplementation 'org.mockito:mockito-core:5.5.0'
 }
 
 tasks.named('test') {

@@ -1,9 +1,21 @@
+server:
+  port: 8080
+
 spring:
   profiles:
     active: local
 
   application:
     name: DoItTogether
+
+  data:
+    redis:
+      host: ${REDIS_HOST} # redis 서버의 호스트 이름
+      port: ${REDIS_PORT} # redis 서버의 포트 번호
+      maxmemory: 128M
+      invite-link:
+        url: ${REDIS_INVITE_URL}
+        ttl-minutes: ${REDIS_INVITE_TTL} # 초대 링크 TTL (분)
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

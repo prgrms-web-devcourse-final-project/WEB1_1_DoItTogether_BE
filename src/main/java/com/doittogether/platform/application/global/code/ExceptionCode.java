@@ -31,10 +31,23 @@ public enum ExceptionCode implements GlobalCode {
     USER_ALREADY_IN_CHANNEL(HttpStatus.CONFLICT, "USER_409", "사용자가 이미 채널에 포함되어 있습니다."),
     USER_NOT_IN_CHANNEL(HttpStatus.BAD_REQUEST, "USER_400", "사용자가 채널에 포함되어 있지 않습니다."),
 
+    // 초대 링크 관련
+    INVITE_LINK_INVALID(HttpStatus.BAD_REQUEST, "INVITE_400", "유효하지 않거나 만료된 초대 링크입니다."),
+    INVITE_LINK_CHANNEL_ID_PARSE_FAILED(HttpStatus.BAD_REQUEST, "INVITE_401", "초대 링크의 채널 ID를 파싱할 수 없습니다."),
+    INVITE_LINK_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "INVITE_500", "초대 링크 생성에 실패하였습니다."),
+    REDIS_KEY_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_500", "Redis 키 검색 중 오류가 발생하였습니다."),
+
     //Validation
     INVALID_CHANNEL_ID(HttpStatus.BAD_REQUEST, "VALID_400", "유효하지 않은 채널 ID입니다."),
     INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "VALID_400", "유효하지 않은 날짜 형식입니다."),
-    NOT_VALIDATE_FILED(HttpStatus.BAD_REQUEST, "VALID_400", "유효성 검증에 실패하였습니다.");
+    NOT_VALIDATE_FILED(HttpStatus.BAD_REQUEST, "VALID_400", "유효성 검증에 실패하였습니다."),
+
+    // Redis 관련 에러 코드
+    EMBEDDED_REDIS_START_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_500", "Redis 서버 시작에 실패했습니다."),
+    EMBEDDED_REDIS_STOP_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_501", "Redis 서버 중지에 실패했습니다."),
+    EMBEDDED_REDIS_PORT_UNAVAILABLE(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_502", "사용 가능한 포트를 찾을 수 없습니다."),
+    EMBEDDED_REDIS_PROCESS_CHECK_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_503", "Redis 프로세스 확인 중 오류가 발생했습니다."),
+    EMBEDDED_REDIS_EXECUTABLE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_504", "Redis 실행 파일을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus; // HTTP 상태 코드
     private final String code; // 응답 코드
