@@ -4,7 +4,6 @@ import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.business.channel.ChannelService;
 import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.presentation.dto.channel.request.ChannelJoinRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateRequest;
@@ -94,11 +93,11 @@ public class ChannelController {
                 ));
     }
 
-    @PostMapping("/join")
+    @PostMapping("/join/{inviteLink}")
     @Operation(summary = "초대 링크로 방 입장", description = "초대 링크를 통해 채널에 입장합니다.")
     public ResponseEntity<SuccessResponse<ChannelJoinResponse>> joinChannelViaInviteLink(
             @AuthenticationPrincipal User user,
-            @Valid @RequestBody ChannelJoinRequest request) {
+            @PathVariable("inviteLink") String inviteLink) {
 
         if(user.getEmail() == null) // 임시 로그인
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -106,7 +105,7 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
-                        channelService.joinChannelViaInviteLink(user.getEmail(), request)
+                        channelService.joinChannelViaInviteLink(user.getEmail(), inviteLink)
                 ));
     }
 

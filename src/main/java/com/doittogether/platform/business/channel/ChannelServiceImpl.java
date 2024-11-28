@@ -2,6 +2,7 @@ package com.doittogether.platform.business.channel;
 
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.channel.ChannelException;
+import com.doittogether.platform.business.invite.InviteLinkService;
 import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.Role;
 import com.doittogether.platform.domain.entity.User;
@@ -9,7 +10,6 @@ import com.doittogether.platform.domain.entity.UserChannel;
 import com.doittogether.platform.infrastructure.persistence.ChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
-import com.doittogether.platform.presentation.dto.channel.request.ChannelJoinRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateRequest;
@@ -34,7 +34,7 @@ public class ChannelServiceImpl implements ChannelService {
     private final UserChannelRepository userChannelRepository;
     private final ChannelRepository channelRepository;
     // private final HouseowrkRepository houseowrkRepository;
-    // private final InviteLinkService inviteLinkService;
+    private final InviteLinkService inviteLinkService;
 
     @Override
     @Transactional
@@ -62,7 +62,7 @@ public class ChannelServiceImpl implements ChannelService {
         UserChannel userChannel = userChannelRepository.findByUserAndChannel(user, channel)
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_IN_CHANNEL));
 
-        if (userChannel.getRole() != Role.ADMIN) {
+        if (!userChannel.isRoleAdmin()) {
             throw new ChannelException(ExceptionCode.CHANNEL_ACCESS_DENIED);
         }
 
@@ -98,34 +98,30 @@ public class ChannelServiceImpl implements ChannelService {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelException(ExceptionCode.CHANNEL_NOT_FOUND));
 
-//        String inviteLink = inviteLinkService.generateInviteLink(channelId);
-//
-//        return ChannelInviteLinkResponse.of(channel, inviteLink);
+        String inviteLink = inviteLinkService.generateInviteLink(channelId);
 
-        return null;
+        return ChannelInviteLinkResponse.of(channel, inviteLink);
     }
 
     @Override
-    public ChannelJoinResponse joinChannelViaInviteLink(String email, ChannelJoinRequest request) {
-//        Long channelId = inviteLinkService.validateInviteLink(request.inviteLink());
-//
-//        Channel channel = channelRepository.findById(channelId)
-//                .orElseThrow(() -> new ChannelException(ExceptionCode.CHANNEL_NOT_FOUND));
-//
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
-//
-//        boolean isUserInChannel = userChannelRepository.existsByUserAndChannel(user, channel);
-//        if (isUserInChannel) {
-//            throw new ChannelException(ExceptionCode.USER_ALREADY_IN_CHANNEL);
-//        }
-//
-//        UserChannel userChannel = UserChannel.of(user, channel, Role.PARTICIPANT);
-//        userChannelRepository.save(userChannel);
-//
-//        return ChannelJoinResponse.of(channel, true);
+    public ChannelJoinResponse joinChannelViaInviteLink(String email, String inviteLink) {
+        Long channelId = inviteLinkService.validateInviteLink(inviteLink);
 
-        return null;
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new ChannelException(ExceptionCode.CHANNEL_NOT_FOUND));
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
+
+        boolean isUserInChannel = userChannelRepository.existsByUserAndChannel(user, channel);
+        if (isUserInChannel) {
+            throw new ChannelException(ExceptionCode.USER_ALREADY_IN_CHANNEL);
+        }
+
+        UserChannel userChannel = UserChannel.of(user, channel, Role.PARTICIPANT);
+        userChannelRepository.save(userChannel);
+
+        return ChannelJoinResponse.of(channel);
     }
 
     @Override
@@ -139,7 +135,7 @@ public class ChannelServiceImpl implements ChannelService {
         UserChannel adminUserChannel = userChannelRepository.findByUserAndChannel(adminUser, channel)
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_IN_CHANNEL));
 
-        if (adminUserChannel.getRole() != Role.ADMIN) {
+        if (!adminUserChannel.isRoleAdmin()) {
             throw new ChannelException(ExceptionCode.CHANNEL_ACCESS_DENIED);
         }
 

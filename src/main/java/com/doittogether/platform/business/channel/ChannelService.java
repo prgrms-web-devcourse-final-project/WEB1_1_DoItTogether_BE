@@ -12,7 +12,7 @@ public interface ChannelService {
     ChannelUpdateResponse updateChannelName(String email, Long channelId, ChannelUpdateRequest request);
     ChannelUserListResponse getChannelUsers(String email, Long channelId, Pageable pageable);
     ChannelInviteLinkResponse generateInviteLink(Long channelId);
-    ChannelJoinResponse joinChannelViaInviteLink(String email, ChannelJoinRequest request);
+    ChannelJoinResponse joinChannelViaInviteLink(String email, String request);
     ChannelKickUserResponse kickUserFromChannel(String email, Long channelId, ChannelKickUserRequest request);
     ChannelHouseworkListResponse getHouseworkByDate(Long channelId, LocalDate targetDate, Pageable pageable);
 }
