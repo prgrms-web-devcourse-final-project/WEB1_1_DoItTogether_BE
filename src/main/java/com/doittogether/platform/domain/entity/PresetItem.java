@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -18,12 +16,9 @@ public class PresetItem extends BaseEntity {
     private Long presetItemId;
 
     @Column(nullable = false)
-    private String category;
+    private String value;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "channel_id")
-    private Channel channel;
-
-    @OneToMany(mappedBy = "presetItem", cascade = CascadeType.ALL)
-    private List<Preset> presets;
+    @JoinColumn(name = "preset_category_id")
+    private PresetCategory presetCategory;
 }

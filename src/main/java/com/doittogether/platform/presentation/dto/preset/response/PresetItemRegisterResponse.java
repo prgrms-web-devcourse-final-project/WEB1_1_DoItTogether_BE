@@ -9,16 +9,16 @@ public record PresetItemRegisterResponse(
         @Schema(description = "채널 아이디")
         Long channelId,
 
-        @Schema(description = "프리셋 아이템 아이디")
-        Long presetItemId,
+        @Schema(description = "프리셋 카테고리 아이디")
+        Long presetCategoryId,
 
         @Schema(description = "프리셋 카테고리", example = "청소")
         String category
 ) {
-    public static PresetItemRegisterResponse of(Long channelId, Long presetItemId, String category) {
+    public static PresetItemRegisterResponse of(Long channelId, Long presetCategoryId, String category) {
         return PresetItemRegisterResponse.builder()
                 .channelId(channelId)
-                .presetItemId(presetItemId)
+                .presetCategoryId(presetCategoryId)
                 .category(category)
                 .build();
    }
