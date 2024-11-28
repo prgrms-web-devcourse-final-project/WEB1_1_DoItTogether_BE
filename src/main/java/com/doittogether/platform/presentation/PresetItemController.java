@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/channels/{channelId}/presets")
-@Tag(name = "프리셋 아이템 API", description = "프리셋 아이템 관리 API")
+@Tag(name = "프리셋 API", description = "프리셋 관리 API")
 public class PresetItemController {
 
     @GetMapping("/keywords")
-    @Operation(summary = "전체 프리셋 키워드 리스트 조회", description = "모든 프리셋 데이터를 카테고리와 값을 분리하여 페이지네이션 형태로 반환합니다.")
+    @Operation(summary = "전체 프리셋 키워드(카테고리-아이템) 리스트 조회",
+            description = "모든 프리셋 데이터를 카테고리와 값을 분리하여 페이지네이션 형태로 반환합니다.")
     public ResponseEntity<SuccessResponse<PresetKeywordListResponse>> getFlatPresetList(
             @PathVariable("channelId") Long channelId,
             @ParameterObject Pageable pageable) {
@@ -29,7 +30,8 @@ public class PresetItemController {
     }
 
     @GetMapping("/categories/{presetCategoryId}")
-    @Operation(summary = "특정 카테고리의 프리셋 리스트 조회", description = "지정된 카테고리의 프리셋 데이터를 페이지네이션 형태로 반환합니다.")
+    @Operation(summary = "특정 프리셋 카테고리의 프리셋 아이템 리스트 조회",
+            description = "지정된 카테고리의 프리셋 데이터를 페이지네이션 형태로 반환합니다.")
     public ResponseEntity<SuccessResponse<CategoryPresetResponse>> getPresetsByCategory(
             @PathVariable("channelId") Long channelId,
             @PathVariable("presetCategoryId") String presetCategoryId,
@@ -40,7 +42,7 @@ public class PresetItemController {
     }
 
     @GetMapping("/categories/names")
-    @Operation(summary = "모든 카테고리 이름 조회", description = "중복 없이 모든 카테고리 이름을 페이지네이션 형태로 반환합니다.")
+    @Operation(summary = "모든 프리셋 카테고리 이름 조회", description = "모든 카테고리 이름을 페이지네이션 형태로 반환합니다.")
     public ResponseEntity<SuccessResponse<CategoryListResponse>> getAllCategories(
             @PathVariable("channelId") Long channelId,
             @ParameterObject Pageable pageable) {
@@ -60,7 +62,7 @@ public class PresetItemController {
     }
 
     @PostMapping("/{presetCategoryId}/details")
-    @Operation(summary = "프리셋 생성", description = "지정된 채널 ID와 프리셋 카테고리 ID에 새로운 프리셋을 생성합니다.")
+    @Operation(summary = "프리셋 아이템 생성", description = "지정된 채널 ID와 프리셋 카테고리 ID에 새로운 프리셋 아이템을 생성합니다.")
     public ResponseEntity<SuccessResponse<PresetItemRegisterResponse>> createPreset(
             @PathVariable("channelId") Long channelId,
             @PathVariable("presetCategoryId") Long presetCategoryId,
