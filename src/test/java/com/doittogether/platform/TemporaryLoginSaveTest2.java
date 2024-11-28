@@ -30,6 +30,11 @@ public class TemporaryLoginSaveTest2 {
         System.setProperty("HOME_URL", dotenv.get("HOME_URL"));
         System.setProperty("HOME_USERNAME", dotenv.get("HOME_USERNAME"));
         System.setProperty("HOME_PASSWORD", dotenv.get("HOME_PASSWORD"));
+
+        System.setProperty("REDIS_HOST", dotenv.get("REDIS_HOST"));
+        System.setProperty("REDIS_PORT", dotenv.get("REDIS_PORT"));
+        System.setProperty("REDIS_INVITE_URL", dotenv.get("REDIS_INVITE_URL"));
+        System.setProperty("REDIS_INVITE_TTL", dotenv.get("REDIS_INVITE_TTL"));
     }
 
     @BeforeEach
