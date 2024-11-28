@@ -8,6 +8,7 @@ import com.doittogether.platform.domain.entity.UserChannel;
 import com.doittogether.platform.infrastructure.persistence.ChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
+import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateRequest;
 import com.doittogether.platform.presentation.dto.channel.response.*;
@@ -235,8 +236,48 @@ public class ChannelServiceTest {
         verify(userChannelRepository, times(1)).save(any(UserChannel.class));
     }
 
+    @Test
+    void 특정_유저_추방() {
+        String adminEmail = "admin@example.com";
+        String targetEmail = "doto@example.com";
+        Long channelId = 1L;
 
+        User adminUser = User.of("Admin User", adminEmail, null);
+        setField(adminUser, "userId", 1L);
 
+        User targetUser = User.of("Target User", targetEmail, null);
+        setField(targetUser, "userId", 2L);
+
+        Channel mockChannel = Channel.builder().name("Test Channel").build();
+        setField(mockChannel, "channelId", channelId);
+
+        UserChannel adminUserChannel = UserChannel.of(adminUser, mockChannel, Role.ADMIN);
+        setField(adminUserChannel, "userChannelId", 1L);
+
+        UserChannel targetUserChannel = UserChannel.of(targetUser, mockChannel, Role.PARTICIPANT);
+        setField(targetUserChannel, "userChannelId", 2L);
+
+        ChannelKickUserRequest request = new ChannelKickUserRequest(targetEmail);
+
+        lenient().when(userRepository.findByEmail(adminEmail)).thenReturn(Optional.of(adminUser));
+        lenient().when(channelRepository.findById(channelId)).thenReturn(Optional.of(mockChannel));
+        lenient().when(userChannelRepository.findByUserAndChannel(adminUser, mockChannel)).thenReturn(Optional.of(adminUserChannel));
+        lenient().when(userRepository.findByEmail(targetEmail)).thenReturn(Optional.of(targetUser));
+        lenient().when(userChannelRepository.findByUserAndChannel(targetUser, mockChannel)).thenReturn(Optional.of(targetUserChannel));
+
+        ChannelKickUserResponse response = channelService.kickUserFromChannel(adminEmail, channelId, request);
+
+        assertNotNull(response);
+        assertEquals(targetUser.getEmail(), response.email());
+        assertEquals(targetUser.getNickName(), response.nickName());
+
+        verify(userRepository, times(1)).findByEmail(adminEmail);
+        verify(channelRepository, times(1)).findById(channelId);
+        verify(userChannelRepository, times(1)).findByUserAndChannel(adminUser, mockChannel);
+        verify(userRepository, times(1)).findByEmail(targetEmail);
+        verify(userChannelRepository, times(1)).findByUserAndChannel(targetUser, mockChannel);
+        verify(userChannelRepository, times(1)).delete(targetUserChannel);
+    }
 
     // id 값 설정할 수 있도록 임시
     private void setField(Object target, String fieldName, Object value) {
