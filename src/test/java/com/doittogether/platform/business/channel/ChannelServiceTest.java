@@ -10,10 +10,7 @@ import com.doittogether.platform.infrastructure.persistence.UserChannelRepositor
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateRequest;
-import com.doittogether.platform.presentation.dto.channel.response.ChannelListResponse;
-import com.doittogether.platform.presentation.dto.channel.response.ChannelRegisterResponse;
-import com.doittogether.platform.presentation.dto.channel.response.ChannelUpdateResponse;
-import com.doittogether.platform.presentation.dto.channel.response.ChannelUserListResponse;
+import com.doittogether.platform.presentation.dto.channel.response.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -186,8 +183,60 @@ public class ChannelServiceTest {
         verify(channelRepository, times(1)).findById(channelId);
         verify(userChannelRepository, times(1)).findByUserAndChannel(mockUser, mockChannel);
         verify(userChannelRepository, times(1)).findByChannel(mockChannel, pageable);
-
     }
+
+    @Test
+    void 채널_초대_링크_생성() {
+        Long channelId = 1L;
+        String mockInviteLink = "http://test.com/invite/abc123";
+
+        Channel mockChannel = Channel.builder().name("Test Channel").build();
+        setField(mockChannel, "channelId", channelId);
+
+        when(channelRepository.findById(channelId)).thenReturn(Optional.of(mockChannel));
+        when(inviteLinkService.generateInviteLink(channelId)).thenReturn(mockInviteLink);
+
+        ChannelInviteLinkResponse response = channelService.generateInviteLink(channelId);
+
+        assertNotNull(response);
+        assertEquals(mockChannel.getChannelId(), response.channelId());
+        assertEquals(mockInviteLink, response.inviteLink());
+
+        verify(channelRepository, times(1)).findById(channelId);
+        verify(inviteLinkService, times(1)).generateInviteLink(channelId);
+    }
+
+    @Test
+    void 초대_링크를_통한_채널_입장() {
+        String email = "doto@gmail.com";
+        String inviteLink = "http://test.com/invite/abc123";
+        Long channelId = 1L;
+
+        User mockUser = User.of("Test User", email, null);
+        setField(mockUser, "userId", 1L);
+
+        Channel mockChannel = Channel.builder().name("Test Channel").build();
+        setField(mockChannel, "channelId", channelId);
+
+        lenient().when(inviteLinkService.validateInviteLink(inviteLink)).thenReturn(channelId);
+        lenient().when(channelRepository.findById(channelId)).thenReturn(Optional.of(mockChannel));
+        lenient().when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        lenient().when(userChannelRepository.existsByUserAndChannel(mockUser, mockChannel)).thenReturn(false);
+
+        ChannelJoinResponse response = channelService.joinChannelViaInviteLink(email, inviteLink);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(mockChannel.getChannelId(), response.channelId());
+
+        verify(inviteLinkService, times(1)).validateInviteLink(inviteLink);
+        verify(channelRepository, times(1)).findById(channelId);
+        verify(userRepository, times(1)).findByEmail(email);
+        verify(userChannelRepository, times(1)).existsByUserAndChannel(mockUser, mockChannel);
+        verify(userChannelRepository, times(1)).save(any(UserChannel.class));
+    }
+
+
+
 
     // id 값 설정할 수 있도록 임시
     private void setField(Object target, String fieldName, Object value) {
