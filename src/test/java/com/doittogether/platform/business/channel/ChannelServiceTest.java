@@ -13,6 +13,7 @@ import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateR
 import com.doittogether.platform.presentation.dto.channel.response.ChannelListResponse;
 import com.doittogether.platform.presentation.dto.channel.response.ChannelRegisterResponse;
 import com.doittogether.platform.presentation.dto.channel.response.ChannelUpdateResponse;
+import com.doittogether.platform.presentation.dto.channel.response.ChannelUserListResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -142,6 +143,50 @@ public class ChannelServiceTest {
 
         // Channel 이름 업데이트 확인
         Assertions.assertEquals(newChannelName, mockChannel.getName());
+    }
+
+    @Test
+    void 채널에_포함된_유저_리스트_조회() {
+        String email = "doto1@gmail.com";
+        Long channelId = 1L;
+
+        User mockUser = User.of("Test User", email, null);
+        setField(mockUser, "userId", 1L);
+
+        Channel mockChannel = Channel.builder().name("Test Channel").build();
+        setField(mockChannel, "channelId", channelId);
+
+        UserChannel mockUserChannel = UserChannel.of(mockUser, mockChannel, Role.PARTICIPANT);
+        setField(mockUserChannel, "userChannelId", 1L);
+
+        Pageable pageable = PageRequest.of(0, 10);
+        UserChannel anotherUserChannel = UserChannel.of(
+                User.of("Another User", "doto2@gmail.com", null),
+                mockChannel,
+                Role.PARTICIPANT
+        );
+        setField(anotherUserChannel, "userChannelId", 2L);
+
+        Page<UserChannel> userChannelsPage = new PageImpl<>(List.of(mockUserChannel, anotherUserChannel), pageable, 2);
+
+        lenient().when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        lenient().when(channelRepository.findById(channelId)).thenReturn(Optional.of(mockChannel));
+        lenient().when(userChannelRepository.findByUserAndChannel(mockUser, mockChannel)).thenReturn(Optional.of(mockUserChannel));
+        lenient().when(userChannelRepository.findByChannel(mockChannel, pageable)).thenReturn(userChannelsPage);
+
+        ChannelUserListResponse response = channelService.getChannelUsers(email, channelId, pageable);
+
+        assertNotNull(response);
+        assertEquals(mockChannel.getChannelId(), response.channelId());
+        assertEquals(2, response.userList().size());
+        assertEquals("doto1@gmail.com", response.userList().get(0).email());
+        assertEquals("doto2@gmail.com", response.userList().get(1).email());
+
+        verify(userRepository, times(1)).findByEmail(email);
+        verify(channelRepository, times(1)).findById(channelId);
+        verify(userChannelRepository, times(1)).findByUserAndChannel(mockUser, mockChannel);
+        verify(userChannelRepository, times(1)).findByChannel(mockChannel, pageable);
+
     }
 
     // id 값 설정할 수 있도록 임시
