@@ -29,11 +29,10 @@ public class PresetItemController {
                 .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
     }
 
-    @GetMapping("/categories/{presetCategoryId}")
+    @GetMapping("/categories/{presetCategoryId}/items")
     @Operation(summary = "특정 프리셋 카테고리의 프리셋 아이템 리스트 조회",
             description = "지정된 카테고리의 프리셋 데이터를 페이지네이션 형태로 반환합니다.")
     public ResponseEntity<SuccessResponse<CategoryPresetResponse>> getPresetsByCategory(
-            @PathVariable("channelId") Long channelId,
             @PathVariable("presetCategoryId") String presetCategoryId,
             @ParameterObject Pageable pageable) {
 
@@ -51,7 +50,7 @@ public class PresetItemController {
                 .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
     }
 
-    @PostMapping
+    @PostMapping("/categories")
     @Operation(summary = "프리셋 카테고리 생성", description = "지정된 채널 ID에 새로운 프리셋 카테고리를 생성합니다.")
     public ResponseEntity<SuccessResponse<PresetCategoryRegisterResponse>> createPresetCategory(
             @PathVariable("channelId") Long channelId,
@@ -61,10 +60,9 @@ public class PresetItemController {
                 .body(SuccessResponse.onSuccess(SuccessCode._CREATED, null));
     }
 
-    @PostMapping("/{presetCategoryId}/details")
+    @PostMapping("/categories/{presetCategoryId}/items")
     @Operation(summary = "프리셋 아이템 생성", description = "지정된 채널 ID와 프리셋 카테고리 ID에 새로운 프리셋 아이템을 생성합니다.")
     public ResponseEntity<SuccessResponse<PresetItemRegisterResponse>> createPreset(
-            @PathVariable("channelId") Long channelId,
             @PathVariable("presetCategoryId") Long presetCategoryId,
             @RequestBody PresetItemRegisterRequest request) {
 
@@ -72,23 +70,22 @@ public class PresetItemController {
                 .body(SuccessResponse.onSuccess(SuccessCode._CREATED, null));
     }
 
-    @DeleteMapping("/{presetCategoryId}")
+    @DeleteMapping("/categories/{presetCategoryId}")
     @Operation(summary = "프리셋 카테고리 삭제",
             description = "지정된 채널 ID 내에서 프리셋 카테고리를 삭제합니다. 프리셋 카테고리에 포함된 리스트 프리셋도 함께 삭제됩니다.")
     public ResponseEntity<SuccessResponse<PresetCategoryDeleteResponse>> deletePreset(
-            @PathVariable("channelId") Long channelId, @PathVariable("presetCategoryId") Long presetCategoryId
+            @PathVariable("presetCategoryId") Long presetCategoryId
     ) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
     }
 
-    @DeleteMapping("/{presetCategoryId}/details/{presetId}")
+    @DeleteMapping("/items/{presetItemId}")
     @Operation(summary = "프리셋 세부 항목 삭제",
             description = "지정된 채널 ID와 프리셋 카테고리 ID 내에서 특정 프리셋 세부 항목(리스트 프리셋)을 삭제합니다.")
     public ResponseEntity<SuccessResponse<PresetItemDeleteResponse>> deletePresetDetail(
-            @PathVariable("channelId") Long channelId, @PathVariable("presetCategoryId") Long presetCategoryId,
-            @PathVariable("presetId") Long presetId) {
+            @PathVariable("presetItemId") Long presetItemId) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
