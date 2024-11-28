@@ -17,6 +17,15 @@ public enum ExceptionCode implements GlobalCode {
     //임시로그인
     TEMPORARY_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "LOGIN_404", "백엔드야!! TemporaryLoginSaveTest에 있는 데이터 넣어라@@@@@!!"),
 
+    // 프리셋 관련
+    PRESET_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "PRESET_404", "요청한 프리셋 카테고리를 찾을 수 없습니다."),
+    PRESET_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "PRESET_404", "요청한 프리셋 아이템을 찾을 수 없습니다."),
+    PRESET_CATEGORY_DUPLICATED(HttpStatus.CONFLICT, "PRESET_409", "이미 존재하는 프리셋 카테고리입니다."),
+    PRESET_ITEM_DUPLICATED(HttpStatus.CONFLICT, "PRESET_409", "이미 존재하는 프리셋 아이템입니다."),
+    PRESET_CREATION_FAILED(HttpStatus.BAD_REQUEST, "PRESET_400", "프리셋 생성에 실패하였습니다."),
+    PRESET_CATEGORY_DELETE_FAILED(HttpStatus.BAD_REQUEST, "PRESET_400", "프리셋 카테고리 삭제에 실패하였습니다."),
+    PRESET_ITEM_DELETE_FAILED(HttpStatus.BAD_REQUEST, "PRESET_400", "프리셋 아이템 삭제에 실패하였습니다."),
+
     //Validation
     NOT_VALIDATE_FILED(HttpStatus.BAD_REQUEST, "VALID_400", "유효성 검증에 실패하였습니다.");
 
