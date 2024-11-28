@@ -15,9 +15,9 @@ public record CategoryPresetResponse(
         String category,
 
         @Schema(description = "프리셋 값 리스트")
-        List<PresetResponse> presetList
+        List<PresetItemResponse> presetList
 ) {
-    public static CategoryPresetResponse of(String category, List<PresetResponse> presetList) {
+    public static CategoryPresetResponse of(String category, List<PresetItemResponse> presetList) {
         return CategoryPresetResponse.builder()
                 .category(category)
                 .presetList(presetList)

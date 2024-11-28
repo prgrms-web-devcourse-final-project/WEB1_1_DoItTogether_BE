@@ -7,13 +7,13 @@ import java.util.List;
 
 @Schema(description = "전체 프리셋 키워드 리스트 응답")
 @Builder
-public record FlatPresetResponse(
+public record PresetKeywordListResponse(
         @Schema(description = "프리셋 데이터 리스트")
-        List<FlatPreset> flatPresets
+        List<PresetKeywordResponse> presetKeywordList
 ) {
     @Schema(description = "프리셋 데이터 항목")
     @Builder
-    public static record FlatPreset(
+    public static record PresetKeywordResponse(
             @Schema(description = "프리셋 카테고리 아이디")
             Long presetCategoryId,
 
@@ -27,9 +27,9 @@ public record FlatPresetResponse(
             String value
     ) {}
 
-    public static FlatPresetResponse of(List<FlatPreset> flatPresets) {
-        return FlatPresetResponse.builder()
-                .flatPresets(flatPresets)
+    public static PresetKeywordListResponse of(List<PresetKeywordResponse> presetKeywordList) {
+        return PresetKeywordListResponse.builder()
+                .presetKeywordList(presetKeywordList)
                 .build();
     }
 }

@@ -5,16 +5,16 @@ import lombok.Builder;
 
 @Schema(description = "프리셋 세부 항목 응답")
 @Builder
-public record PresetResponse(
-        @Schema(description = "프리셋 아이디")
-        Long presetId,
+public record PresetItemResponse(
+        @Schema(description = "프리셋 아이템 아이디")
+        Long preseItemtId,
 
         @Schema(description = "프리셋 값", example = "바닥 청소")
         String value
 ) {
-    public static PresetResponse of(Long presetId, String value) {
-        return PresetResponse.builder()
-                .presetId(presetId)
+    public static PresetItemResponse of(Long preseItemtId, String value) {
+        return PresetItemResponse.builder()
+                .preseItemtId(preseItemtId)
                 .value(value)
                 .build();
     }
