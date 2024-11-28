@@ -14,6 +14,7 @@ public enum ExceptionCode implements GlobalCode {
     // 집안일 등록 관련
     HOUSEWORK_NOT_FOUND(HttpStatus.NOT_FOUND, "HOUSEWORK_404", "요청한 집안일을 찾을 수 없습니다."),
     HOUSEWORK_NOT_NULL(HttpStatus.UNPROCESSABLE_ENTITY, "HOUSEWORK_422", "집안일 객체가 null일 수는 없습니다."),
+    HOUSEWORK_NO_PERMISSION(HttpStatus.FORBIDDEN, "HOUSEWORK_403", "해당 집안일에 접근할 권한이 없습니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "CATEGORY_404", "요청한 집안일 카테고리를 찾을 수 없습니다."),
 
 
