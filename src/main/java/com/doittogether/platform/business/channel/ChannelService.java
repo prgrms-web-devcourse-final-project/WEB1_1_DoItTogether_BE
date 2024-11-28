@@ -15,5 +15,4 @@ public interface ChannelService {
     ChannelInviteLinkResponse generateInviteLink(Long channelId);
     ChannelJoinResponse joinChannelViaInviteLink(String email, String request);
     ChannelKickUserResponse kickUserFromChannel(String email, Long channelId, ChannelKickUserRequest request);
-    ChannelHouseworkListResponse getHouseworkByDate(Long channelId, LocalDate targetDate, Pageable pageable);
 }

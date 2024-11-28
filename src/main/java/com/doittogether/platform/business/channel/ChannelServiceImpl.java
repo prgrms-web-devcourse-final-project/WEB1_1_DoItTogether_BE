@@ -33,7 +33,6 @@ public class ChannelServiceImpl implements ChannelService {
     private final UserRepository userRepository;
     private final UserChannelRepository userChannelRepository;
     private final ChannelRepository channelRepository;
-    // private final HouseowrkRepository houseowrkRepository;
     private final InviteLinkService inviteLinkService;
 
     @Override
@@ -161,25 +160,6 @@ public class ChannelServiceImpl implements ChannelService {
         userChannelRepository.delete(targetUserChannel);
 
         return ChannelKickUserResponse.from(targetUser);
-    }
-
-    @Override
-    public ChannelHouseworkListResponse getHouseworkByDate(Long channelId, LocalDate targetDate, Pageable pageable) {
-//        Channel channel = channelRepository.findById(channelId)
-//                .orElseThrow(() -> new ChannelException(ExceptionCode.CHANNEL_NOT_FOUND));
-//
-//        Page<Housework> houseworks = houseworkRepository.findByChannelAndDate(channel, targetDate, pageable);
-//
-//        List<HouseworkResponse> houseworkResponses = new ArrayList<>();
-//        if (!houseworks.isEmpty()) {
-//            houseworkResponses = houseworks.stream()
-//                    .map(housework -> HouseworkResponse.from(housework))
-//                    .toList();
-//        }
-//
-//        return ChannelHouseworkListResponse.of(channel, houseworkResponses);
-
-        return null;
     }
 
     private Pageable resolveSort(Pageable pageable) {

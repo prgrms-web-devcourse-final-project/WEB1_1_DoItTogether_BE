@@ -1,4 +1,4 @@
-package com.doittogether.platform.presentation;
+package com.doittogether.platform.presentation.dto.channel;
 
 import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.SuccessResponse;
@@ -9,20 +9,16 @@ import com.doittogether.platform.presentation.dto.channel.request.ChannelRegiste
 import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateRequest;
 import com.doittogether.platform.presentation.dto.channel.response.*;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/v1/channels")
@@ -138,22 +134,6 @@ public class ChannelController {
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
                         channelService.kickUserFromChannel(user.getEmail(), channelId, request)
-                ));
-    }
-
-    @GetMapping("/{channelId}/housework")
-    @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
-    public ResponseEntity<SuccessResponse<ChannelHouseworkListResponse>> getHouseworkByDate(
-            @PathVariable("channelId") Long channelId,
-            @RequestParam("targetDate")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // yyyy-MM-dd 형식을 지원
-            @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate,
-            @ParameterObject Pageable pageable) {
-
-        return ResponseEntity.status(HttpStatus.OK).body(
-                SuccessResponse.onSuccess(
-                        SuccessCode._OK,
-                        channelService.getHouseworkByDate(channelId, targetDate, pageable)
                 ));
     }
 }
