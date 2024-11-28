@@ -64,8 +64,7 @@ public class Housework extends BaseEntity {
     public Housework update(HouseworkRequest request, Assignee assignee) {
         this.startDateTime = request.startDateTime();
         this.task = request.task();
-        this.category = HouseworkCategory.from(request.category());
-        this.status = Status.valueOf(request.category());
+        this.category = request.category();
         this.assignee = assignee;
         return this;
     }
