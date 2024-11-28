@@ -9,8 +9,10 @@ import com.doittogether.platform.infrastructure.persistence.ChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
+import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateRequest;
 import com.doittogether.platform.presentation.dto.channel.response.ChannelListResponse;
 import com.doittogether.platform.presentation.dto.channel.response.ChannelRegisterResponse;
+import com.doittogether.platform.presentation.dto.channel.response.ChannelUpdateResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -104,6 +106,42 @@ public class ChannelServiceTest {
         Assertions.assertNotNull(response);
         Assertions.assertEquals(mockChannel.getChannelId(), response.channelId());
         Assertions.assertEquals(channelName, response.name());
+    }
+
+    @Test
+    void 채널방_이름_수정() {
+        String email = "doto@gmail.com";
+        Long channelId = 1L;
+        String newChannelName = "Updated Channel Name";
+
+        User mockUser = User.of("Test User", email, null);
+        setField(mockUser, "userId", 1L);
+
+        Channel mockChannel = Channel.builder().name("Old Channel Name").build();
+        setField(mockChannel, "channelId", channelId);
+
+        UserChannel mockUserChannel = UserChannel.of(mockUser, mockChannel, Role.ADMIN);
+        setField(mockUserChannel, "userChannelId", 1L);
+
+        ChannelUpdateRequest request = new ChannelUpdateRequest(newChannelName);
+
+        lenient().when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        lenient().when(channelRepository.findById(channelId)).thenReturn(Optional.of(mockChannel));
+        lenient().when(userChannelRepository.findByUserAndChannel(mockUser, mockChannel)).thenReturn(Optional.of(mockUserChannel));
+        lenient().when(channelRepository.save(any(Channel.class))).thenReturn(mockChannel);
+
+        ChannelUpdateResponse response = channelService.updateChannelName(email, channelId, request);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(channelId, response.channelId());
+
+        verify(userRepository, times(1)).findByEmail(email);
+        verify(channelRepository, times(1)).findById(channelId);
+        verify(userChannelRepository, times(1)).findByUserAndChannel(mockUser, mockChannel);
+        verify(channelRepository, times(1)).save(mockChannel);
+
+        // Channel 이름 업데이트 확인
+        Assertions.assertEquals(newChannelName, mockChannel.getName());
     }
 
     // id 값 설정할 수 있도록 임시
