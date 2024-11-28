@@ -12,16 +12,12 @@ public record ChannelJoinResponse(
         Long channelId,
 
         @Schema(description = "채널명")
-        String name,
-
-        @Schema(description = "사용자가 성공적으로 입장했는지 여부", example = "true")
-        boolean joinedSuccessfully
+        String name
 ) {
-    public static ChannelJoinResponse of(Channel channel, boolean joinedSuccessfully) {
+    public static ChannelJoinResponse of(Channel channel) {
         return ChannelJoinResponse.builder()
                 .channelId(channel.getChannelId())
                 .name(channel.getName())
-                .joinedSuccessfully(joinedSuccessfully)
                 .build();
     }
 }
