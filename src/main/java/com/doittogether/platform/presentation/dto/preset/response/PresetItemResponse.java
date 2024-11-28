@@ -7,14 +7,14 @@ import lombok.Builder;
 @Builder
 public record PresetItemResponse(
         @Schema(description = "프리셋 아이템 아이디")
-        Long preseItemtId,
+        Long presetItemId,
 
         @Schema(description = "프리셋 값", example = "바닥 청소")
         String value
 ) {
     public static PresetItemResponse of(Long preseItemtId, String value) {
         return PresetItemResponse.builder()
-                .preseItemtId(preseItemtId)
+                .presetItemId(preseItemtId)
                 .value(value)
                 .build();
     }
