@@ -1,4 +1,4 @@
-package com.doittogether.platform.presentation;
+package com.doittogether.platform.presentation.dto.preset;
 
 import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.SuccessResponse;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/channels/{channelId}/presets")
 @Tag(name = "프리셋 API", description = "프리셋 관리 API")
-public class PresetItemController {
+public class PresetController {
 
     @GetMapping("/keywords")
     @Operation(summary = "전체 프리셋 키워드(카테고리-아이템) 리스트 조회",
