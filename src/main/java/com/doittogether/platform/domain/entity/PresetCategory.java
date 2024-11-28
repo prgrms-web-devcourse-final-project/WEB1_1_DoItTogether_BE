@@ -25,5 +25,5 @@ public class PresetCategory extends BaseEntity {
     private Channel channel;
 
     @OneToMany(mappedBy = "presetCategory", cascade = CascadeType.ALL)
-    private List<Preset> presets;
+    private List<PresetItem> presetItems;
 }

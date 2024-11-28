@@ -8,12 +8,12 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "preset")
+@Table(name = "preset_item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Preset extends BaseEntity {
+public class PresetItem extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long presetId;
+    private Long presetItemId;
 
     @Column(nullable = false)
     private String value;
