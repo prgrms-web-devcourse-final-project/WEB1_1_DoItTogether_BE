@@ -42,7 +42,7 @@ public class TemporaryLoginSaveTest {
     @Order(value = 1)
     public void 홍길동_계정_저장() {
         userRepository.save(
-                User.of("길똥이", "doto@gmail.com", profileImage)
+                User.of("doto", "doto@gmail.com", profileImage)
         );
     }
 

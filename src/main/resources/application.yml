@@ -1,9 +1,20 @@
+server:
+  port: 8080
+
 spring:
   profiles:
     active: local
 
   application:
     name: DoItTogether
+
+  data:
+    redis:
+      host: ${REDIS_HOST} # redis 서버의 호스트 이름
+      port: ${REDIS_PORT} # redis 서버의 포트 번호
+      maxmemory: 128M
+      invite-link:
+        ttl-minutes: ${REDIS_INVITE_TTL} # 초대 링크 TTL (분)
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -24,7 +35,7 @@ springdoc:
   api-docs:
     path: /api-docs  # API 문서의 기본 경로
   swagger-ui:
-    path: /swagger-ui.html  # Swagger UI에 접근하기 위한 URL 경로
+    path: /api  # Swagger UI에 접근하기 위한 URL 경로
     operationsSorter: alpha  # API 정렬 기준 (alpha: 알파벳순)
     tagsSorter: alpha        # 태그 정렬 기준
-    disable-swagger-default-url: true # Swagger 기본 URL 표시 비활성화
+    disable-swagger-default-url: false # Swagger 기본 URL 표시 비활성화

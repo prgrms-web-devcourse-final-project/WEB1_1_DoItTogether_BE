@@ -30,6 +30,11 @@ public class TemporaryLoginSaveTest2 {
         System.setProperty("HOME_URL", dotenv.get("HOME_URL"));
         System.setProperty("HOME_USERNAME", dotenv.get("HOME_USERNAME"));
         System.setProperty("HOME_PASSWORD", dotenv.get("HOME_PASSWORD"));
+
+        System.setProperty("REDIS_HOST", dotenv.get("REDIS_HOST"));
+        System.setProperty("REDIS_PORT", dotenv.get("REDIS_PORT"));
+        System.setProperty("REDIS_INVITE_URL", dotenv.get("REDIS_INVITE_URL"));
+        System.setProperty("REDIS_INVITE_TTL", dotenv.get("REDIS_INVITE_TTL"));
     }
 
     @BeforeEach
@@ -41,7 +46,15 @@ public class TemporaryLoginSaveTest2 {
     @Test
     public void 홍길동_계정_저장() {
         userRepository.save(
-                User.of("길똥이","doto@gmail.com", profileImage)
+                User.of("doto", "doto@gmail.com", profileImage)
+        );
+
+        userRepository.save(
+                User.of("ycjung", "ycjung@gmail.com", null)
+        );
+
+        userRepository.save(
+                User.of("dong", "123@gmail.com", null)
         );
     }
 }

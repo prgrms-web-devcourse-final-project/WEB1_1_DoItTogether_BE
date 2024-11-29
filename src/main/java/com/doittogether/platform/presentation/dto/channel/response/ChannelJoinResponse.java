@@ -1,5 +1,7 @@
 package com.doittogether.platform.presentation.dto.channel.response;
 
+import com.doittogether.platform.domain.entity.Channel;
+import com.doittogether.platform.domain.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -10,16 +12,12 @@ public record ChannelJoinResponse(
         Long channelId,
 
         @Schema(description = "채널명")
-        String name,
-
-        @Schema(description = "사용자가 성공적으로 입장했는지 여부", example = "true")
-        boolean joinedSuccessfully
+        String name
 ) {
-    public static ChannelJoinResponse of(Long channelId, String name, boolean joinedSuccessfully) {
+    public static ChannelJoinResponse of(Channel channel) {
         return ChannelJoinResponse.builder()
-                .channelId(channelId)
-                .name(name)
-                .joinedSuccessfully(joinedSuccessfully)
+                .channelId(channel.getChannelId())
+                .name(channel.getName())
                 .build();
     }
 }

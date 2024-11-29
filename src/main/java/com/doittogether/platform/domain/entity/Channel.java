@@ -29,11 +29,11 @@ public class Channel extends BaseEntity {
     @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
     private List<UserChannel> userChannels;
 
-    @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
     private List<Housework> houseworks;
 
     @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
-    private List<PresetItem> presetItems;
+    private List<PresetCategory> presetCategories;
 
     public static Channel of(String name) {
         final Channel channel = new Channel();
@@ -43,5 +43,9 @@ public class Channel extends BaseEntity {
 
     public Long retrieveChannelId() {
         return channelId;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
     }
 }
