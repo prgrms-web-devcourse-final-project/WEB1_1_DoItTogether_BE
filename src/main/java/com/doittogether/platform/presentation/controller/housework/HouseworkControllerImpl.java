@@ -46,7 +46,7 @@ public class HouseworkControllerImpl implements HouseworkController {
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId,
             @RequestParam("targetDate")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // yyyy-MM-dd 형식을 지원
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate,
             @RequestParam("pageNumber") Integer pageNumber,
             @RequestParam("pageSize") Integer pageSize
@@ -66,7 +66,7 @@ public class HouseworkControllerImpl implements HouseworkController {
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId,
             @RequestParam("targetDate")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // yyyy-MM-dd 형식을 지원
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate,
             @RequestParam("assigneeId") Long assigneeId,
             @RequestParam("pageNumber") Integer pageNumber,
