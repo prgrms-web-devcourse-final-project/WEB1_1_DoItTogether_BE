@@ -13,7 +13,7 @@ public record PresetKeywordResponse(
         String category,
 
         @Schema(description = "프리셋 아이디")
-        String presetId,
+        Long presetId,
 
         @Schema(description = "프리셋 값", example = "쓰레기통1")
         String value
