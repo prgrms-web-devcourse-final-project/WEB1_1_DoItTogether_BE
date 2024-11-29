@@ -27,7 +27,7 @@ public class Channel extends BaseEntity {
     @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
     private List<UserChannel> userChannels;
 
-    @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
     private List<Housework> houseworks;
 
     @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
