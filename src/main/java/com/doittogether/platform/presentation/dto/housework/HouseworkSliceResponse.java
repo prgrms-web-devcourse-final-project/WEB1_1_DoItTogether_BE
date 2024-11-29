@@ -14,7 +14,7 @@ public record HouseworkSliceResponse(
         int currentPage,
         int size,
         boolean first,
-        boolean last
+        boolean hasNext
 ) {
     public static HouseworkSliceResponse from(final Slice<Housework> houseworks) {
         return HouseworkSliceResponse.builder()
@@ -26,7 +26,7 @@ public record HouseworkSliceResponse(
                 .currentPage(houseworks.getNumber())
                 .size(houseworks.getSize())
                 .first(houseworks.isFirst())
-                .last(houseworks.isLast())
+                .hasNext(houseworks.hasNext())
                 .build();
     }
 }
