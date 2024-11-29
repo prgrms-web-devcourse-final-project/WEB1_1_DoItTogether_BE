@@ -9,6 +9,7 @@ import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.entity.UserChannel;
 import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
+import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateRequest;
