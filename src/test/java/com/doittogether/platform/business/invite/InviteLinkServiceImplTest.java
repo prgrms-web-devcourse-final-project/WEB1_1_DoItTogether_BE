@@ -29,27 +29,15 @@ public class InviteLinkServiceImplTest {
         // 직접 객체 생성 및 의존성 주입
         inviteLinkService = new InviteLinkServiceImpl(
                 redisSingleDataService,
-                "localhost:8080",
                 10
         );
 
-        // 생성자 이후 초기화 메서드 실행
-        ReflectionTestUtils.invokeMethod(inviteLinkService, "initBaseInviteUrl");
     }
 
     @Test
     void 생성자_초기화_테스트() {
         // 필드 값 검증
-        assertEquals("localhost:8080", ReflectionTestUtils.getField(inviteLinkService, "inviteLinkUrl"));
         assertEquals(10, ReflectionTestUtils.getField(inviteLinkService, "inviteLinkTtlMinutes"));
-    }
-
-    @Test
-    void 초대링크_베이스_URL생성_테스트() {
-        // baseInviteUrl 값 검증
-        String expectedBaseInviteUrl = "http://localhost:8080/";
-        String actualBaseInviteUrl = (String) ReflectionTestUtils.getField(inviteLinkService, "baseInviteUrl");
-        assertEquals(expectedBaseInviteUrl, actualBaseInviteUrl);
     }
 
     @Test
@@ -66,7 +54,7 @@ public class InviteLinkServiceImplTest {
 
         String result = inviteLinkService.generateInviteLink(channelId);
 
-        assertEquals("http://localhost:8080/" + existingInviteLink, result);
+        assertEquals(existingInviteLink, result);
         verify(redisSingleDataService).storeDataWithExpiration(eq(redisKey), eq(channelId.toString()), eq(Duration.ofMinutes(10)));
         verify(redisSingleDataService, times(1)).fetchData(redisKey);
     }
