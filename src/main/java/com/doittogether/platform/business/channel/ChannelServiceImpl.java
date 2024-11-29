@@ -7,7 +7,6 @@ import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.Role;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.entity.UserChannel;
-import com.doittogether.platform.infrastructure.persistence.ChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
@@ -36,7 +35,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public ChannelListResponse getMyChannels(User loginUser, Pageable pageable) {
-        User user = userRepository.findByEmail(loginUser.getEmail())
+        User user = userRepository.findByEmail(loginUser.retrieveEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         Pageable resolvedPageable = resolveSort(pageable);
@@ -50,7 +49,7 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     @Transactional
     public ChannelRegisterResponse createChannel(User loginUser, ChannelRegisterRequest request) {
-        User user = userRepository.findByEmail(loginUser.getEmail())
+        User user = userRepository.findByEmail(loginUser.retrieveEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         Channel channel = ChannelRegisterRequest.toEntity(request);
@@ -64,7 +63,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public ChannelUpdateResponse updateChannelName(User loginUser, Long channelId, ChannelUpdateRequest request) {
-        User user = userRepository.findByEmail(loginUser.getEmail())
+        User user = userRepository.findByEmail(loginUser.retrieveEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         Channel channel = channelRepository.findById(channelId)
@@ -87,7 +86,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public ChannelUserListResponse getChannelUsers(User loginUser, Long channelId, Pageable pageable) {
-        User user = userRepository.findByEmail(loginUser.getEmail())
+        User user = userRepository.findByEmail(loginUser.retrieveEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         Channel channel = channelRepository.findById(channelId)
@@ -121,7 +120,7 @@ public class ChannelServiceImpl implements ChannelService {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelException(ExceptionCode.CHANNEL_NOT_FOUND));
 
-        User user = userRepository.findByEmail(loginUser.getEmail())
+        User user = userRepository.findByEmail(loginUser.retrieveEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         boolean isUserInChannel = userChannelRepository.existsByUserAndChannel(user, channel);
@@ -137,7 +136,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public ChannelKickUserResponse kickUserFromChannel(User loginUser, Long channelId, ChannelKickUserRequest request) {
-        User adminUser = userRepository.findByEmail(loginUser.getEmail())
+        User adminUser = userRepository.findByEmail(loginUser.retrieveEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         Channel channel = channelRepository.findById(channelId)
@@ -164,7 +163,7 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     @Transactional
     public void leaveChannel(User loginUser, Long channelId) {
-        User user = userRepository.findByEmail(loginUser.getEmail())
+        User user = userRepository.findByEmail(loginUser.retrieveEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelException(ExceptionCode.CHANNEL_NOT_FOUND));

@@ -14,9 +14,9 @@ public record UserChannelResponse(
 ) {
     public static UserChannelResponse from(UserChannel userChannel) {
         return UserChannelResponse.builder()
-                .userId(userChannel.getUser().getUserId())
-                .nickName(userChannel.getUser().getNickName())
-                .email(userChannel.getUser().getEmail())
+                .userId(userChannel.getUser().retrieveUserId())
+                .nickName(userChannel.getUser().retrieveNickName())
+                .email(userChannel.getUser().retrieveEmail())
                 .role(userChannel.getRole().name())
                 .build();
     }
