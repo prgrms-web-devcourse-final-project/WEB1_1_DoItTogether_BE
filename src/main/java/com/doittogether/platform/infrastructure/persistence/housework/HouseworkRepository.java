@@ -23,7 +23,7 @@ public interface HouseworkRepository extends JpaRepository<Housework, Long> {
             + "when h.assignee.assigneeId = :userId then 0 "
             + "else 1 "
             + "end asc,"
-            + "h.startDate asc")
+            + "h.startTime asc")
     Slice<Housework> findAllByChannelIdAndTargetDate(@Param("channelId") final Long channelId,
                                                      @Param("userId") final Long userId,
                                                      final
@@ -31,7 +31,8 @@ public interface HouseworkRepository extends JpaRepository<Housework, Long> {
                                                      @Param("startDate") final LocalDate startDate);
 
     @Query(value = "select h from Housework h where "
-            + "h.assignee.assigneeId = :assigneeId "
+            + "h.channel.channelId = :channelId "
+            + "and h.assignee.assigneeId = :assigneeId "
             + "and h.startDate = :startDate "
             + "order by "
             + "case "
@@ -39,7 +40,7 @@ public interface HouseworkRepository extends JpaRepository<Housework, Long> {
             + "when h.status = 'COMPLETE' then 1 "
             + "else 3 "
             + "end asc, "
-            + "h.startDate asc")
+            + "h.startTime asc")
     Slice<Housework> findAllByChannelIdAndTargetDateAndAssigneeId(@Param("channelId") final Long channelId,
                                                                   @Param("assigneeId") final Long assigneeId,
                                                                   final
