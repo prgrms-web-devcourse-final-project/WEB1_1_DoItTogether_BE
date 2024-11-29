@@ -25,7 +25,10 @@ public enum ExceptionCode implements GlobalCode {
     NOT_VALIDATE_FILED(HttpStatus.BAD_REQUEST, "VALID_400", "유효성 검증에 실패하였습니다."),
 
     //채널
-    CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_404", "해당 채널을 찾지 못하였습니다.");
+    CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_404", "해당 채널을 찾지 못하였습니다."),
+
+    //유저
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "해당 유저를 찾지 못하였습니다.");
 
     private final HttpStatus httpStatus; // HTTP 상태 코드
     private final String code; // 응답 코드
