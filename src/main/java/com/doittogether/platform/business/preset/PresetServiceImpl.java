@@ -29,7 +29,7 @@ public class PresetServiceImpl implements PresetService {
     @Override
     public PresetKeywordListResponse getFlatPresetList(Long channelId, Pageable pageable) {
         channelRepository.findById(channelId)
-                .orElseThrow(() -> new PresetException(ExceptionCode._INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new PresetException(ExceptionCode.CHANNEL_NOT_FOUND));
 
         Page<PresetItem> items = presetItemRepository.findAllByChannelId(channelId, pageable);
 
@@ -69,7 +69,7 @@ public class PresetServiceImpl implements PresetService {
     @Override
     public CategoryListResponse getAllCategories(Long channelId, Pageable pageable) {
         channelRepository.findById(channelId)
-                .orElseThrow(() -> new PresetException(ExceptionCode._INTERNAL_SERVER_ERROR)); // TODO : 채널 에러로 변경해야됨
+                .orElseThrow(() -> new PresetException(ExceptionCode.CHANNEL_NOT_FOUND));
 
         List<PresetCategory> categories = presetCategoryRepository.findAllByChannelId(channelId, pageable);
 
@@ -86,7 +86,7 @@ public class PresetServiceImpl implements PresetService {
     @Override
     public PresetCategoryRegisterResponse createPresetCategory(Long channelId, PresetCategoryRegisterRequest request) {
         Channel channel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new PresetException(ExceptionCode._INTERNAL_SERVER_ERROR)); // TODO : 채널 에러로 변경해야됨
+                .orElseThrow(() -> new PresetException(ExceptionCode.CHANNEL_NOT_FOUND));
 
         PresetCategory category = PresetCategoryRegisterRequest.toEntity(request, channel);
         category = presetCategoryRepository.save(category);
