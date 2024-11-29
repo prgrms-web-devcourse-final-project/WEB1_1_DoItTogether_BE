@@ -34,7 +34,7 @@ public class ChannelController {
             @AuthenticationPrincipal User user,
             @ParameterObject Pageable pageable) {
 
-        if(user.getEmail() == null) // 임시 로그인
+        if(user.retrieveUserId() == null) // 임시 로그인
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -50,7 +50,7 @@ public class ChannelController {
             @AuthenticationPrincipal User user,
             @RequestBody @Valid ChannelRegisterRequest request) {
 
-        if(user.getEmail() == null) // 임시 로그인
+        if(user.retrieveEmail() == null) // 임시 로그인
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -66,7 +66,7 @@ public class ChannelController {
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId, @RequestBody @Valid ChannelUpdateRequest request) {
 
-        if(user.getEmail() == null) // 임시 로그인
+        if(user.retrieveEmail() == null) // 임시 로그인
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -83,7 +83,7 @@ public class ChannelController {
             @PathVariable("channelId") Long channelId,
             @ParameterObject Pageable pageable) {
 
-        if(user.getEmail() == null) // 임시 로그인
+        if(user.retrieveEmail() == null) // 임시 로그인
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -111,7 +111,7 @@ public class ChannelController {
             @AuthenticationPrincipal User user,
             @PathVariable("inviteLink") String inviteLink) {
 
-        if(user.getEmail() == null) // 임시 로그인
+        if(user.retrieveEmail() == null) // 임시 로그인
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -127,7 +127,7 @@ public class ChannelController {
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId, @Valid @RequestBody ChannelKickUserRequest request) {
 
-        if(user.getEmail() == null) // 임시 로그인
+        if(user.retrieveEmail() == null) // 임시 로그인
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -143,7 +143,7 @@ public class ChannelController {
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId) {
 
-        if (user.getEmail() == null) // 임시 로그인 처리
+        if (user.retrieveEmail() == null) // 임시 로그인 처리
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         channelService.leaveChannel(user, channelId);

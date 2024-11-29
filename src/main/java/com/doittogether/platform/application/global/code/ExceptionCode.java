@@ -12,7 +12,11 @@ public enum ExceptionCode implements GlobalCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_403", "금지된 요청입니다."),
 
     // 집안일 등록 관련
-    CHORE_NOT_FOUND(HttpStatus.NOT_FOUND, "CHORE_404", "요청한 집안일을 찾을 수 없습니다."),
+    HOUSEWORK_NOT_FOUND(HttpStatus.NOT_FOUND, "HOUSEWORK_404", "요청한 집안일을 찾을 수 없습니다."),
+    HOUSEWORK_NOT_NULL(HttpStatus.UNPROCESSABLE_ENTITY, "HOUSEWORK_422", "집안일 객체가 null일 수는 없습니다."),
+    HOUSEWORK_NO_PERMISSION(HttpStatus.FORBIDDEN, "HOUSEWORK_403", "해당 집안일에 접근할 권한이 없습니다."),
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "CATEGORY_404", "요청한 집안일 카테고리를 찾을 수 없습니다."),
+
 
     // 채널 관련
     CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_404", "해당 채널을 찾을 수 없습니다."),
@@ -49,9 +53,9 @@ public enum ExceptionCode implements GlobalCode {
     REDIS_KEY_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_500", "Redis 키 검색 중 오류가 발생하였습니다."),
 
     //Validation
+    NOT_VALIDATE_FILED(HttpStatus.BAD_REQUEST, "VALID_400", "유효성 검증에 실패하였습니다."),
     INVALID_CHANNEL_ID(HttpStatus.BAD_REQUEST, "VALID_400", "유효하지 않은 채널 ID입니다."),
     INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "VALID_400", "유효하지 않은 날짜 형식입니다."),
-    NOT_VALIDATE_FILED(HttpStatus.BAD_REQUEST, "VALID_400", "유효성 검증에 실패하였습니다."),
 
     // Redis 관련 에러 코드
     EMBEDDED_REDIS_START_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_500", "Redis 서버 시작에 실패했습니다."),

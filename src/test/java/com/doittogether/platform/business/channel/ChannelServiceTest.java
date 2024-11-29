@@ -5,7 +5,6 @@ import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.Role;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.entity.UserChannel;
-import com.doittogether.platform.infrastructure.persistence.ChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
@@ -25,7 +24,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

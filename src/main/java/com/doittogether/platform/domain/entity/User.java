@@ -2,7 +2,6 @@ package com.doittogether.platform.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Getter
 @Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
@@ -41,5 +39,18 @@ public class User extends BaseEntity {
         user.email = email;
         user.profileImage = profileImage;
         return user;
+    }
+
+    public Long retrieveUserId() {
+        return userId;
+    }
+
+    public String retrieveEmail() {
+        return email;
+    }
+
+
+    public String retrieveNickName() {
+        return nickName;
     }
 }

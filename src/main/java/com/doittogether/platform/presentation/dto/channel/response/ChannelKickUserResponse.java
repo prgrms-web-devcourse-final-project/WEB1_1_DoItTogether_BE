@@ -15,8 +15,8 @@ public record ChannelKickUserResponse(
 ) {
     public static ChannelKickUserResponse from(User user) {
         return ChannelKickUserResponse.builder()
-                .email(user.getEmail())
-                .nickName(user.getNickName())
+                .email(user.retrieveEmail())
+                .nickName(user.retrieveNickName())
                 .build();
     }
 }

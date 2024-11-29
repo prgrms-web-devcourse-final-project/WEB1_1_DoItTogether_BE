@@ -4,7 +4,6 @@ import com.doittogether.platform.business.preset.PresetServiceImpl;
 import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.PresetCategory;
 import com.doittogether.platform.domain.entity.PresetItem;
-import com.doittogether.platform.infrastructure.persistence.ChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.PresetCategoryRepository;
 import com.doittogether.platform.infrastructure.persistence.PresetItemRepository;
 import com.doittogether.platform.presentation.dto.preset.request.PresetCategoryRegisterRequest;

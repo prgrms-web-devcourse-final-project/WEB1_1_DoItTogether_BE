@@ -1,4 +1,4 @@
-package com.doittogether.platform.infrastructure.persistence;
+package com.doittogether.platform.infrastructure.persistence.channel;
 
 import com.doittogether.platform.domain.entity.Channel;
 import org.springframework.data.jpa.repository.JpaRepository;
