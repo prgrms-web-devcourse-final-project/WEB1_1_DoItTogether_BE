@@ -44,7 +44,6 @@ public class TemporaryLoginSaveTest {
         userRepository.save(
                 User.of("길똥이", "doto@gmail.com", profileImage)
         );
-        userRepository.save(user);
     }
 
     @Test
