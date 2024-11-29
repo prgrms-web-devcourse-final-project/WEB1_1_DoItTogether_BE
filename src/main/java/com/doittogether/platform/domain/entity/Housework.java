@@ -12,9 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -85,8 +83,12 @@ public class Housework extends BaseEntity {
         this.status = Status.UN_COMPLETE;
     }
 
-    public LocalDateTime retrieveStartDateTime() {
-        return startDateTime;
+    public LocalDate retrieveStartDate() {
+        return startDate;
+    }
+
+    public LocalTime retrieveStartTime() {
+        return startTime;
     }
 
     public String retrieveTask() {
