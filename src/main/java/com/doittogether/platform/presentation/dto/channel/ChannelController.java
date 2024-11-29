@@ -151,19 +151,4 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
     }
-
-    @DeleteMapping("/{channelId}/admin/leave")
-    @Operation(summary = "관리자가 채널 나가기", description = "방 관리자가 채널을 나가면 방이 삭제되거나 권한이 위임됩니다.")
-    public ResponseEntity<SuccessResponse<Void>> leaveChannelAsAdmin(
-            @AuthenticationPrincipal User user,
-            @PathVariable("channelId") Long channelId) {
-
-        if (user.getEmail() == null) // 임시 로그인 처리
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        channelService.leaveChannelAsAdmin(user, channelId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
-    }
 }
