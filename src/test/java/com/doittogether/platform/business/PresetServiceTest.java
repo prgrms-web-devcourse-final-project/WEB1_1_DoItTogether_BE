@@ -65,12 +65,12 @@ public class PresetServiceTest {
         assertEquals(2, response.presetKeywordList().size());
 
         PresetKeywordResponse keyword1 = response.presetKeywordList().get(0);
-        assertEquals("100", keyword1.presetId());
+        assertEquals(100L, keyword1.presetId());
         assertEquals("Test Category", keyword1.category());
         assertEquals("Item 1", keyword1.value());
 
         PresetKeywordResponse keyword2 = response.presetKeywordList().get(1);
-        assertEquals("200", keyword2.presetId());
+        assertEquals(200L, keyword2.presetId());
         assertEquals("Test Category", keyword2.category());
         assertEquals("Item 2", keyword2.value());
 
