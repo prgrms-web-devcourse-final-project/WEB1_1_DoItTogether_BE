@@ -41,4 +41,8 @@ public class UserChannel extends BaseEntity {
     public boolean isRoleAdmin() {
         return role.isAdmin();
     }
+
+    public void assignNewAdmin() {
+        this.role = Role.ADMIN;
+    }
 }

@@ -8,7 +8,7 @@ import lombok.Builder;
 @Schema(description = "프리셋 아이템 등록 요청")
 @Builder
 public record PresetItemRegisterRequest(
-        @Schema(description = "프리셋 아이템 이름", example = "[\"바닥 청소\", \"유리창 닦기\"]")
+        @Schema(description = "프리셋 아이템 이름", example = "바닥 청소")
         String name
 ) {
     public static PresetItem toEntity(PresetItemRegisterRequest request,

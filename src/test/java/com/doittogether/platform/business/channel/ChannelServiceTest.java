@@ -25,11 +25,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -67,7 +67,7 @@ public class ChannelServiceTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
         when(userChannelRepository.findByUser(mockUser, pageable)).thenReturn(userChannelsPage);
 
-        ChannelListResponse result = channelService.getMyChannels(email, pageable);
+        ChannelListResponse result = channelService.getMyChannels(mockUser, pageable);
 
         assertNotNull(result);
         assertEquals(mockUser.getUserId(), result.userId());
@@ -100,7 +100,7 @@ public class ChannelServiceTest {
         lenient().when(channelRepository.save(any(Channel.class))).thenReturn(mockChannel);
         lenient().when(userChannelRepository.save(any(UserChannel.class))).thenReturn(mockUserChannel);
 
-        ChannelRegisterResponse response = channelService.createChannel(email, request);
+        ChannelRegisterResponse response = channelService.createChannel(mockUser, request);
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(mockChannel.getChannelId(), response.channelId());
@@ -129,7 +129,7 @@ public class ChannelServiceTest {
         lenient().when(userChannelRepository.findByUserAndChannel(mockUser, mockChannel)).thenReturn(Optional.of(mockUserChannel));
         lenient().when(channelRepository.save(any(Channel.class))).thenReturn(mockChannel);
 
-        ChannelUpdateResponse response = channelService.updateChannelName(email, channelId, request);
+        ChannelUpdateResponse response = channelService.updateChannelName(mockUser, channelId, request);
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(channelId, response.channelId());
@@ -172,7 +172,7 @@ public class ChannelServiceTest {
         lenient().when(userChannelRepository.findByUserAndChannel(mockUser, mockChannel)).thenReturn(Optional.of(mockUserChannel));
         lenient().when(userChannelRepository.findByChannel(mockChannel, pageable)).thenReturn(userChannelsPage);
 
-        ChannelUserListResponse response = channelService.getChannelUsers(email, channelId, pageable);
+        ChannelUserListResponse response = channelService.getChannelUsers(mockUser, channelId, pageable);
 
         assertNotNull(response);
         assertEquals(mockChannel.getChannelId(), response.channelId());
@@ -224,7 +224,7 @@ public class ChannelServiceTest {
         lenient().when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
         lenient().when(userChannelRepository.existsByUserAndChannel(mockUser, mockChannel)).thenReturn(false);
 
-        ChannelJoinResponse response = channelService.joinChannelViaInviteLink(email, inviteLink);
+        ChannelJoinResponse response = channelService.joinChannelViaInviteLink(mockUser, inviteLink);
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(mockChannel.getChannelId(), response.channelId());
@@ -265,7 +265,7 @@ public class ChannelServiceTest {
         lenient().when(userRepository.findByEmail(targetEmail)).thenReturn(Optional.of(targetUser));
         lenient().when(userChannelRepository.findByUserAndChannel(targetUser, mockChannel)).thenReturn(Optional.of(targetUserChannel));
 
-        ChannelKickUserResponse response = channelService.kickUserFromChannel(adminEmail, channelId, request);
+        ChannelKickUserResponse response = channelService.kickUserFromChannel(adminUser, channelId, request);
 
         assertNotNull(response);
         assertEquals(targetUser.getEmail(), response.email());
@@ -277,6 +277,108 @@ public class ChannelServiceTest {
         verify(userRepository, times(1)).findByEmail(targetEmail);
         verify(userChannelRepository, times(1)).findByUserAndChannel(targetUser, mockChannel);
         verify(userChannelRepository, times(1)).delete(targetUserChannel);
+    }
+
+    @Test
+    void 일반_사용자가_채널_나가기() {
+        String email = "doto@example.com";
+        User mockUser = User.of("Test User", email, null);
+        setField(mockUser, "userId", 1L);
+
+        Channel mockChannel = Channel.builder().name("Test Channel").build();
+        setField(mockChannel, "channelId", 1L);
+
+        UserChannel mockUserChannel = UserChannel.of(mockUser, mockChannel, Role.PARTICIPANT);
+        setField(mockUserChannel, "userChannelId", 1L);
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        when(channelRepository.findById(1L)).thenReturn(Optional.of(mockChannel));
+        when(userChannelRepository.findByUserAndChannel(mockUser, mockChannel))
+                .thenReturn(Optional.of(mockUserChannel));
+
+        channelService.leaveChannel(mockUser, 1L);
+
+        verify(userRepository, Mockito.times(1)).findByEmail(email);
+        verify(channelRepository, Mockito.times(1)).findById(1L);
+        verify(userChannelRepository, Mockito.times(1)).findByUserAndChannel(mockUser, mockChannel);
+        verify(userChannelRepository, Mockito.times(1)).delete(mockUserChannel);
+        verifyNoMoreInteractions(userRepository, channelRepository, userChannelRepository);
+    }
+
+    @Test
+    void 관리자가_채널_나가기_혼자_남은_경우() {
+        String email = "admin@example.com";
+        User mockAdmin = User.of("Admin User", email, null);
+        setField(mockAdmin, "userId", 1L);
+
+        Channel mockChannel = Mockito.mock(Channel.class);
+        UserChannel mockAdminChannel = UserChannel.of(mockAdmin, mockChannel, Role.ADMIN);
+        setField(mockAdminChannel, "userChannelId", 1L);
+
+        List<UserChannel> adminChannelList = List.of(mockAdminChannel);
+
+        doAnswer(invocation -> {
+            if ("getUserChannels".equals(invocation.getMethod().getName())) {
+                return adminChannelList;
+            }
+            return null;
+        }).when(mockChannel).getUserChannels();
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockAdmin));
+        when(channelRepository.findById(1L)).thenReturn(Optional.of(mockChannel));
+        when(userChannelRepository.findByUserAndChannel(mockAdmin, mockChannel))
+                .thenReturn(Optional.of(mockAdminChannel));
+
+        channelService.leaveChannel(mockAdmin, 1L);
+
+        verify(channelRepository, times(1)).delete(mockChannel);
+        verifyNoMoreInteractions(userRepository, channelRepository, userChannelRepository);
+    }
+
+    @Test
+    void 관리자가_채널_나가기_다른_참여자가_있는_경우_위임() {
+        String adminEmail = "admin@example.com";
+        String userEmail = "user@example.com";
+
+        User mockAdmin = User.of("Admin User", adminEmail, null);
+        setField(mockAdmin, "userId", 1L);
+
+        User mockUser = User.of("Regular User", userEmail, null);
+        setField(mockUser, "userId", 2L);
+
+        Channel mockChannel = Mockito.mock(Channel.class);
+
+        UserChannel mockAdminChannel = UserChannel.of(mockAdmin, mockChannel, Role.ADMIN);
+        setField(mockAdminChannel, "userChannelId", 1L);
+
+        UserChannel mockUserChannel = UserChannel.of(mockUser, mockChannel, Role.PARTICIPANT);
+        setField(mockUserChannel, "userChannelId", 2L);
+
+        List<UserChannel> channelUserList = List.of(mockAdminChannel, mockUserChannel);
+
+        doAnswer(invocation -> {
+            if ("getUserChannels".equals(invocation.getMethod().getName())) {
+                return channelUserList;
+            }
+            return null;
+        }).when(mockChannel).getUserChannels();
+
+        when(userRepository.findByEmail(adminEmail)).thenReturn(Optional.of(mockAdmin));
+        when(channelRepository.findById(1L)).thenReturn(Optional.of(mockChannel));
+        when(userChannelRepository.findByUserAndChannel(mockAdmin, mockChannel))
+                .thenReturn(Optional.of(mockAdminChannel));
+        when(userChannelRepository.findFirstByChannelAndRoleNot(mockChannel, Role.ADMIN))
+                .thenReturn(Optional.of(mockUserChannel));
+
+        channelService.leaveChannel(mockAdmin, 1L);
+
+        verify(userChannelRepository, times(1)).delete(mockAdminChannel);
+        verify(userChannelRepository, times(1)).findFirstByChannelAndRoleNot(mockChannel, Role.ADMIN);
+        assertTrue(mockUserChannel.isRoleAdmin());
+
+        verify(channelRepository, never()).delete(mockChannel);
+
+        verifyNoMoreInteractions(userRepository, channelRepository, userChannelRepository);
     }
 
     // id 값 설정할 수 있도록 임시
