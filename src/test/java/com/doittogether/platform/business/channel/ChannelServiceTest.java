@@ -67,7 +67,7 @@ public class ChannelServiceTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
         when(userChannelRepository.findByUser(mockUser, pageable)).thenReturn(userChannelsPage);
 
-        ChannelListResponse result = channelService.getMyChannels(email, pageable);
+        ChannelListResponse result = channelService.getMyChannels(mockUser, pageable);
 
         assertNotNull(result);
         assertEquals(mockUser.getUserId(), result.userId());
@@ -100,7 +100,7 @@ public class ChannelServiceTest {
         lenient().when(channelRepository.save(any(Channel.class))).thenReturn(mockChannel);
         lenient().when(userChannelRepository.save(any(UserChannel.class))).thenReturn(mockUserChannel);
 
-        ChannelRegisterResponse response = channelService.createChannel(email, request);
+        ChannelRegisterResponse response = channelService.createChannel(mockUser, request);
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(mockChannel.getChannelId(), response.channelId());
@@ -129,7 +129,7 @@ public class ChannelServiceTest {
         lenient().when(userChannelRepository.findByUserAndChannel(mockUser, mockChannel)).thenReturn(Optional.of(mockUserChannel));
         lenient().when(channelRepository.save(any(Channel.class))).thenReturn(mockChannel);
 
-        ChannelUpdateResponse response = channelService.updateChannelName(email, channelId, request);
+        ChannelUpdateResponse response = channelService.updateChannelName(mockUser, channelId, request);
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(channelId, response.channelId());
@@ -172,7 +172,7 @@ public class ChannelServiceTest {
         lenient().when(userChannelRepository.findByUserAndChannel(mockUser, mockChannel)).thenReturn(Optional.of(mockUserChannel));
         lenient().when(userChannelRepository.findByChannel(mockChannel, pageable)).thenReturn(userChannelsPage);
 
-        ChannelUserListResponse response = channelService.getChannelUsers(email, channelId, pageable);
+        ChannelUserListResponse response = channelService.getChannelUsers(mockUser, channelId, pageable);
 
         assertNotNull(response);
         assertEquals(mockChannel.getChannelId(), response.channelId());
@@ -224,7 +224,7 @@ public class ChannelServiceTest {
         lenient().when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
         lenient().when(userChannelRepository.existsByUserAndChannel(mockUser, mockChannel)).thenReturn(false);
 
-        ChannelJoinResponse response = channelService.joinChannelViaInviteLink(email, inviteLink);
+        ChannelJoinResponse response = channelService.joinChannelViaInviteLink(mockUser, inviteLink);
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(mockChannel.getChannelId(), response.channelId());
@@ -265,7 +265,7 @@ public class ChannelServiceTest {
         lenient().when(userRepository.findByEmail(targetEmail)).thenReturn(Optional.of(targetUser));
         lenient().when(userChannelRepository.findByUserAndChannel(targetUser, mockChannel)).thenReturn(Optional.of(targetUserChannel));
 
-        ChannelKickUserResponse response = channelService.kickUserFromChannel(adminEmail, channelId, request);
+        ChannelKickUserResponse response = channelService.kickUserFromChannel(adminUser, channelId, request);
 
         assertNotNull(response);
         assertEquals(targetUser.getEmail(), response.email());
