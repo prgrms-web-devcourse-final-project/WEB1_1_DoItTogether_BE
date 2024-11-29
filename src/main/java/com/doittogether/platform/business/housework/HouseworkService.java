@@ -3,15 +3,13 @@ package com.doittogether.platform.business.housework;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
-import org.springframework.data.domain.PageRequest;
+import java.time.LocalDate;
+import org.springframework.data.domain.Pageable;
 
 public interface HouseworkService {
-    public HouseworkSliceResponse findAllByChannelId(final User loginUser, final Long lastHouseworkId, final Long channelId,
-                                                     final PageRequest pageRequest);
+    public HouseworkSliceResponse findAllByChannelIdAndTargetDate(final User loginUser, final Long channelId, final LocalDate targetDate, final Pageable pageable);
 
-    public HouseworkSliceResponse findAllByChannelIdAndAssigneeId(final Long lastHouseworkId, final Long channelId,
-                                                                  final Long userId, final
-                                                                  PageRequest pageRequest);
+    public HouseworkSliceResponse findAllByChannelIdAndTargetDateAndAssigneeId(final Long channelId, final LocalDate targetDate, final Long assigneeId, final Pageable pageable);
 
     public void addHousework(final Long channelId, final HouseworkRequest request);
 
