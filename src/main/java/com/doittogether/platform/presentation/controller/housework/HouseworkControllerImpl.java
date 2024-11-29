@@ -40,7 +40,7 @@ public class HouseworkControllerImpl implements HouseworkController {
 
     private final HouseworkService houseworkService;
 
-    @GetMapping
+    @GetMapping("/{targetDate}/{pageNumber}/{pageSize}")
     @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
     public ResponseEntity<SuccessResponse<HouseworkSliceResponse>> getHouseworkByDate(
             @AuthenticationPrincipal User user,
@@ -60,7 +60,7 @@ public class HouseworkControllerImpl implements HouseworkController {
                 ));
     }
 
-    @GetMapping
+    @GetMapping("/{targetDate}/{pageNumber}/{pageSize}/{assigneeId}")
     @Operation(summary = "집안일 담당자별 목록 조회", description = "일자별 담당자별 집안일 목록을 조회합니다.")
     public ResponseEntity<SuccessResponse<HouseworkSliceResponse>> getHouseworkByDateAndAssignee(
             @AuthenticationPrincipal User user,
