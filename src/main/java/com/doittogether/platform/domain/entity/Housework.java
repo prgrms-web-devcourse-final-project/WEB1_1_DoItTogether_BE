@@ -12,7 +12,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -24,8 +27,11 @@ public class Housework extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long houseworkId;
 
-    @Column(name = "start_date_time")
-    private LocalDateTime startDateTime;
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "start_time")
+    private LocalTime startTime;
 
     @Column(name = "task")
     private String task;
@@ -49,10 +55,11 @@ public class Housework extends BaseEntity {
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
-    public static Housework of(LocalDateTime startDateTime, String task, HouseworkCategory category, Assignee assignee,
+    public static Housework of(LocalDate startDate, LocalTime startTime, String task, HouseworkCategory category, Assignee assignee,
                                Channel channel) {
         final Housework housework = new Housework();
-        housework.startDateTime = startDateTime;
+        housework.startDate = startDate;
+        housework.startTime = startTime;
         housework.task = task;
         housework.category = category;
         housework.status = Status.UN_COMPLETE;
@@ -62,7 +69,8 @@ public class Housework extends BaseEntity {
     }
 
     public Housework update(HouseworkRequest request, Assignee assignee) {
-        this.startDateTime = request.startDateTime();
+        this.startDate = request.startDate();
+        this.startTime = request.startTime();
         this.task = request.task();
         this.category = request.category();
         this.assignee = assignee;

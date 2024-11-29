@@ -66,7 +66,8 @@ public class HouseworkServiceImpl implements HouseworkService {
         try {
             final Assignee assignee = entityManager.getReference(Assignee.class, request.userId());
             final Housework housework = Housework.of(
-                    request.startDateTime(),
+                    request.startDate(),
+                    request.startTime(),
                     request.task(),
                     request.category(),
                     Assignee.assignAssignee(assignee.retrieveUser()),
