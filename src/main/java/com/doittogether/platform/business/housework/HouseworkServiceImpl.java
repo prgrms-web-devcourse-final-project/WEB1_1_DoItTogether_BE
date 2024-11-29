@@ -7,14 +7,16 @@ import com.doittogether.platform.domain.entity.Assignee;
 import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.Housework;
 import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.AssigneeRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.HouseworkRepository;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,31 +28,34 @@ public class HouseworkServiceImpl implements HouseworkService {
 
     private final EntityManager entityManager;
     private final HouseworkRepository houseworkRepository;
-    private final ChannelRepository channelRepository;
     private final AssigneeRepository assigneeRepository;
     private final HouseworkValidator houseworkValidator;
     private final ChannelValidator channelValidator;
 
+    @Override
     @Transactional(readOnly = true)
-    public HouseworkSliceResponse findAllByChannelId(final User loginUser, final Long lastHouseworkId,
-                                                     final Long channelId,
-                                                     final
-                                                     PageRequest pageRequest) {
+    public HouseworkSliceResponse findAllByChannelIdAndTargetDate(final User loginUser, final Long channelId, final
+    LocalDate targetDate, final Pageable pageable) {
         channelValidator.validateExistChannel(channelId);
-        final Slice<Housework> houseworks = houseworkRepository.findAllByChannelId(lastHouseworkId, channelId,
-                loginUser.retrieveUserId(),
-                pageRequest);
+        final LocalDateTime startOfDay = targetDate.atStartOfDay();
+        final LocalDateTime endOfDay = targetDate.atTime(LocalTime.MAX);
+        final Slice<Housework> houseworks = houseworkRepository.findAllByChannelIdAndTargetDate(
+                channelId, loginUser.retrieveUserId(), pageable, startOfDay, endOfDay);
+
         return HouseworkSliceResponse.from(houseworks);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public HouseworkSliceResponse findAllByChannelIdAndAssigneeId(final Long lastHouseworkId, final Long channelId,
-                                                                  final Long assigneeId, final
-                                                                  PageRequest pageRequest) {
+    public HouseworkSliceResponse findAllByChannelIdAndTargetDateAndAssigneeId(final Long channelId, final
+    LocalDate targetDate,
+                                                                               final Long assigneeId,
+                                                                               final Pageable pageable) {
         channelValidator.validateExistChannel(channelId);
-        final Slice<Housework> houseworks = houseworkRepository.findAllByChannelIdAndAssigneeId(channelId, assigneeId,
-                pageRequest);
+        final LocalDateTime startOfDay = targetDate.atStartOfDay();
+        final LocalDateTime endOfDay = targetDate.atTime(LocalTime.MAX);
+        final Slice<Housework> houseworks = houseworkRepository.findAllByChannelIdAndTargetDateAndAssigneeId(channelId,
+                assigneeId, pageable, startOfDay, endOfDay);
         return HouseworkSliceResponse.from(houseworks);
     }
 
