@@ -37,7 +37,7 @@ public class PresetServiceImpl implements PresetService {
                 .map(item -> PresetKeywordResponse.builder()
                         .presetCategoryId(item.getPresetCategory().getPresetCategoryId())
                         .category(item.getPresetCategory().getCategory())
-                        .presetId(item.getPresetItemId().toString())
+                        .presetId(item.getPresetItemId())
                         .value(item.getValue())
                         .build())
                 .toList();
