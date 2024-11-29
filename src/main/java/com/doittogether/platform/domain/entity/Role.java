@@ -1,6 +1,19 @@
 package com.doittogether.platform.domain.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
-    ADMIN,
-    PARTICIPANT
+    ADMIN("관리자"),
+    PARTICIPANT("참가자");
+
+    private final String description;
+
+    Role(String description) {
+        this.description = description;
+    };
+
+    public boolean isAdmin() {
+        return this == ADMIN;
+    }
 }
