@@ -42,7 +42,15 @@ public record HouseworkResponse(
 
         @NotBlank
         @Schema(description = "작업 담당자 이름", example = "홍길동")
-        String assignee
+        String assignee,
+
+        @NotNull
+        @Schema(description = "작업 담당자 userId", example = "홍길동")
+        Long userId,
+
+        @NotNull
+        @Schema(description = "작업 담당자 assigneeId", example = "홍길동")
+        Long assigneeId
 ) {
     public static HouseworkResponse from(Housework housework) {
         return HouseworkResponse.builder()
@@ -51,6 +59,8 @@ public record HouseworkResponse(
                 .startDate(housework.retrieveStartDate())
                 .startTime(housework.retrieveStartTime())
                 .isAllDay(housework.isAllDay())
+                .userId(housework.retrieveAssignee().retrieveUser().retrieveUserId())
+                .assigneeId(housework.retrieveAssignee().retrieveAssigneeId())
                 .assignee(housework.retrieveAssignee().retrieveUser().retrieveNickName())
                 .build();
     }
