@@ -7,7 +7,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import lombok.Builder;
 
 @Builder(access = PRIVATE)
@@ -26,9 +27,14 @@ public record HouseworkResponse(
         String task,
 
         @NotBlank
-        @Schema(description = "진행 날짜", example = "2024-11-23 00:00:00")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        LocalDateTime startDateTime,
+        @Schema(description = "진행 날짜", example = "2024-11-23")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        LocalDate startDate,
+
+        @NotBlank
+        @Schema(description = "진행 시간", example = "OO:OO")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
+        LocalTime startTime,
 
         @NotBlank
         @Schema(description = "하루 종일 여부", example = "true")
@@ -42,7 +48,8 @@ public record HouseworkResponse(
         return HouseworkResponse.builder()
                 .category(housework.retrieveCategory().getDisplayName())
                 .task(housework.retrieveTask())
-                .startDateTime(housework.retrieveStartDateTime())
+                .startDate(housework.retrieveStartDate())
+                .startTime(housework.retrieveStartTime())
                 .isAllDay(housework.isAllDay())
                 .assignee(housework.retrieveAssignee().retrieveUser().retrieveNickName())
                 .build();
