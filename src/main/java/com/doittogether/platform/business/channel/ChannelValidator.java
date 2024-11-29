@@ -1,6 +1,7 @@
 package com.doittogether.platform.business.channel;
 
 import com.doittogether.platform.application.global.code.ExceptionCode;
+import com.doittogether.platform.application.global.exception.channel.ChannelValidationException;
 import com.doittogether.platform.application.global.exception.housework.HouseworkException;
 import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,6 @@ public class ChannelValidator {
 
     public void validateExistChannel(final Long channelId) {
         channelRepository.findById(channelId)
-                .orElseThrow(() -> new HouseworkException(ExceptionCode.CHANNEL_NOT_FOUND));
+                .orElseThrow(() -> new ChannelValidationException(ExceptionCode.CHANNEL_NOT_FOUND));
     }
 }
