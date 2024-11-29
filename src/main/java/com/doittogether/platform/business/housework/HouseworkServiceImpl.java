@@ -7,14 +7,13 @@ import com.doittogether.platform.domain.entity.Assignee;
 import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.Housework;
 import com.doittogether.platform.domain.entity.User;
+import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.AssigneeRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.HouseworkRepository;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -31,6 +30,7 @@ public class HouseworkServiceImpl implements HouseworkService {
     private final AssigneeRepository assigneeRepository;
     private final HouseworkValidator houseworkValidator;
     private final ChannelValidator channelValidator;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -60,7 +60,9 @@ public class HouseworkServiceImpl implements HouseworkService {
         channelValidator.validateExistChannel(channelId);
         final Channel channel = entityManager.getReference(Channel.class, channelId);
         try {
-            final Assignee assignee = entityManager.getReference(Assignee.class, request.userId());
+            final Assignee assignee = Assignee.assignAssignee(userRepository.findById(request.userId())
+                    .orElseThrow(() -> new HouseworkException(ExceptionCode.USER_NOT_FOUND)));
+            assigneeRepository.save(assignee);
             final Housework housework = Housework.of(
                     request.startDate(),
                     request.startTime(),
