@@ -37,10 +37,8 @@ public class HouseworkServiceImpl implements HouseworkService {
     public HouseworkSliceResponse findAllByChannelIdAndTargetDate(final User loginUser, final Long channelId, final
     LocalDate targetDate, final Pageable pageable) {
         channelValidator.validateExistChannel(channelId);
-        final LocalDateTime startOfDay = targetDate.atStartOfDay();
-        final LocalDateTime endOfDay = targetDate.atTime(LocalTime.MAX);
         final Slice<Housework> houseworks = houseworkRepository.findAllByChannelIdAndTargetDate(
-                channelId, loginUser.retrieveUserId(), pageable, startOfDay, endOfDay);
+                channelId, loginUser.retrieveUserId(), pageable, targetDate);
 
         return HouseworkSliceResponse.from(houseworks);
     }
@@ -52,10 +50,8 @@ public class HouseworkServiceImpl implements HouseworkService {
                                                                                final Long assigneeId,
                                                                                final Pageable pageable) {
         channelValidator.validateExistChannel(channelId);
-        final LocalDateTime startOfDay = targetDate.atStartOfDay();
-        final LocalDateTime endOfDay = targetDate.atTime(LocalTime.MAX);
         final Slice<Housework> houseworks = houseworkRepository.findAllByChannelIdAndTargetDateAndAssigneeId(channelId,
-                assigneeId, pageable, startOfDay, endOfDay);
+                assigneeId, pageable, targetDate);
         return HouseworkSliceResponse.from(houseworks);
     }
 
