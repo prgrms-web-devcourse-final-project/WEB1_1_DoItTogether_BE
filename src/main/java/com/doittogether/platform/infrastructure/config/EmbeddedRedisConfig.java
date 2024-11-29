@@ -124,7 +124,7 @@ public class EmbeddedRedisConfig {
     // mac os용 redis 바이너리 파일
     private File getRedisServerExecutable() {
         try {
-            return new File("src/main/resources/redis/redis-server-7.2.6-mac-arm64");
+            return new File("/opt/homebrew/bin/redis-server");
         } catch (Exception e) {
             throw new EmbeddedRedisException(ExceptionCode.EMBEDDED_REDIS_EXECUTABLE_NOT_FOUND);
         }
