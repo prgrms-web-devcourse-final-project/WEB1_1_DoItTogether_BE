@@ -6,23 +6,31 @@ import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.business.housework.HouseworkService;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
+import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,6 +39,48 @@ import org.springframework.web.bind.annotation.RestController;
 public class HouseworkControllerImpl implements HouseworkController {
 
     private final HouseworkService houseworkService;
+
+    @GetMapping
+    @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
+    public ResponseEntity<SuccessResponse<HouseworkSliceResponse>> getHouseworkByDate(
+            @AuthenticationPrincipal User user,
+            @PathVariable("channelId") Long channelId,
+            @RequestParam("targetDate")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // yyyy-MM-dd 형식을 지원
+            @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate,
+            @RequestParam("pageNumber") Integer pageNumber,
+            @RequestParam("pageSize") Integer pageSize
+    ) {
+        final Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        houseworkService.findAllByChannelIdAndTargetDate(loginUser, channelId, targetDate, pageable)
+                ));
+    }
+
+    @GetMapping
+    @Operation(summary = "집안일 담당자별 목록 조회", description = "일자별 담당자별 집안일 목록을 조회합니다.")
+    public ResponseEntity<SuccessResponse<HouseworkSliceResponse>> getHouseworkByDateAndAssignee(
+            @AuthenticationPrincipal User user,
+            @PathVariable("channelId") Long channelId,
+            @RequestParam("targetDate")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // yyyy-MM-dd 형식을 지원
+            @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate,
+            @RequestParam("assigneeId") Long assigneeId,
+            @RequestParam("pageNumber") Integer pageNumber,
+            @RequestParam("pageSize") Integer pageSize
+    ) {
+        final Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        houseworkService.findAllByChannelIdAndTargetDateAndAssigneeId(channelId, targetDate,
+                                assigneeId, pageable)
+                ));
+    }
 
     @Override
     @PostMapping
@@ -90,7 +140,7 @@ public class HouseworkControllerImpl implements HouseworkController {
                                                                  @PathVariable("channelId") Long channelId,
                                                                  @PathVariable(name = "houseworkId") Long houseworkId) {
         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        houseworkService.deleteHousework(loginUser,houseworkId,channelId);
+        houseworkService.deleteHousework(loginUser, houseworkId, channelId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._NO_CONTENT));
     }
