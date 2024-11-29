@@ -1,6 +1,7 @@
 package com.doittogether.platform.infrastructure.persistence;
 
 import com.doittogether.platform.domain.entity.Channel;
+import com.doittogether.platform.domain.entity.Role;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.entity.UserChannel;
 import org.springframework.data.domain.Page;
@@ -17,4 +18,8 @@ public interface UserChannelRepository extends JpaRepository<UserChannel, Long> 
     Page<UserChannel> findByChannel(Channel channel, Pageable pageable);
 
     boolean existsByUserAndChannel(User user, Channel channel);
+
+    void deleteByUserAndChannel(User user, Channel channel);
+
+    Optional<UserChannel> findFirstByChannelAndRoleNot(Channel channel, Role role);
 }

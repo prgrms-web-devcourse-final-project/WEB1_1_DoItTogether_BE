@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -163,13 +162,28 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
+    @Transactional
     public void leaveChannel(User loginUser, Long channelId) {
+        User user = userRepository.findByEmail(loginUser.getEmail())
+                .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new ChannelException(ExceptionCode.CHANNEL_NOT_FOUND));
 
-    }
+        UserChannel userChannel = userChannelRepository.findByUserAndChannel(user, channel)
+                .orElseThrow(() -> new ChannelException(ExceptionCode.USER_CHANNEL_RELATION_NOT_FOUND));
 
-    @Override
-    public void leaveChannelAsAdmin(User loginUser, Long channelId) {
+        if (userChannel.isRoleAdmin()) { // 관리자 이라면,
+            if (channel.getUserChannels().size() == 1) { // 방에 관리자가 혼자 남은 경우
+                channelRepository.delete(channel);
+                return;
+            }
 
+            UserChannel newAdmin = userChannelRepository.findFirstByChannelAndRoleNot(channel, Role.ADMIN)
+                    .orElseThrow(() -> new ChannelException(ExceptionCode.UNABLE_TO_ASSIGN_NEW_ADMIN));
+            newAdmin.assignNewAdmin(); // 다른 사용자에게 관리자 권한 부여
+        }
+
+        userChannelRepository.delete(userChannel);
     }
 
     private Pageable resolveSort(Pageable pageable) {

@@ -18,6 +18,8 @@ public enum ExceptionCode implements GlobalCode {
     CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_404", "해당 채널을 찾을 수 없습니다."),
     CHANNEL_NAME_DUPLICATE(HttpStatus.CONFLICT, "CHANNEL_409", "채널 이름이 중복됩니다."),
     CHANNEL_ACCESS_DENIED(HttpStatus.FORBIDDEN, "CHANNEL_403", "채널에 대한 접근 권한이 없습니다."),
+    USER_CHANNEL_RELATION_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_404", "유저와 채널 관계를 찾을 수 없습니다."),
+    UNABLE_TO_ASSIGN_NEW_ADMIN(HttpStatus.BAD_REQUEST, "CHANNEL_400", "새 관리자를 지정할 수 없습니다."),
 
     // 초대 링크 관련
     INVALID_INVITE_LINK(HttpStatus.BAD_REQUEST, "INVITE_400", "유효하지 않은 초대 링크입니다."),

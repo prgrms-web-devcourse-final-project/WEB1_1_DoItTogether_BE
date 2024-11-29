@@ -17,5 +17,4 @@ public interface ChannelService {
     ChannelJoinResponse joinChannelViaInviteLink(User loginUser, String request);
     ChannelKickUserResponse kickUserFromChannel(User loginUser, Long channelId, ChannelKickUserRequest request);
     void leaveChannel(User loginUser, Long channelId);
-    void leaveChannelAsAdmin(User loginUser, Long channelId);
 }
