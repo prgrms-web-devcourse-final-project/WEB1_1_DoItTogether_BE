@@ -31,6 +31,9 @@ public class Assignee {
         assignee.user = user;
         return assignee;
     }
+    public Long retrieveAssigneeId() {
+        return assigneeId;
+    }
     public User retrieveUser() {
         return user;
     }
