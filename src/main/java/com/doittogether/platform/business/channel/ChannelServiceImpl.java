@@ -36,8 +36,8 @@ public class ChannelServiceImpl implements ChannelService {
     private final InviteLinkService inviteLinkService;
 
     @Override
-    public ChannelListResponse getMyChannels(String email, Pageable pageable) {
-        User user = userRepository.findByEmail(email)
+    public ChannelListResponse getMyChannels(User loginUser, Pageable pageable) {
+        User user = userRepository.findByEmail(loginUser.getEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         Pageable resolvedPageable = resolveSort(pageable);
@@ -50,8 +50,8 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     @Transactional
-    public ChannelRegisterResponse createChannel(String email, ChannelRegisterRequest request) {
-        User user = userRepository.findByEmail(email)
+    public ChannelRegisterResponse createChannel(User loginUser, ChannelRegisterRequest request) {
+        User user = userRepository.findByEmail(loginUser.getEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         Channel channel = ChannelRegisterRequest.toEntity(request);
@@ -64,8 +64,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public ChannelUpdateResponse updateChannelName(String email, Long channelId, ChannelUpdateRequest request) {
-        User user = userRepository.findByEmail(email)
+    public ChannelUpdateResponse updateChannelName(User loginUser, Long channelId, ChannelUpdateRequest request) {
+        User user = userRepository.findByEmail(loginUser.getEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         Channel channel = channelRepository.findById(channelId)
@@ -87,8 +87,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public ChannelUserListResponse getChannelUsers(String email, Long channelId, Pageable pageable) {
-        User user = userRepository.findByEmail(email)
+    public ChannelUserListResponse getChannelUsers(User loginUser, Long channelId, Pageable pageable) {
+        User user = userRepository.findByEmail(loginUser.getEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         Channel channel = channelRepository.findById(channelId)
@@ -116,13 +116,13 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public ChannelJoinResponse joinChannelViaInviteLink(String email, String inviteLink) {
+    public ChannelJoinResponse joinChannelViaInviteLink(User loginUser, String inviteLink) {
         Long channelId = inviteLinkService.validateInviteLink(inviteLink);
 
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelException(ExceptionCode.CHANNEL_NOT_FOUND));
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(loginUser.getEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         boolean isUserInChannel = userChannelRepository.existsByUserAndChannel(user, channel);
@@ -137,8 +137,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public ChannelKickUserResponse kickUserFromChannel(String email, Long channelId, ChannelKickUserRequest request) {
-        User adminUser = userRepository.findByEmail(email)
+    public ChannelKickUserResponse kickUserFromChannel(User loginUser, Long channelId, ChannelKickUserRequest request) {
+        User adminUser = userRepository.findByEmail(loginUser.getEmail())
                 .orElseThrow(() -> new ChannelException(ExceptionCode.USER_NOT_FOUND));
 
         Channel channel = channelRepository.findById(channelId)
@@ -160,6 +160,16 @@ public class ChannelServiceImpl implements ChannelService {
         userChannelRepository.delete(targetUserChannel);
 
         return ChannelKickUserResponse.from(targetUser);
+    }
+
+    @Override
+    public void leaveChannel(User loginUser, Long channelId) {
+
+    }
+
+    @Override
+    public void leaveChannelAsAdmin(User loginUser, Long channelId) {
+
     }
 
     private Pageable resolveSort(Pageable pageable) {

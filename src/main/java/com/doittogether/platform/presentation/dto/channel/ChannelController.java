@@ -40,7 +40,7 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
-                        channelService.getMyChannels(user.getEmail(), pageable)
+                        channelService.getMyChannels(user, pageable)
                 ));
     }
 
@@ -56,7 +56,7 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
-                        channelService.createChannel(user.getEmail(), request)
+                        channelService.createChannel(user, request)
                 ));
     }
 
@@ -72,7 +72,7 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
-                        channelService.updateChannelName(user.getEmail(), channelId, request)
+                        channelService.updateChannelName(user, channelId, request)
                 ));
     }
 
@@ -89,7 +89,7 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
-                        channelService.getChannelUsers(user.getEmail(), channelId, pageable)
+                        channelService.getChannelUsers(user, channelId, pageable)
                 ));
     }
 
@@ -117,7 +117,7 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
-                        channelService.joinChannelViaInviteLink(user.getEmail(), inviteLink)
+                        channelService.joinChannelViaInviteLink(user, inviteLink)
                 ));
     }
 
@@ -133,7 +133,37 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
-                        channelService.kickUserFromChannel(user.getEmail(), channelId, request)
+                        channelService.kickUserFromChannel(user, channelId, request)
                 ));
+    }
+
+    @DeleteMapping("/{channelId}/leave")
+    @Operation(summary = "일반 참가자가 채널 나가기", description = "일반 참가자가 채널을 나가면 연관된 데이터가 삭제됩니다.")
+    public ResponseEntity<SuccessResponse<Void>> leaveChannel(
+            @AuthenticationPrincipal User user,
+            @PathVariable("channelId") Long channelId) {
+
+        if (user.getEmail() == null) // 임시 로그인 처리
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        channelService.leaveChannel(user, channelId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
+    }
+
+    @DeleteMapping("/{channelId}/admin/leave")
+    @Operation(summary = "관리자가 채널 나가기", description = "방 관리자가 채널을 나가면 방이 삭제되거나 권한이 위임됩니다.")
+    public ResponseEntity<SuccessResponse<Void>> leaveChannelAsAdmin(
+            @AuthenticationPrincipal User user,
+            @PathVariable("channelId") Long channelId) {
+
+        if (user.getEmail() == null) // 임시 로그인 처리
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        channelService.leaveChannelAsAdmin(user, channelId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.onSuccess(SuccessCode._OK, null));
     }
 }
