@@ -1,4 +1,4 @@
-package com.doittogether.platform.presentation.dto.housework;
+package com.doittogether.platform.presentation.housework.dto;
 
 import static lombok.AccessLevel.PRIVATE;
 

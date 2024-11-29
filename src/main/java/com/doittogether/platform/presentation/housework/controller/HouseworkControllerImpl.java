@@ -1,12 +1,12 @@
-package com.doittogether.platform.presentation.controller.housework;
+package com.doittogether.platform.presentation.housework.controller;
 
 import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.ExceptionResponse;
 import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.business.housework.HouseworkService;
 import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
-import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
+import com.doittogether.platform.presentation.housework.dto.HouseworkRequest;
+import com.doittogether.platform.presentation.housework.dto.HouseworkSliceResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

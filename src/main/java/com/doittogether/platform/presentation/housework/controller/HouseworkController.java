@@ -1,8 +1,8 @@
-package com.doittogether.platform.presentation.controller.housework;
+package com.doittogether.platform.presentation.housework.controller;
 
 import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
+import com.doittogether.platform.presentation.housework.dto.HouseworkRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

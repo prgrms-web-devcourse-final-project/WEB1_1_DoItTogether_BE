@@ -1,4 +1,4 @@
-package com.doittogether.platform.presentation.dto.housework;
+package com.doittogether.platform.presentation.housework.dto;
 
 import com.doittogether.platform.domain.entity.HouseworkCategory;
 import com.fasterxml.jackson.annotation.JsonFormat;

@@ -1,8 +1,8 @@
 package com.doittogether.platform.business.housework;
 
 import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
-import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
+import com.doittogether.platform.presentation.housework.dto.HouseworkRequest;
+import com.doittogether.platform.presentation.housework.dto.HouseworkSliceResponse;
 import java.time.LocalDate;
 import org.springframework.data.domain.Pageable;
 
