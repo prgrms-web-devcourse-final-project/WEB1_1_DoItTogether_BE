@@ -2,7 +2,9 @@ package com.doittogether.platform.presentation.dto.housework;
 
 import com.doittogether.platform.domain.entity.HouseworkCategory;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ public record HouseworkRequest(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         LocalDate startDate,
 
+        @Nullable
         @Schema(description = "시작 시간", example = "00:00", type = "string")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
         LocalTime startTime,
