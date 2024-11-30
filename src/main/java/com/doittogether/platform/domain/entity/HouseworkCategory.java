@@ -16,7 +16,7 @@ public enum HouseworkCategory {
         this.displayName = displayName;
     }
 
-    public static HouseworkCategory from(final String displayName) {
+    public static HouseworkCategory parse(final String displayName) {
         for (HouseworkCategory category : HouseworkCategory.values()) {
             if (category.getDisplayName().equals(displayName)) {
                 return category;
