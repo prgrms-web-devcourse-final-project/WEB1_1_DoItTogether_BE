@@ -27,6 +27,16 @@ public class PresetServiceImpl implements PresetService {
     private final PresetItemRepository presetItemRepository;
 
     @Override
+    public void addDefaultCategoriesToChannel(Channel channel) {
+        List<String> defaultCategories = List.of("거실", "침실", "주방", "욕실", "기타");
+
+        defaultCategories.forEach(categoryName -> {
+            PresetCategory presetCategory = PresetCategory.of(categoryName, channel);
+            presetCategoryRepository.save(presetCategory);
+        });
+    }
+
+    @Override
     public PresetKeywordListResponse getFlatPresetList(Long channelId, Pageable pageable) {
         channelRepository.findById(channelId)
                 .orElseThrow(() -> new PresetException(ExceptionCode.CHANNEL_NOT_FOUND));
