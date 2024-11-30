@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@RequestMapping("/api/v1/channels/{channelId}/houseworks")
 public interface HouseworkController {
     @GetMapping("/{targetDate}/{pageNumber}/{pageSize}")
     @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
