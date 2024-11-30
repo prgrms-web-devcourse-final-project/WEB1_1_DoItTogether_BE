@@ -55,13 +55,12 @@ public interface HouseworkController {
 
 
     @GetMapping("/{houseworkId}")
-    @Operation(summary = "집안일 Id별 상세 정보 조회", description = "일자별 담당자별 집안일 목록을 조회합니다.")
+    @Operation(summary = "집안일 Id별 상세 정보 조회", description = "집안일 id 별 집안일 목록을 조회합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "202", description = "추가 성공")
+            @ApiResponse(responseCode = "200", description = "조회 성공")
     })
     ResponseEntity<SuccessResponse<HouseworkResponse>> findHouseworkByHouseworkId(@AuthenticationPrincipal User user,
-                                                                                  @PathVariable("houseworkId") Long houseworkId,
-                                                                                  @RequestBody HouseworkRequest request);
+                                                                                  @PathVariable("houseworkId") Long houseworkId);
 
     @PostMapping
     @Operation(summary = "집안일 추가", description = "집안일 카테고리, 작업, 담당자를 설정하여 추가합니다.")
