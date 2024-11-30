@@ -4,7 +4,9 @@ import static lombok.AccessLevel.PRIVATE;
 
 import com.doittogether.platform.domain.entity.Housework;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -31,13 +33,13 @@ public record HouseworkResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         LocalDate startDate,
 
-        @NotBlank
+        @Nullable
         @Schema(description = "진행 시간", example = "OO:OO")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
         LocalTime startTime,
 
         @NotBlank
-        @Schema(description = "하루 종일 여부", example = "true")
+        @Schema(description = "하루 종일 여부", example = "false")
         Boolean isAllDay,
 
         @NotBlank
