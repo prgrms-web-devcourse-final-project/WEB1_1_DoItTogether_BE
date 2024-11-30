@@ -2,6 +2,7 @@ package com.doittogether.platform.business.housework;
 
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
+import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
 import java.time.LocalDate;
 import org.springframework.data.domain.Pageable;
@@ -17,4 +18,6 @@ public interface HouseworkService {
                                 final HouseworkRequest request);
 
     public void deleteHousework(final User loginUser, final Long houseworkId, final Long channelId);
+
+    public HouseworkResponse findHouseworkByHouseworkId(final User user, final Long houseworkId, final HouseworkRequest request);
 }

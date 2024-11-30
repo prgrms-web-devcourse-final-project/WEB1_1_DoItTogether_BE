@@ -11,6 +11,7 @@ import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.AssigneeRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.HouseworkRepository;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
+import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
@@ -103,5 +104,11 @@ public class HouseworkServiceImpl implements HouseworkService {
         } catch (IllegalArgumentException exception) {
             throw new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL);
         }
+    }
+
+    @Override
+    public HouseworkResponse findHouseworkByHouseworkId(User user, Long houseworkId,
+                                                        HouseworkRequest request) {
+        return null;
     }
 }
