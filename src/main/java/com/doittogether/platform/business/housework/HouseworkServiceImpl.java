@@ -6,11 +6,13 @@ import com.doittogether.platform.business.channel.ChannelValidator;
 import com.doittogether.platform.domain.entity.Assignee;
 import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.Housework;
+import com.doittogether.platform.domain.entity.HouseworkCategory;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.AssigneeRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.HouseworkRepository;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
+import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
@@ -56,19 +58,26 @@ public class HouseworkServiceImpl implements HouseworkService {
     }
 
     @Override
+    public HouseworkResponse findHouseworkByHouseworkId(User user, Long houseworkId) {
+        return null;
+    }
+
+    @Override
     public void addHousework(final Long channelId, final HouseworkRequest request) {
         channelValidator.validateExistChannel(channelId);
         final Channel channel = entityManager.getReference(Channel.class, channelId);
+
         try {
-            final Assignee assignee = Assignee.assignAssignee(userRepository.findById(request.userId())
-                    .orElseThrow(() -> new HouseworkException(ExceptionCode.USER_NOT_FOUND)));
-            assigneeRepository.save(assignee);
+            final Assignee assignee = assigneeRepository.findByUserUserId(request.userId())
+                    .orElseGet(() -> Assignee.assignAssignee(userRepository.findById(request.userId())
+                            .orElseThrow(() -> new HouseworkException(ExceptionCode.USER_NOT_FOUND))));
+            final Assignee saveAssignee = assigneeRepository.saveAndFlush(assignee);
             final Housework housework = Housework.of(
                     request.startDate(),
                     request.startTime(),
                     request.task(),
-                    request.category(),
-                    Assignee.assignAssignee(assignee.retrieveUser()),
+                    HouseworkCategory.parse(request.category()),
+                    saveAssignee,
                     channel);
             houseworkRepository.save(housework);
         } catch (IllegalArgumentException exception) {
@@ -84,7 +93,9 @@ public class HouseworkServiceImpl implements HouseworkService {
         final Housework housework = entityManager.getReference(Housework.class, houseworkId);
         houseworkValidator.validateEditableUser(housework, loginUser);
         try {
-            final Assignee assignee = assigneeRepository.findByUserUserId(request.userId());
+            final Assignee assignee = assigneeRepository.findByUserUserId(request.userId())
+                    .orElseGet(() -> Assignee.assignAssignee(userRepository.findById(request.userId())
+                            .orElseThrow(() -> new HouseworkException(ExceptionCode.USER_NOT_FOUND))));
             final Housework updateHousework = housework.update(request, assignee);
             houseworkRepository.save(updateHousework);
         } catch (IllegalArgumentException exception) {
