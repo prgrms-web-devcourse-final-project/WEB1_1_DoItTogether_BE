@@ -66,9 +66,11 @@ public class HouseworkServiceImpl implements HouseworkService {
     public void addHousework(final Long channelId, final HouseworkRequest request) {
         channelValidator.validateExistChannel(channelId);
         final Channel channel = entityManager.getReference(Channel.class, channelId);
+
         try {
-            final Assignee assignee = Assignee.assignAssignee(userRepository.findById(request.userId())
-                    .orElseThrow(() -> new HouseworkException(ExceptionCode.USER_NOT_FOUND)));
+            final Assignee assignee = assigneeRepository.findByUserUserId(request.userId())
+                    .orElseGet(() -> Assignee.assignAssignee(userRepository.findById(request.userId())
+                            .orElseThrow(() -> new HouseworkException(ExceptionCode.USER_NOT_FOUND))));
             final Assignee saveAssignee = assigneeRepository.saveAndFlush(assignee);
             final Housework housework = Housework.of(
                     request.startDate(),
@@ -91,7 +93,9 @@ public class HouseworkServiceImpl implements HouseworkService {
         final Housework housework = entityManager.getReference(Housework.class, houseworkId);
         houseworkValidator.validateEditableUser(housework, loginUser);
         try {
-            final Assignee assignee = assigneeRepository.findByUserUserId(request.userId());
+            final Assignee assignee = assigneeRepository.findByUserUserId(request.userId())
+                    .orElseGet(() -> Assignee.assignAssignee(userRepository.findById(request.userId())
+                            .orElseThrow(() -> new HouseworkException(ExceptionCode.USER_NOT_FOUND))));
             final Housework updateHousework = housework.update(request, assignee);
             houseworkRepository.save(updateHousework);
         } catch (IllegalArgumentException exception) {
