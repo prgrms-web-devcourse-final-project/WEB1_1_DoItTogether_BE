@@ -6,6 +6,7 @@ import com.doittogether.platform.domain.entity.PresetCategory;
 import com.doittogether.platform.domain.entity.PresetItem;
 import com.doittogether.platform.infrastructure.persistence.PresetCategoryRepository;
 import com.doittogether.platform.infrastructure.persistence.PresetItemRepository;
+import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;
 import com.doittogether.platform.presentation.dto.preset.request.PresetCategoryRegisterRequest;
 import com.doittogether.platform.presentation.dto.preset.request.PresetItemRegisterRequest;
 import com.doittogether.platform.presentation.dto.preset.response.*;
@@ -40,9 +41,7 @@ public class PresetServiceTest {
     void 전체_프리셋_키워드_리스트_조회() {
         Long validChannelId = 1L;
 
-        Channel channel = Channel.builder().
-                name("Test Channel").
-                build();
+        Channel channel = Channel.of("Test Channel");
         setField(channel, "channelId", validChannelId);
 
         PresetCategory category = PresetCategory.of("Test Category", channel);
@@ -120,9 +119,7 @@ public class PresetServiceTest {
         Long channelId = 1L;
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Channel channel = Channel.builder().
-                name("Test Channel").
-                build();
+        Channel channel = Channel.of("Test Channel");
         setField(channel, "channelId", channelId);
 
         PresetCategory category1 = PresetCategory.of("거실", channel);
@@ -158,7 +155,7 @@ public class PresetServiceTest {
         Long channelId = 1L;
         String categoryName = "거실";
 
-        Channel channel = Channel.builder().name("Test Channel").build();
+        Channel channel = Channel.of("Test Channel");
         setField(channel, "channelId", channelId);
 
         PresetCategoryRegisterRequest request = PresetCategoryRegisterRequest.builder()

@@ -3,10 +3,8 @@ package com.doittogether.platform.business.channel;
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.channel.ChannelException;
 import com.doittogether.platform.business.invite.InviteLinkService;
-import com.doittogether.platform.domain.entity.Channel;
-import com.doittogether.platform.domain.entity.Role;
-import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.domain.entity.UserChannel;
+import com.doittogether.platform.business.preset.PresetService;
+import com.doittogether.platform.domain.entity.*;
 import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;
@@ -33,6 +31,7 @@ public class ChannelServiceImpl implements ChannelService {
     private final UserChannelRepository userChannelRepository;
     private final ChannelRepository channelRepository;
     private final InviteLinkService inviteLinkService;
+    private final PresetService presetService;
 
     @Override
     public ChannelListResponse getMyChannels(User loginUser, Pageable pageable) {
@@ -58,6 +57,8 @@ public class ChannelServiceImpl implements ChannelService {
 
         UserChannel userChannel = UserChannel.of(user, channel, Role.ADMIN);
         userChannelRepository.save(userChannel);
+
+        presetService.addDefaultCategoriesToChannel(channel);
 
         return ChannelRegisterResponse.of(channel.getChannelId(), channel.getName());
     }
