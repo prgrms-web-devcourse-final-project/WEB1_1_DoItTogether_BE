@@ -86,7 +86,22 @@ public class HouseworkControllerImpl implements HouseworkController {
                 ));
     }
 
+    @GetMapping("/{houseworkId}")
+    @Operation(summary = "집안일 Id별 상세 정보 조회", description = "집안일 Id별 상세 정보를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "202", description = "수정 성공")
+    })
     @Override
+    public ResponseEntity<SuccessResponse<HouseworkResponse>> findHouseworkByHouseworkId(
+            @AuthenticationPrincipal User user,
+            @PathVariable("houseworkId") Long houseworkId,
+            @RequestBody HouseworkRequest request) {
+        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(SuccessResponse.onSuccess(SuccessCode._OK,
+                        houseworkService.findHouseworkByHouseworkId(user, houseworkId, request)));
+    }
+
     @PostMapping
     @Operation(summary = "집안일 추가", description = "집안일 카테고리, 작업, 담당자를 설정하여 추가합니다.")
     @ApiResponses({
