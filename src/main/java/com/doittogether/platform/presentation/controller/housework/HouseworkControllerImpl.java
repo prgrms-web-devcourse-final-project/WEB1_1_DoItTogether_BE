@@ -6,6 +6,7 @@ import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.business.housework.HouseworkService;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
+import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,9 +41,11 @@ public class HouseworkControllerImpl implements HouseworkController {
 
     private final HouseworkService houseworkService;
 
+
     @GetMapping("/{targetDate}/{pageNumber}/{pageSize}")
     @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
-    public ResponseEntity<SuccessResponse<HouseworkSliceResponse>> getHouseworkByDate(
+    @Override
+    public ResponseEntity<SuccessResponse<HouseworkSliceResponse>> findHouseworksByDate(
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId,
             @RequestParam("targetDate")
@@ -62,7 +65,8 @@ public class HouseworkControllerImpl implements HouseworkController {
 
     @GetMapping("/{targetDate}/{pageNumber}/{pageSize}/{assigneeId}")
     @Operation(summary = "집안일 담당자별 목록 조회", description = "일자별 담당자별 집안일 목록을 조회합니다.")
-    public ResponseEntity<SuccessResponse<HouseworkSliceResponse>> getHouseworkByDateAndAssignee(
+    @Override
+    public ResponseEntity<SuccessResponse<HouseworkSliceResponse>> findHouseworksByDateAndAssignee(
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId,
             @RequestParam("targetDate")
@@ -88,6 +92,7 @@ public class HouseworkControllerImpl implements HouseworkController {
     @ApiResponses({
             @ApiResponse(responseCode = "202", description = "추가 성공")
     })
+    @Override
     public ResponseEntity<SuccessResponse<Void>> addHousework(@AuthenticationPrincipal User user,
                                                               @PathVariable("channelId") Long channelId,
                                                               @RequestBody HouseworkRequest request) {
@@ -97,7 +102,6 @@ public class HouseworkControllerImpl implements HouseworkController {
                 .body(SuccessResponse.onSuccess());
     }
 
-    @Override
     @PutMapping("/{houseworkId}")
     @Operation(summary = "집안일 수정", description = "기존 집안일의 카테고리, 작업, 담당자를 수정합니다.")
     @ApiResponses({
@@ -111,6 +115,7 @@ public class HouseworkControllerImpl implements HouseworkController {
             @Content(schema = @Schema(implementation = ExceptionResponse.class))
             )
     })
+    @Override
     public ResponseEntity<SuccessResponse<Void>> updateHousework(
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId,
@@ -122,7 +127,6 @@ public class HouseworkControllerImpl implements HouseworkController {
                 .body(SuccessResponse.onSuccess());
     }
 
-    @Override
     @DeleteMapping("/{houseworkId}")
     @Operation(summary = "집안일  삭제", description = "기존 집안일을 삭제합니다.")
     @ApiResponses({
@@ -136,6 +140,7 @@ public class HouseworkControllerImpl implements HouseworkController {
             @Content(schema = @Schema(implementation = ExceptionResponse.class))
             )
     })
+    @Override
     public ResponseEntity<SuccessResponse<Void>> deleteHousework(@AuthenticationPrincipal User user,
                                                                  @PathVariable("channelId") Long channelId,
                                                                  @PathVariable(name = "houseworkId") Long houseworkId) {
