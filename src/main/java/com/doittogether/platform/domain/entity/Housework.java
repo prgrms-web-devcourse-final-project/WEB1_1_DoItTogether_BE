@@ -83,6 +83,10 @@ public class Housework extends BaseEntity {
         this.status = Status.UN_COMPLETE;
     }
 
+    public Long retrieveHouseworkId() {
+        return houseworkId;
+    }
+
     public LocalDate retrieveStartDate() {
         return startDate;
     }
@@ -103,9 +107,6 @@ public class Housework extends BaseEntity {
         return status;
     }
 
-    public boolean isAllDay() {
-        return isAllDay;
-    }
 
     public Assignee retrieveAssignee() {
         return assignee;
@@ -113,5 +114,9 @@ public class Housework extends BaseEntity {
 
     public Channel retrieveChannel() {
         return channel;
+    }
+
+    public boolean isAllDay() {
+        return null == startTime;
     }
 }
