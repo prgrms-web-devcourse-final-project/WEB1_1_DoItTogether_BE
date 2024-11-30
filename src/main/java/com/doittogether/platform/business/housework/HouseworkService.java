@@ -19,5 +19,5 @@ public interface HouseworkService {
 
     public void deleteHousework(final User loginUser, final Long houseworkId, final Long channelId);
 
-    public HouseworkResponse findHouseworkByHouseworkId(final User user, final Long houseworkId, final HouseworkRequest request);
+    public HouseworkResponse findHouseworkByHouseworkId(final User user, final Long houseworkId);
 }
