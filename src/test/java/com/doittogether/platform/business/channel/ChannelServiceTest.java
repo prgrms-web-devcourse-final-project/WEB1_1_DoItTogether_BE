@@ -7,6 +7,7 @@ import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.entity.UserChannel;
 import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
+import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelUpdateRequest;
@@ -50,10 +51,7 @@ public class ChannelServiceTest {
         User mockUser = User.of("Test User", email, null);
         setField(mockUser, "userId", 1L);
 
-        Channel mockChannel = Channel.
-                builder().
-                name("Test Channel").
-                build();
+        Channel mockChannel = Channel.of("Test Channel");
         setField(mockChannel, "channelId", 1L);
 
         UserChannel mockUserChannel = UserChannel.of(mockUser, mockChannel, Role.ADMIN);
@@ -68,7 +66,7 @@ public class ChannelServiceTest {
         ChannelListResponse result = channelService.getMyChannels(mockUser, pageable);
 
         assertNotNull(result);
-        assertEquals(mockUser.getUserId(), result.userId());
+        assertEquals(mockUser.retrieveUserId(), result.userId());
         assertEquals(1, result.channelList().size());
         assertEquals("Test Channel", result.channelList().get(0).name());
 
@@ -86,9 +84,7 @@ public class ChannelServiceTest {
 
         ChannelRegisterRequest request = ChannelRegisterRequest.of(channelName);
 
-        Channel mockChannel = Channel.builder()
-                .name(channelName)
-                .build();
+        Channel mockChannel = Channel.of(channelName);
         setField(mockChannel, "channelId", 1L);
 
         UserChannel mockUserChannel = UserChannel.of(mockUser, mockChannel, Role.ADMIN);
@@ -114,7 +110,7 @@ public class ChannelServiceTest {
         User mockUser = User.of("Test User", email, null);
         setField(mockUser, "userId", 1L);
 
-        Channel mockChannel = Channel.builder().name("Old Channel Name").build();
+        Channel mockChannel = Channel.of("Old Channel Name");
         setField(mockChannel, "channelId", channelId);
 
         UserChannel mockUserChannel = UserChannel.of(mockUser, mockChannel, Role.ADMIN);
@@ -149,7 +145,7 @@ public class ChannelServiceTest {
         User mockUser = User.of("Test User", email, null);
         setField(mockUser, "userId", 1L);
 
-        Channel mockChannel = Channel.builder().name("Test Channel").build();
+        Channel mockChannel = Channel.of("Test Channel");
         setField(mockChannel, "channelId", channelId);
 
         UserChannel mockUserChannel = UserChannel.of(mockUser, mockChannel, Role.PARTICIPANT);
@@ -189,7 +185,7 @@ public class ChannelServiceTest {
         Long channelId = 1L;
         String mockInviteLink = "http://test.com/invite/abc123";
 
-        Channel mockChannel = Channel.builder().name("Test Channel").build();
+        Channel mockChannel = Channel.of("Test Channel");
         setField(mockChannel, "channelId", channelId);
 
         when(channelRepository.findById(channelId)).thenReturn(Optional.of(mockChannel));
@@ -214,7 +210,7 @@ public class ChannelServiceTest {
         User mockUser = User.of("Test User", email, null);
         setField(mockUser, "userId", 1L);
 
-        Channel mockChannel = Channel.builder().name("Test Channel").build();
+        Channel mockChannel = Channel.of("Test Channel");
         setField(mockChannel, "channelId", channelId);
 
         lenient().when(inviteLinkService.validateInviteLink(inviteLink)).thenReturn(channelId);
@@ -246,7 +242,7 @@ public class ChannelServiceTest {
         User targetUser = User.of("Target User", targetEmail, null);
         setField(targetUser, "userId", 2L);
 
-        Channel mockChannel = Channel.builder().name("Test Channel").build();
+        Channel mockChannel = Channel.of("Test Channel");
         setField(mockChannel, "channelId", channelId);
 
         UserChannel adminUserChannel = UserChannel.of(adminUser, mockChannel, Role.ADMIN);
@@ -266,8 +262,8 @@ public class ChannelServiceTest {
         ChannelKickUserResponse response = channelService.kickUserFromChannel(adminUser, channelId, request);
 
         assertNotNull(response);
-        assertEquals(targetUser.getEmail(), response.email());
-        assertEquals(targetUser.getNickName(), response.nickName());
+        assertEquals(targetUser.retrieveEmail(), response.email());
+        assertEquals(targetUser.retrieveNickName(), response.nickName());
 
         verify(userRepository, times(1)).findByEmail(adminEmail);
         verify(channelRepository, times(1)).findById(channelId);
@@ -283,7 +279,7 @@ public class ChannelServiceTest {
         User mockUser = User.of("Test User", email, null);
         setField(mockUser, "userId", 1L);
 
-        Channel mockChannel = Channel.builder().name("Test Channel").build();
+        Channel mockChannel = Channel.of("Test Channel");
         setField(mockChannel, "channelId", 1L);
 
         UserChannel mockUserChannel = UserChannel.of(mockUser, mockChannel, Role.PARTICIPANT);
