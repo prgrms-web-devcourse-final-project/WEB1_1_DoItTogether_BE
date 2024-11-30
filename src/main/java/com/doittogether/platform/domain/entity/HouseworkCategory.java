@@ -7,6 +7,7 @@ public enum HouseworkCategory {
     LIVING_ROOM("거실"),
     KITCHEN("주방"),
     BATHROOM("욕실"),
+    BED_ROOM("침실"),
     OTHER("기타");
 
     private final String displayName;
