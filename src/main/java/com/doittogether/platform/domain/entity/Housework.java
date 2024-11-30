@@ -70,7 +70,7 @@ public class Housework extends BaseEntity {
         this.startDate = request.startDate();
         this.startTime = request.startTime();
         this.task = request.task();
-        this.category = request.category();
+        this.category = HouseworkCategory.parse(request.category());
         this.assignee = assignee;
         return this;
     }
