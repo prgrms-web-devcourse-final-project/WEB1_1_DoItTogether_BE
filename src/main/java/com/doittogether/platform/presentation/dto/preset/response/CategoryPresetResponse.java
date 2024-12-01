@@ -14,13 +14,13 @@ public record CategoryPresetResponse(
         @Schema(description = "카테고리 이름", example = "거실")
         String category,
 
-        @Schema(description = "프리셋 값 리스트")
-        List<PresetItemResponse> presetList
+        @Schema(description = "프리셋 아이템 리스트")
+        List<PresetItemResponse> presetItemList
 ) {
-    public static CategoryPresetResponse of(String category, List<PresetItemResponse> presetList) {
+    public static CategoryPresetResponse of(String category, List<PresetItemResponse> presetItemList) {
         return CategoryPresetResponse.builder()
                 .category(category)
-                .presetList(presetList)
+                .presetItemList(presetItemList)
                 .build();
     }
 }

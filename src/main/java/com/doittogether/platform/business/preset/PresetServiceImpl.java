@@ -48,7 +48,7 @@ public class PresetServiceImpl implements PresetService {
                         .presetCategoryId(item.getPresetCategory().getPresetCategoryId())
                         .category(item.getPresetCategory().getCategory())
                         .presetId(item.getPresetItemId())
-                        .value(item.getValue())
+                        .name(item.getName())
                         .build())
                 .toList();
 
@@ -62,17 +62,17 @@ public class PresetServiceImpl implements PresetService {
 
         List<PresetItem> items = presetItemRepository.findAllByPresetCategoryId(presetCategoryId, pageable);
 
-        List<PresetItemResponse> presetList = items.stream()
+        List<PresetItemResponse> presetItemList = items.stream()
                 .map(item -> PresetItemResponse.builder()
                         .presetItemId(item.getPresetItemId())
-                        .value(item.getValue())
+                        .name(item.getName())
                         .build())
                 .toList();
 
         return CategoryPresetResponse.builder()
                 .presetCategoryId(category.getPresetCategoryId())
                 .category(category.getCategory())
-                .presetList(presetList)
+                .presetItemList(presetItemList)
                 .build();
     }
 
@@ -91,6 +91,33 @@ public class PresetServiceImpl implements PresetService {
                 .toList();
 
         return CategoryListResponse.of(categoryList);
+    }
+
+    @Override
+    public CategoryPresetListResponse getAllCategoriesWithItems(Long channelId, Pageable pageable) {
+        channelRepository.findById(channelId)
+                .orElseThrow(() -> new PresetException(ExceptionCode.CHANNEL_NOT_FOUND));
+
+        List<PresetCategory> categories = presetCategoryRepository.findAllWithItemsByChannelId(channelId, pageable);
+
+        List<CategoryPresetResponse> categoryPresetList = categories.stream()
+                .map(category -> {
+                    List<PresetItemResponse> presetItemList = category.getPresetItems().stream()
+                            .map(item -> PresetItemResponse.builder()
+                                    .presetItemId(item.getPresetItemId())
+                                    .name(item.getName())
+                                    .build())
+                            .toList();
+
+                    return CategoryPresetResponse.builder()
+                            .presetCategoryId(category.getPresetCategoryId())
+                            .category(category.getCategory())
+                            .presetItemList(presetItemList)
+                            .build();
+                })
+                .toList();
+
+        return CategoryPresetListResponse.of(categoryPresetList);
     }
 
     @Override

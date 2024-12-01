@@ -9,12 +9,12 @@ public record PresetKeywordResponse(
         @Schema(description = "프리셋 카테고리 아이디")
         Long presetCategoryId,
 
-        @Schema(description = "카테고리 이름", example = "거실")
+        @Schema(description = "프리셋 카테고리 이름", example = "거실")
         String category,
 
-        @Schema(description = "프리셋 아이디")
+        @Schema(description = "프리셋 아이템 아이디")
         Long presetId,
 
-        @Schema(description = "프리셋 값", example = "쓰레기통1")
-        String value
+        @Schema(description = "프리셋 아이템 이름", example = "쓰레기통1")
+        String name
 ) {}

@@ -65,12 +65,12 @@ public class PresetServiceTest {
         PresetKeywordResponse keyword1 = response.presetKeywordList().get(0);
         assertEquals(100L, keyword1.presetId());
         assertEquals("Test Category", keyword1.category());
-        assertEquals("Item 1", keyword1.value());
+        assertEquals("Item 1", keyword1.name());
 
         PresetKeywordResponse keyword2 = response.presetKeywordList().get(1);
         assertEquals(200L, keyword2.presetId());
         assertEquals("Test Category", keyword2.category());
-        assertEquals("Item 2", keyword2.value());
+        assertEquals("Item 2", keyword2.name());
 
         verify(channelRepository).findById(validChannelId);
         verify(presetItemRepository).findAllByChannelId(validChannelId, PageRequest.of(0, 10));
@@ -100,15 +100,15 @@ public class PresetServiceTest {
         assertNotNull(response);
         assertEquals(presetCategoryId, response.presetCategoryId());
         assertEquals("거실", response.category());
-        assertEquals(2, response.presetList().size());
+        assertEquals(2, response.presetItemList().size());
 
-        PresetItemResponse preset1 = response.presetList().get(0);
+        PresetItemResponse preset1 = response.presetItemList().get(0);
         assertEquals(100L, preset1.presetItemId());
-        assertEquals("바닥 청소", preset1.value());
+        assertEquals("바닥 청소", preset1.name());
 
-        PresetItemResponse preset2 = response.presetList().get(1);
+        PresetItemResponse preset2 = response.presetItemList().get(1);
         assertEquals(200L, preset2.presetItemId());
-        assertEquals("책상 정리", preset2.value());
+        assertEquals("책상 정리", preset2.name());
 
         verify(presetCategoryRepository).findById(presetCategoryId);
         verify(presetItemRepository).findAllByPresetCategoryId(presetCategoryId, pageable);
@@ -201,7 +201,7 @@ public class PresetServiceTest {
         assertNotNull(response);
         assertEquals(presetCategoryId, response.presetCategoryId());
         assertEquals(100L, response.presetItemId());
-        assertEquals(presetValue, response.category());
+        assertEquals(presetValue, response.name());
 
         verify(presetCategoryRepository).findById(presetCategoryId);
         verify(presetItemRepository).save(any(PresetItem.class));
