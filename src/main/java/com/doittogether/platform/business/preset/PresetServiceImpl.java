@@ -48,7 +48,7 @@ public class PresetServiceImpl implements PresetService {
                         .presetCategoryId(item.getPresetCategory().getPresetCategoryId())
                         .category(item.getPresetCategory().getCategory())
                         .presetId(item.getPresetItemId())
-                        .value(item.getValue())
+                        .name(item.getName())
                         .build())
                 .toList();
 
@@ -65,7 +65,7 @@ public class PresetServiceImpl implements PresetService {
         List<PresetItemResponse> presetList = items.stream()
                 .map(item -> PresetItemResponse.builder()
                         .presetItemId(item.getPresetItemId())
-                        .value(item.getValue())
+                        .name(item.getName())
                         .build())
                 .toList();
 

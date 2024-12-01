@@ -14,14 +14,14 @@ public record PresetItemRegisterResponse(
         @Schema(description = "프리셋 아이템 아이디")
         Long presetItemId,
 
-        @Schema(description = "프리셋 아이템 카테고리", example = "청소")
-        String category
+        @Schema(description = "프리셋 아이템 이름")
+        String name
 ) {
     public static PresetItemRegisterResponse of(PresetCategory presetCategory, PresetItem presetItem) {
         return PresetItemRegisterResponse.builder()
                 .presetCategoryId(presetCategory.getPresetCategoryId())
                 .presetItemId(presetItem.getPresetItemId())
-                .category(presetItem.getValue())
+                .name(presetItem.getName())
                 .build();
    }
 }

@@ -14,7 +14,7 @@ public record CategoryPresetResponse(
         @Schema(description = "카테고리 이름", example = "거실")
         String category,
 
-        @Schema(description = "프리셋 값 리스트")
+        @Schema(description = "프리셋 이름 리스트")
         List<PresetItemResponse> presetList
 ) {
     public static CategoryPresetResponse of(String category, List<PresetItemResponse> presetList) {
