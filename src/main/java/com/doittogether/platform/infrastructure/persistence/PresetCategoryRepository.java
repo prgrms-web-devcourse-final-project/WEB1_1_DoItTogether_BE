@@ -11,4 +11,7 @@ import java.util.List;
 public interface PresetCategoryRepository extends JpaRepository<PresetCategory, Long> {
     @Query("SELECT c FROM PresetCategory c WHERE c.channel.channelId = :channelId")
     List<PresetCategory> findAllByChannelId(@Param("channelId") Long channelId, Pageable pageable);
+
+    @Query("SELECT DISTINCT c FROM PresetCategory c LEFT JOIN FETCH c.presetItems WHERE c.channel.channelId = :channelId")
+    List<PresetCategory> findAllWithItemsByChannelId(@Param("channelId") Long channelId, Pageable pageable);
 }
