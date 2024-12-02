@@ -6,6 +6,7 @@ import com.doittogether.platform.business.stastics.StatisticsService;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.stastics.ChannelCountStatisticsResponse;
 import com.doittogether.platform.presentation.dto.stastics.CompleteScoreResponse;
+import com.doittogether.platform.presentation.dto.stastics.MonthlyStatisticsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,7 +31,7 @@ public class StatisticsControllerImpl implements StatisticsController {
 
     private final StatisticsService statisticsService;
 
-    @GetMapping("/{targetDate}/totalCount")
+    @GetMapping("/weekly/{targetDate}/totalCount")
     @Operation(summary = "주간 통계관련 완료 미완료 칭찬 찌르기 개수 조회", description = "주간 통계에서 사용할, 이번주 완료 개수 랭킹을 반환합니다.")
     @Override
     public ResponseEntity<SuccessResponse<ChannelCountStatisticsResponse>> calculateTotalCountByChannelId(
@@ -48,7 +49,7 @@ public class StatisticsControllerImpl implements StatisticsController {
                 ));
     }
 
-    @GetMapping("/{targetDate}/score")
+    @GetMapping("/weekly/{targetDate}/score")
     @Operation(summary = "주간 통계, 이번주 완료 개수 랭킹", description = "주간통계 중, 이번주 완료 개수 랭킹을 반환합니다.")
     @Override
     public ResponseEntity<SuccessResponse<CompleteScoreResponse>> calculateWeeklyStatistics(
@@ -63,6 +64,24 @@ public class StatisticsControllerImpl implements StatisticsController {
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
                         statisticsService.calculateWeeklyStatistics(loginUser, channelId, targetDate)
+                ));
+    }
+
+    @GetMapping("/monthly/{targetMonth}/score")
+    @Operation(summary = "월간 통계, 캘린더 부분 조회", description = "월간통계 중, 캘린더 부분에 사용될 데이터를 반환합니다.")
+    @Override
+    public ResponseEntity<SuccessResponse<MonthlyStatisticsResponse>> calculateMonthlyStatistics(
+            @AuthenticationPrincipal User user,
+            @PathVariable("channelId") Long channelId,
+            @RequestParam("targetMonth")
+            @Parameter(description = "선택 월 (yyyy-MM 형식)", example = "2024-11") String targetMonth
+    ) {
+        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LocalDate targetDate = LocalDate.parse(targetMonth+"-00");
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        statisticsService.calculateMonthlyStatistics(loginUser, channelId, targetDate)
                 ));
     }
 }
