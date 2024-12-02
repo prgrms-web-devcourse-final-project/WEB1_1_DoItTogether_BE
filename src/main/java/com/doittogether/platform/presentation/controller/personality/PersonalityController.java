@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +28,7 @@ public class PersonalityController {
 
     private final PersonalityService personalityService;
 
-    @GetMapping
+    @PostMapping
     @Operation(summary = "사용자 성향 조회",
             description = "설문조사 내용을 분석하여 키워드를 반환합니다.")
     public ResponseEntity<SuccessResponse<PersonalityResponseDTO>> findKeywordsFromGPT(
