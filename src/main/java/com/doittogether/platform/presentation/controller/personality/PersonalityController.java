@@ -1,12 +1,13 @@
-package com.doittogether.platform.presentation.personality;
+package com.doittogether.platform.presentation.controller.personality;
 
 import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.business.personality.PersonalityService;
 import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.presentation.personality.dto.PersonalityRequestDto;
-import com.doittogether.platform.presentation.personality.dto.PersonalityResponseDTO;
+import com.doittogether.platform.presentation.dto.personality.PersonalityRequestDto;
+import com.doittogether.platform.presentation.dto.personality.PersonalityResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/personalities")
 @RequiredArgsConstructor
+@Tag(name = "선호도조사 API", description = "성향 관리 API")
 public class PersonalityController {
 
     private final PersonalityService personalityService;
