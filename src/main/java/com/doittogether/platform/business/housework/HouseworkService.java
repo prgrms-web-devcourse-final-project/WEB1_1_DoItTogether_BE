@@ -4,6 +4,7 @@ import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
+import jakarta.validation.Valid;
 import java.time.LocalDate;
 import org.springframework.data.domain.Pageable;
 
@@ -20,4 +21,6 @@ public interface HouseworkService {
     public void deleteHousework(final User loginUser, final Long houseworkId, final Long channelId);
 
     public HouseworkResponse findHouseworkByHouseworkId(final User user, final Long houseworkId);
+
+    public void updateStatus(User loginUser, Long houseworkId, Long channelId);
 }
