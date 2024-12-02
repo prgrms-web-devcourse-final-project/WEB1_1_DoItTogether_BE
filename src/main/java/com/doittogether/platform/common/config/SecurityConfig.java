@@ -31,7 +31,6 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
     private final TokenUtil tokenUtil;
-    private final RedisSingleDataServiceImpl redisSingleDataService;
     private final CustomOAuth2AccessTokenResponseClient customAccessTokenResponseClient;
     private final TokenService tokenService;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
