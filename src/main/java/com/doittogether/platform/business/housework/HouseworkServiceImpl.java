@@ -104,6 +104,11 @@ public class HouseworkServiceImpl implements HouseworkService {
     }
 
     @Override
+    public void updateStatus(User loginUser, Long houseworkId, Long channelId) {
+
+    }
+
+    @Override
     public void deleteHousework(final User loginUser, final Long houseworkId, final Long channelId) {
         channelValidator.validateExistChannel(channelId);
         houseworkValidator.validateExistHousework(houseworkId);
