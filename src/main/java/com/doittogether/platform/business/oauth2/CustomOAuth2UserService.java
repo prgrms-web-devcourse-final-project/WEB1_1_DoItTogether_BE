@@ -1,5 +1,7 @@
 package com.doittogether.platform.business.oauth2;
 
+import com.doittogether.platform.application.global.code.ExceptionCode;
+import com.doittogether.platform.application.global.exception.UserException.UserException;
 import com.doittogether.platform.domain.entity.ProfileImage;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
@@ -21,6 +23,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
+    public static final String REFRESH_TOKEN_KEY = "refresh_token";
+
     private final UserRepository userRepository;
 
     @Override
@@ -30,43 +34,27 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String accessTokenValue = accessToken.getTokenValue();
         String refreshTokenValue = userRequest.getAdditionalParameters().get("refresh_token").toString();
 
-        log.info("Access Token: {}", accessTokenValue);
-        log.info("Refresh Token: {}", refreshTokenValue);
+        log.trace("Access Token: {}", accessTokenValue);
+        log.trace("Refresh Token: {}", refreshTokenValue);
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         Long kakaoId = extractKakaoId(oAuth2User.getAttributes());
-        if (kakaoId == null) {
-            throw new IllegalArgumentException("KakaoId not found in the response");
-        }
-
         String email = extractEmail(oAuth2User.getAttributes());
-        if (email == null) {
-            throw new IllegalArgumentException("Email not found in the response");
-        }
-
         String nickName = extractNickname(oAuth2User.getAttributes());
-        if (nickName == null) {
-            throw new IllegalArgumentException("NickName not found in the response");
-        }
-
         String tokenProfileImage = extractProfileImage(oAuth2User.getAttributes());
-        if (tokenProfileImage == null) {
-            throw new IllegalArgumentException("Profile image not found in the response");
-        }
 
-        ProfileImage profileImage = new ProfileImage(tokenProfileImage);
+        ProfileImage profileImage = ProfileImage.from(tokenProfileImage);
 
         User existData = userRepository.findBykakaoId(kakaoId);
 
         if (existData == null) {
 
             User user = User.of(kakaoId, nickName, email, profileImage);
-
             userRepository.save(user);
         }
 
-        UserDTO userDTO = new UserDTO(kakaoId, nickName, email, "ROLE_USER", accessTokenValue, refreshTokenValue);
+        UserDTO userDTO = UserDTO.of(kakaoId, nickName, email, "ROLE_USER", accessTokenValue, refreshTokenValue);
         return new CustomOAuth2User(userDTO);
     }
 
@@ -76,7 +64,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (idObject instanceof Long) {
             return (Long) idObject; // Long 타입으로 캐스팅
         } else {
-            throw new IllegalArgumentException("Kakao ID is not of type Long.");
+            throw new UserException(ExceptionCode.KAKAO_ID_NOT_FOUND);
         }
     }
 
@@ -86,8 +74,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         if (kakaoAccount != null) {
             return (String) kakaoAccount.get("email");
+        }else{
+            throw new UserException(ExceptionCode.KAKAO_EMAIL_NOT_FOUND);
         }
-        return null; // 이메일이 없는 경우
     }
 
     // 닉네임 추출 메서드
@@ -95,8 +84,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
         if (properties != null) {
             return (String) properties.get("nickname");
+        }else{
+            throw new UserException(ExceptionCode.KAKAO_NICKNAME_NOT_FOUND);
         }
-        return null; // 닉네임이 없는 경우
     }
 
     // 프로필 이미지 추출 메서드 (수정됨)
@@ -104,8 +94,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
         if (properties != null) {
             return (String) properties.get("profile_image");
+        }else{
+            throw new UserException(ExceptionCode.KAKAO_PROFILE_IMAGE_NOT_FOUND);
         }
-        return null; // 프로필 이미지가 없는 경우
     }
 }
 
