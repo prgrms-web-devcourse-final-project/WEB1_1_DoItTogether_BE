@@ -95,7 +95,7 @@ public class HouseworkControllerImpl implements HouseworkController {
     })
     public ResponseEntity<SuccessResponse<HouseworkResponse>> findHouseworkByHouseworkId(
             @AuthenticationPrincipal User user,
-            @PathVariable("houseworkId") Long houseworkId){
+            @PathVariable("houseworkId") Long houseworkId) {
         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,
@@ -134,13 +134,40 @@ public class HouseworkControllerImpl implements HouseworkController {
     public ResponseEntity<SuccessResponse<Void>> updateHousework(
             @AuthenticationPrincipal User user,
             @PathVariable("channelId") Long channelId,
-            @PathVariable(name = "houseworkId") Long houseworkId,
+            @PathVariable("houseworkId") Long houseworkId,
             @RequestBody @Valid HouseworkRequest request) {
         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         houseworkService.updateHousework(loginUser, houseworkId, channelId, request);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess());
     }
+
+
+    @PutMapping("/{houseworkId}/changeStatus")
+    @Operation(summary = "집안일 상태 변경", description = "기존 집안일 상태를 변경합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "수정 성공", content =
+            @Content(schema = @Schema(implementation = SuccessResponse.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음", content =
+            @Content(schema = @Schema(implementation = ExceptionResponse.class))
+            ),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 데이터", content =
+            @Content(schema = @Schema(implementation = ExceptionResponse.class))
+            )
+    })
+    @Override
+    public ResponseEntity<SuccessResponse<Void>> changeStatus(
+            @AuthenticationPrincipal User user,
+            @PathVariable("channelId") Long channelId,
+            @PathVariable("houseworkId") Long houseworkId
+            ) {
+        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        houseworkService.updateStatus(loginUser, houseworkId, channelId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.onSuccess());
+    }
+
 
     @DeleteMapping("/{houseworkId}")
     @Operation(summary = "집안일  삭제", description = "기존 집안일을 삭제합니다.")
