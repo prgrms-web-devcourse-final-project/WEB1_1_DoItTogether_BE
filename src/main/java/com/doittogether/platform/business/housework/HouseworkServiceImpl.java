@@ -15,12 +15,13 @@ import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -58,8 +59,16 @@ public class HouseworkServiceImpl implements HouseworkService {
     }
 
     @Override
-    public HouseworkResponse findHouseworkByChannelIdAndHouseworkId(User user, Long houseworkId, Long channelId) {
-        return null;
+    public HouseworkResponse findHouseworkByChannelIdAndHouseworkId(final User loginUser, final Long houseworkId,
+                                                                    final Long channelId) {
+        channelValidator.validateExistChannel(channelId);
+        houseworkValidator.validateExistHousework(houseworkId);
+        final Housework houseworkVerify = entityManager.getReference(Housework.class, houseworkId);
+        houseworkValidator.validateEditableUser(houseworkVerify, loginUser);
+        Housework housework = houseworkRepository.findById(houseworkId)
+                .orElseThrow(() -> new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL));
+
+        return HouseworkResponse.from(housework);
     }
 
     @Override
@@ -105,7 +114,14 @@ public class HouseworkServiceImpl implements HouseworkService {
 
     @Override
     public void updateStatus(User loginUser, Long houseworkId, Long channelId) {
-
+        channelValidator.validateExistChannel(channelId);
+        houseworkValidator.validateExistHousework(houseworkId);
+        final Housework houseworkVerify = entityManager.getReference(Housework.class, houseworkId);
+        houseworkValidator.validateEditableUser(houseworkVerify, loginUser);
+        final Housework housework = houseworkRepository.findById(houseworkId)
+                .orElseThrow(() -> new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL));
+        housework.updateStatus();
+        houseworkRepository.save(housework);
     }
 
     @Override
