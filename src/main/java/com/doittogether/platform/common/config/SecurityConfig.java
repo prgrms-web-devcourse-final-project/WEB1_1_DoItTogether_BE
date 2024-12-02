@@ -1,5 +1,7 @@
 package com.doittogether.platform.common.config;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +23,10 @@ public class SecurityConfig {
 
     @Value("${front.url}")
     private String frontUrl;
+
+    private final String[] permitAllPaths = {
+            "/user/login"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
