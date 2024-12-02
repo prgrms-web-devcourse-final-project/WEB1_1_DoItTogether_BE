@@ -6,6 +6,7 @@ import com.doittogether.platform.business.stastics.StatisticsService;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.stastics.ChannelCountStatisticsResponse;
 import com.doittogether.platform.presentation.dto.stastics.CompleteScoreResponse;
+import com.doittogether.platform.presentation.dto.stastics.MonthlyMVPResponse;
 import com.doittogether.platform.presentation.dto.stastics.MonthlyStatisticsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -82,6 +83,24 @@ public class StatisticsControllerImpl implements StatisticsController {
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
                         statisticsService.calculateMonthlyStatistics(loginUser, channelId, targetDate)
+                ));
+    }
+
+    @GetMapping("/monthly/{targetMonth}/mvp")
+    @Operation(summary = "월간 통계,MVP 부분 조회", description = "월간통계 중, MVP 부분에 사용될 데이터를 반환합니다.")
+    @Override
+    public ResponseEntity<SuccessResponse<MonthlyMVPResponse>> calculateMonthlyMVP(
+            @AuthenticationPrincipal User user,
+            @PathVariable("channelId") Long channelId,
+            @RequestParam("targetMonth")
+            @Parameter(description = "선택 월 (yyyy-MM 형식)", example = "2024-11") String targetMonth
+    ) {
+        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LocalDate targetDate = LocalDate.parse(targetMonth+"-00");
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        statisticsService.calculateMonthlyMVP(loginUser, channelId, targetDate)
                 ));
     }
 }

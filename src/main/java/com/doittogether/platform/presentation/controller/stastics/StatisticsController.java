@@ -4,6 +4,7 @@ import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.stastics.ChannelCountStatisticsResponse;
 import com.doittogether.platform.presentation.dto.stastics.CompleteScoreResponse;
+import com.doittogether.platform.presentation.dto.stastics.MonthlyMVPResponse;
 import com.doittogether.platform.presentation.dto.stastics.MonthlyStatisticsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,5 +48,14 @@ public interface StatisticsController {
             @PathVariable("channelId") Long channelId,
             @RequestParam("targetDate")
             @Parameter(description = "선택 월 (yyyy-MM 형식)", example = "2024-11") String targetDate
+    );
+
+    @GetMapping("/monthly/{targetMonth}/score")
+    @Operation(summary = "월간 통계,MVP 부분 조회", description = "월간통계 중, MVP 부분에 사용될 데이터를 반환합니다.")
+    ResponseEntity<SuccessResponse<MonthlyMVPResponse>> calculateMonthlyMVP(
+            @AuthenticationPrincipal User user,
+            @PathVariable("channelId") Long channelId,
+            @RequestParam("targetMonth")
+            @Parameter(description = "선택 월 (yyyy-MM 형식)", example = "2024-11") String targetMonth
     );
 }
