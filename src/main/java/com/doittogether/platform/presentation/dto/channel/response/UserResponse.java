@@ -18,9 +18,9 @@ public record UserResponse(
 ) {
     public static UserResponse from(User user) {
         return UserResponse.builder()
-                .userId(user.getUserId())
-                .email(user.getEmail())
-                .nickName(user.getNickName())
+                .userId(user.retrieveUserId())
+                .email(user.retrieveEmail())
+                .nickName(user.retrieveNickName())
                 .build();
     }
 }

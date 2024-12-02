@@ -14,7 +14,6 @@ spring:
       port: ${REDIS_PORT} # redis 서버의 포트 번호
       maxmemory: 128M
       invite-link:
-        url: ${REDIS_INVITE_URL}
         ttl-minutes: ${REDIS_INVITE_TTL} # 초대 링크 TTL (분)
 
   datasource:
@@ -29,9 +28,9 @@ spring:
       hibernate:
         format_sql: true
     database: mysql
-  #    hibernate:
-  #      ddl-auto: create
-
+    hibernate:
+      ddl-auto: update
+      
   security:
     oauth2:
       client:
@@ -53,6 +52,7 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+           
 
 kakao_url:
   valid-uri: https://kapi.kakao.com/v1/user/access_token_info
@@ -62,7 +62,12 @@ springdoc:
   api-docs:
     path: /api-docs  # API 문서의 기본 경로
   swagger-ui:
-    path: /swagger-ui.html  # Swagger UI에 접근하기 위한 URL 경로
+    path: /api  # Swagger UI에 접근하기 위한 URL 경로
     operationsSorter: alpha  # API 정렬 기준 (alpha: 알파벳순)
     tagsSorter: alpha        # 태그 정렬 기준
-    disable-swagger-default-url: true # Swagger 기본 URL 표시 비활성화
+    disable-swagger-default-url: false # Swagger 기본 URL 표시 비활성화
+
+openai:
+  secret-key: ${OPENAI_SECRET_KEY}
+  model:
+    key: ${OPENAI_SECRET_KEY}

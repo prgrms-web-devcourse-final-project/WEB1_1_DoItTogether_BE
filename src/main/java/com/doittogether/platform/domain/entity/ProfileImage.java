@@ -2,7 +2,6 @@ package com.doittogether.platform.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,12 +19,9 @@ public class ProfileImage extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String url;
 
-    public static ProfileImage from(String url) {
-        return new ProfileImage(url);
-    }
-
-    @Builder
-    public ProfileImage(String url) {
-        this.url = url;
+    public static ProfileImage from(final String url) {
+        final ProfileImage profileImage = new ProfileImage();
+        profileImage.url = url;
+        return profileImage;
     }
 }

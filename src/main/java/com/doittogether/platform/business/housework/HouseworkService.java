@@ -1,17 +1,31 @@
 package com.doittogether.platform.business.housework;
 
-import com.doittogether.platform.domain.entity.Housework;
+import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
-import java.util.List;
+import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
+import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
+import jakarta.validation.Valid;
+import java.time.LocalDate;
+import org.springframework.data.domain.Pageable;
 
 public interface HouseworkService {
-    public List<Housework> getAllHouseworks();
+    public HouseworkSliceResponse findAllByChannelIdAndTargetDate(final User loginUser, final Long channelId,
+                                                                  final LocalDate targetDate, final Pageable pageable);
 
-    public List<Housework> getHouseworksByCategory(final String category);
+    public HouseworkSliceResponse findAllByChannelIdAndTargetDateAndAssigneeId(final Long channelId,
+                                                                               final LocalDate targetDate,
+                                                                               final Long assigneeId,
+                                                                               final Pageable pageable);
 
-    public Housework addHousework(final Housework housework);
+    public void addHousework(final Long channelId, final HouseworkRequest request);
 
-    public void updateHousework(final Long id, final HouseworkRequest request);
+    public void updateHousework(final User loginUser, final Long houseworkId, final Long channelId,
+                                final HouseworkRequest request);
 
-    public void deleteHousework(final Long id);
+    public void deleteHousework(final User loginUser, final Long houseworkId, final Long channelId);
+
+    public HouseworkResponse findHouseworkByChannelIdAndHouseworkId(final User user, final Long houseworkId, final Long channelId);
+
+    public void updateStatus(User loginUser, Long houseworkId, Long channelId);
+
 }

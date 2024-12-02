@@ -3,7 +3,6 @@ package com.doittogether.platform.business.invite;
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.redis.InviteException;
 import com.doittogether.platform.business.redis.RedisSingleDataService;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,29 +15,14 @@ public class InviteLinkServiceImpl implements InviteLinkService {
 
     private static final String INVITE_LINK_PREFIX = "invite:";
 
-    private final String inviteLinkUrl;
-
     private final int inviteLinkTtlMinutes;
-
-    private String baseInviteUrl;
 
     public InviteLinkServiceImpl (
             RedisSingleDataService redisSingleDataService,
-            @Value("${spring.data.redis.invite-link.url}") String inviteLinkUrl,
             @Value("${spring.data.redis.invite-link.ttl-minutes:10}") int inviteLinkTtlMinutes
     ) {
         this.redisSingleDataService = redisSingleDataService;
-        this.inviteLinkUrl = inviteLinkUrl;
         this.inviteLinkTtlMinutes = inviteLinkTtlMinutes;
-    }
-
-    @PostConstruct
-    private void initBaseInviteUrl() {
-        try {
-            this.baseInviteUrl = String.format("http://%s/", inviteLinkUrl);
-        } catch (Exception e) {
-            throw new InviteException(ExceptionCode.INVITE_LINK_GENERATION_FAILED);
-        }
     }
 
     @Override
@@ -51,14 +35,14 @@ public class InviteLinkServiceImpl implements InviteLinkService {
                 // 기존 초대 링크의 TTL 갱신
                 String redisKey = INVITE_LINK_PREFIX + existingInviteLink;
                 redisSingleDataService.storeDataWithExpiration(redisKey, channelId.toString(), Duration.ofMinutes(inviteLinkTtlMinutes));
-                return baseInviteUrl + existingInviteLink;
+                return existingInviteLink;
             }
 
             // 2. 새로운 초대 링크 생성
             String newInviteLink = RandomAuthCode.generate();
             String redisKey = INVITE_LINK_PREFIX + newInviteLink;
             redisSingleDataService.storeDataWithExpiration(redisKey, channelId.toString(), Duration.ofMinutes(inviteLinkTtlMinutes));
-            return baseInviteUrl + newInviteLink;
+            return newInviteLink;
         } catch (Exception e) {
             throw new InviteException(ExceptionCode.INVITE_LINK_GENERATION_FAILED);
         }
