@@ -39,7 +39,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/channels/{channelId}/houseworks")
 @Tag(name = "집안일 API", description = "집안일 관리 API")
-public class HouseworkControllerImpl implements HouseworkController {
+public class HouseworkControllerImpl implements
+        HouseworkController {
 
     private final HouseworkService houseworkService;
 
