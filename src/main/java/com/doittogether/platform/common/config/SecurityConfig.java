@@ -45,9 +45,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Collections.singletonList(frontUrl + "/*"));
-        configuration.setAllowedHeaders(Collections.singletonList("Authorization"));
-        configuration.setAllowedMethods(Collections.singletonList("*"));
+        configuration.setAllowedOriginPatterns(List.of((frontUrl + "/*"), "https://accounts.kakao.com/*"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "FETCH", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
