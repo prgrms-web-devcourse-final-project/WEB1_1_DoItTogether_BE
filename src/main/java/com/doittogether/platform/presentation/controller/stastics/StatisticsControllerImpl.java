@@ -4,6 +4,7 @@ import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.business.stastics.StatisticsService;
 import com.doittogether.platform.domain.entity.User;
+import com.doittogether.platform.presentation.dto.stastics.ChannelCountStatisticsResponse;
 import com.doittogether.platform.presentation.dto.stastics.CompleteScoreResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,7 +30,25 @@ public class StatisticsControllerImpl implements StatisticsController {
 
     private final StatisticsService statisticsService;
 
-    @GetMapping("/{targetDate}/{pageNumber}/{pageSize}")
+    @GetMapping("/{targetDate}/totalCount")
+    @Operation(summary = "주간 통계관련 완료 미완료 칭찬 찌르기 개수 조회", description = "주간 통계에서 사용할, 이번주 완료 개수 랭킹을 반환합니다.")
+    @Override
+    public ResponseEntity<SuccessResponse<ChannelCountStatisticsResponse>> calculateTotalCountByChannelId(
+            @AuthenticationPrincipal User user,
+            @PathVariable("channelId") Long channelId,
+            @RequestParam("targetDate")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate
+    ) {
+        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        statisticsService.calculateTotalCountByChannelId(loginUser, channelId, targetDate)
+                ));
+    }
+
+    @GetMapping("/{targetDate}/score")
     @Operation(summary = "주간 통계, 이번주 완료 개수 랭킹", description = "주간통계 중, 이번주 완료 개수 랭킹을 반환합니다.")
     @Override
     public ResponseEntity<SuccessResponse<CompleteScoreResponse>> calculateWeeklyStatistics(
