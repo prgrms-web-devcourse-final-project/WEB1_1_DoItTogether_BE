@@ -22,6 +22,10 @@ public class SecurityConfig {
     private String frontUrl;
 
     private final String[] permitAllPaths = {
+            "/api",
+            "/swagger-ui/*",
+            "api-docs/swagger-config",
+            "/api-docs",
             "/user/login"
     };
 
