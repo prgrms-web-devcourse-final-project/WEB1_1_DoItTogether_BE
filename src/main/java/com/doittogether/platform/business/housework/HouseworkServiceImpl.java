@@ -58,7 +58,7 @@ public class HouseworkServiceImpl implements HouseworkService {
     }
 
     @Override
-    public HouseworkResponse findHouseworkByHouseworkId(User user, Long houseworkId) {
+    public HouseworkResponse findHouseworkByChannelIdAndHouseworkId(User user, Long houseworkId, Long channelId) {
         return null;
     }
 
