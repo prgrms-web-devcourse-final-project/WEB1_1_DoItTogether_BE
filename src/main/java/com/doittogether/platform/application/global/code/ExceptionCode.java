@@ -65,17 +65,7 @@ public enum ExceptionCode implements GlobalCode {
     EMBEDDED_REDIS_STOP_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_501", "Redis 서버 중지에 실패했습니다."),
     EMBEDDED_REDIS_PORT_UNAVAILABLE(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_502", "사용 가능한 포트를 찾을 수 없습니다."),
     EMBEDDED_REDIS_PROCESS_CHECK_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_503", "Redis 프로세스 확인 중 오류가 발생했습니다."),
-    EMBEDDED_REDIS_EXECUTABLE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_504", "Redis 실행 파일을 찾을 수 없습니다."),
-
-    //User 관련
-    KAKAO_RESPONSE_NOT_FOUD(HttpStatus.NOT_FOUND, "KAKAO_404","카카오 API에서 응답이 없습니다."),
-    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "TOKEN_404", "사용자의 토큰을 찾을 수 없습니다."),
-    EXPIRES_IN_NOT_FOUND(HttpStatus.NOT_FOUND, "EXPIRES_IN_404", "토큰의 만료 시간을 찾을 수 없습니다."),
-    KAKAO_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "KAKAO_ID_404", "카카오 고유 ID를 찾을 수 없습니다."),
-    KAKAO_EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "KAKAO_EMAIL_404", "카카오 이메일을 찾을 수 없습니다."),
-    KAKAO_NICKNAME_NOT_FOUND(HttpStatus.NOT_FOUND, "KAKAO_NICKNAME_404", "카카오 닉네임을 찾을 수 없습니다."),
-    KAKAO_PROFILE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "KAKAO_PROFILE_IMAGE_404", "카카오 프로필 이미지 경로를 찾을 수 없습니다.");
-
+    EMBEDDED_REDIS_EXECUTABLE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_504", "Redis 실행 파일을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus; // HTTP 상태 코드
     private final String code; // 응답 코드

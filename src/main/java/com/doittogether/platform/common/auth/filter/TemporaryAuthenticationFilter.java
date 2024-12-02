@@ -28,32 +28,32 @@ public class TemporaryAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-//         String path = request.getRequestURI();
-//         if (path.startsWith("/api/")) {
-//             try {
-//                 String token = request.getHeader("Authorization");
-//                 if (token != null && !token.isBlank()) {
-//                     token = token.substring(7).trim();
-//                     User temporaryUser = userRepository.findByEmail(token).orElseThrow(() ->
-//                             new TemporaryLoginException(ExceptionCode.TEMPORARY_USER_NOT_FOUND_2));
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/")) {
+            try {
+                String token = request.getHeader("Authorization");
+                if (token != null && !token.isBlank()) {
+                    token = token.substring(7).trim();
+                    User temporaryUser = userRepository.findByEmail(token).orElseThrow(() ->
+                            new TemporaryLoginException(ExceptionCode.TEMPORARY_USER_NOT_FOUND_2));
 
-//                     Authentication authentication = new UsernamePasswordAuthenticationToken(
-//                             temporaryUser, null, null);
-//                     SecurityContextHolder.getContext().setAuthentication(authentication);
-//                 } else {
-//                     throw new TemporaryLoginException(ExceptionCode.TEMPORARY_USER_NOT_FOUND_1);
-//                 }
-//             } catch (TemporaryLoginException e) {
-//                 ExceptionResponse<Void> exceptionResponse = ExceptionResponse.onFailure(e.getExceptionCode());
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(
+                            temporaryUser, null, null);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    throw new TemporaryLoginException(ExceptionCode.TEMPORARY_USER_NOT_FOUND_1);
+                }
+            } catch (TemporaryLoginException e) {
+                ExceptionResponse<Void> exceptionResponse = ExceptionResponse.onFailure(e.getExceptionCode());
 
-//                 response.setCharacterEncoding("UTF-8");
-//                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                 response.setContentType("application/json");
-//                 response.getWriter().write(new ObjectMapper().writeValueAsString(exceptionResponse));
-//                 return;
-//             }
-//         }
+                response.setCharacterEncoding("UTF-8");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write(new ObjectMapper().writeValueAsString(exceptionResponse));
+                return;
+            }
+        }
 
-//         chain.doFilter(request, response);
+        chain.doFilter(request, response);
     }
 }
