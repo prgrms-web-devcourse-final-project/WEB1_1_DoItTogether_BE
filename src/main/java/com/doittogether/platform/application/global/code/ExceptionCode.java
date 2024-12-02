@@ -10,6 +10,7 @@ public enum ExceptionCode implements GlobalCode {
     _BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON_400", "잘못된 요청입니다."),
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON_401", "인증이 필요합니다."),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_403", "금지된 요청입니다."),
+    _NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON_404", "요청한 URL 리소스를 찾을 수 없습니다."),
 
     // 집안일 등록 관련
     HOUSEWORK_NOT_FOUND(HttpStatus.NOT_FOUND, "HOUSEWORK_404", "요청한 집안일을 찾을 수 없습니다."),
@@ -30,7 +31,9 @@ public enum ExceptionCode implements GlobalCode {
     EXPIRED_INVITE_LINK(HttpStatus.GONE, "INVITE_410", "초대 링크가 만료되었습니다."),
 
     //임시로그인
-    TEMPORARY_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "LOGIN_404", "백엔드야!! TemporaryLoginSaveTest에 있는 데이터 넣어라@@@@@!!"),
+    TEMPORARY_USER_NOT_FOUND_1(HttpStatus.NOT_FOUND, "LOGIN_404", "(임시) Bearer Token 에 이메일을 기입해주세요."),
+    TEMPORARY_USER_NOT_FOUND_2(HttpStatus.NOT_FOUND, "LOGIN_404", "(임시) 사용자 정보를 찾을 수 없습니다. - 백엔드에 문의"),
+
 
     // 프리셋 관련
     PRESET_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "PRESET_404", "요청한 프리셋 카테고리를 찾을 수 없습니다."),

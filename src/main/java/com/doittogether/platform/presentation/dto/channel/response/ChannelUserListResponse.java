@@ -13,6 +13,9 @@ public record ChannelUserListResponse(
         @Schema(description = "채널 아이디")
         Long channelId,
 
+        @Schema(description = "채널명")
+        String name,
+
         @Schema(description = "채널 내의 모든 회원 리스트")
         List<UserChannelResponse> userList,
 
@@ -25,6 +28,7 @@ public record ChannelUserListResponse(
     public static ChannelUserListResponse of(Channel channel, Page<UserChannelResponse> userChannelPage) {
         return ChannelUserListResponse.builder()
                 .channelId(channel.getChannelId())
+                .name(channel.getName())
                 .userList(userChannelPage.getContent())
                 .totalElements(userChannelPage.getTotalElements())
                 .totalPages(userChannelPage.getTotalPages())

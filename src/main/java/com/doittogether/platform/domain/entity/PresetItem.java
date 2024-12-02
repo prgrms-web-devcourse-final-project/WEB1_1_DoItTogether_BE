@@ -18,15 +18,15 @@ public class PresetItem extends BaseEntity {
     private Long presetItemId;
 
     @Column(nullable = false)
-    private String value;
+    private String name;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "preset_category_id")
     private PresetCategory presetCategory;
 
-    public static PresetItem of(String value, PresetCategory presetCategory) {
+    public static PresetItem of(String name, PresetCategory presetCategory) {
         PresetItem presetitem = new PresetItem();
-        presetitem.value = value;
+        presetitem.name = name;
         presetitem.presetCategory = presetCategory;
 
         return presetitem;

@@ -1,4 +1,4 @@
-package com.doittogether.platform.presentation.dto.channel;
+package com.doittogether.platform.presentation.controller.channel;
 
 import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.SuccessResponse;

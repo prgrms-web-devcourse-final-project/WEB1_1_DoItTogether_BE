@@ -1,4 +1,4 @@
-package com.doittogether.platform.presentation.dto.preset;
+package com.doittogether.platform.presentation.controller.preset;
 
 import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.SuccessResponse;
@@ -53,6 +53,18 @@ public class PresetController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK, presetService.getAllCategories(channelId, pageable)));
+    }
+
+    @GetMapping("/categories/items")
+    @Operation(summary = "모든 카테고리와 해당 프리셋 아이템 리스트 조회",
+            description = "모든 카테고리와 각 카테고리에 속한 프리셋 아이템 리스트를 반환합니다.")
+    public ResponseEntity<SuccessResponse<CategoryPresetListResponse>> getAllCategoriesWithItems(
+            @PathVariable("channelId") Long channelId,
+            @ParameterObject Pageable pageable) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.onSuccess(SuccessCode._OK,
+                        presetService.getAllCategoriesWithItems(channelId, pageable)));
     }
 
     @PostMapping("/categories")

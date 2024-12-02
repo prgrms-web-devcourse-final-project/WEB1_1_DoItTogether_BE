@@ -3,8 +3,10 @@ package com.doittogether.platform.presentation.housework.dto;
 import static lombok.AccessLevel.PRIVATE;
 
 import com.doittogether.platform.domain.entity.Housework;
+import com.doittogether.platform.domain.entity.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -31,13 +33,13 @@ public record HouseworkResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         LocalDate startDate,
 
-        @NotBlank
+        @Nullable
         @Schema(description = "진행 시간", example = "OO:OO")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
         LocalTime startTime,
 
         @NotBlank
-        @Schema(description = "하루 종일 여부", example = "true")
+        @Schema(description = "하루 종일 여부", example = "false")
         Boolean isAllDay,
 
         @NotBlank
@@ -49,17 +51,23 @@ public record HouseworkResponse(
         Long userId,
 
         @NotNull
+        @Schema(description = "집안일 완료여부_ COMPLETE 또는 NOT_COMPLETE로 구분", example = "COMPLETE")
+        Status status,
+
+        @NotNull
         @Schema(description = "작업 담당자 assigneeId", example = "홍길동")
         Long assigneeId
 ) {
     public static HouseworkResponse from(Housework housework) {
         return HouseworkResponse.builder()
+                .houseworkId(housework.retrieveHouseworkId())
                 .category(housework.retrieveCategory().getDisplayName())
                 .task(housework.retrieveTask())
                 .startDate(housework.retrieveStartDate())
                 .startTime(housework.retrieveStartTime())
                 .isAllDay(housework.isAllDay())
                 .userId(housework.retrieveAssignee().retrieveUser().retrieveUserId())
+                .status(housework.retrieveStatus())
                 .assigneeId(housework.retrieveAssignee().retrieveAssigneeId())
                 .assignee(housework.retrieveAssignee().retrieveUser().retrieveNickName())
                 .build();
