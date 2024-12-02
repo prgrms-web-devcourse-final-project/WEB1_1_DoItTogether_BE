@@ -93,13 +93,15 @@ public class HouseworkControllerImpl implements HouseworkController {
     @ApiResponses({
             @ApiResponse(responseCode = "202", description = "수정 성공")
     })
-    public ResponseEntity<SuccessResponse<HouseworkResponse>> findHouseworkByHouseworkId(
+    @Override
+    public ResponseEntity<SuccessResponse<HouseworkResponse>> findHouseworkByChannelIdAndHouseworkId(
             @AuthenticationPrincipal User user,
+            @PathVariable("channelId") Long channelId,
             @PathVariable("houseworkId") Long houseworkId){
         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,
-                        houseworkService.findHouseworkByHouseworkId(user, houseworkId)));
+                        houseworkService.findHouseworkByChannelIdAndHouseworkId(user, channelId, houseworkId)));
     }
 
     @PostMapping
