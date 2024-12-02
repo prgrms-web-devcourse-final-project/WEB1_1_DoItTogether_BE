@@ -1,8 +1,8 @@
 package com.doittogether.platform.business.personality;
 
 import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.presentation.personality.dto.PersonalityRequestDto;
-import com.doittogether.platform.presentation.personality.dto.PersonalityResponseDTO;
+import com.doittogether.platform.presentation.dto.personality.PersonalityRequestDto;
+import com.doittogether.platform.presentation.dto.personality.PersonalityResponseDTO;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -2,7 +2,6 @@ package com.doittogether.platform.presentation.dto.preset.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-
 import java.util.List;
 
 @Schema(description = "전체 프리셋 키워드 리스트 응답")
