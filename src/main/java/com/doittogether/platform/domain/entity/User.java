@@ -4,13 +4,8 @@ import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -28,6 +23,9 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long userId;
 
+    @Column(unique = true)
+    private Long kakaoId;
+
     private String nickName;
 
     private String email;
@@ -41,4 +39,13 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<UserChannel> userChannels = new ArrayList<>();
+
+    public static User of(Long kakaoId, String nickName, String email, ProfileImage profileImage) {
+        User user = new User();
+        user.kakaoId = kakaoId;
+        user.nickName = nickName;
+        user.email = email;
+        user.profileImage = profileImage;
+        return user;
+    }
 }
