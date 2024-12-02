@@ -14,12 +14,6 @@ public class ChatGPTConfig {
     private String secretKey;
 
     @Bean
-    public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate;
-    }
-
-    @Bean
     public HttpHeaders httpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + secretKey);
