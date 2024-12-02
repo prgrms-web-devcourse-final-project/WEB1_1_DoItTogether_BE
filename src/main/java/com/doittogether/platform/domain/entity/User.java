@@ -51,4 +51,16 @@ public class User extends BaseEntity {
         user.profileImage = profileImage;
         return user;
     }
+
+    public Long retrieveUserId() {
+        return userId;
+    }
+
+    public String retrieveEmail() {
+        return email;
+    }
+
+    public String retrieveNickName() {
+        return nickName;
+    }
 }

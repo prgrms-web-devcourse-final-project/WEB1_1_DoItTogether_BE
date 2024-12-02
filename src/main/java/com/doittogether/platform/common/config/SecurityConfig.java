@@ -19,9 +19,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -81,10 +84,12 @@ public class SecurityConfig {
         // CORS 설정
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); // 허용된 출처
+            configuration.setAllowedOriginPatterns(List.of("*"));
+            // configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); // 허용된 출처
             configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH")); // 허용된 메서드
             configuration.setAllowCredentials(true); // 자격 증명 허용
             configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept")); // 허용된 헤더
+            //configuration.setAllowedHeaders(List.of("*"));
             configuration.setExposedHeaders(Arrays.asList("Authorization")); // 노출할 헤더
             configuration.setMaxAge(3600L); // Pre-flight 요청 캐시 시간
             return configuration;
@@ -93,3 +98,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
+
