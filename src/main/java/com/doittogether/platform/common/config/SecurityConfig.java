@@ -13,6 +13,9 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
+    @Value("${front.url}")
+    private String frontUrl;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -31,6 +34,7 @@ public class SecurityConfig {
         configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedOriginPatterns(Collections.singletonList(frontUrl + "/*"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
