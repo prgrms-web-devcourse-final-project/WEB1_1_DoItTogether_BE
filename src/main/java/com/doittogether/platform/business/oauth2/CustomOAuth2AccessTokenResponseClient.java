@@ -1,5 +1,7 @@
 package com.doittogether.platform.business.oauth2;
 
+import com.doittogether.platform.application.global.code.ExceptionCode;
+import com.doittogether.platform.application.global.exception.UserException.UserException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,10 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class CustomOAuth2AccessTokenResponseClient implements OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> {
+
+    public static final String REFRESH_TOKEN_KEY = "refresh_token";
+    public static final String ACCESS_TOKEN_KEY = "access_token";
+    public static final String EXPIRES_IN = "expires_in";
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
@@ -58,7 +64,7 @@ public class CustomOAuth2AccessTokenResponseClient implements OAuth2AccessTokenR
         String responseBody = response.getBody();
 
         if (responseBody == null) {
-            throw new RuntimeException("Received empty response body from Kakao API");
+            throw new UserException(ExceptionCode.KAKAO_RESPONSE_NOT_FOUD);
         }
 
         String accessToken = parseJsonForAccessToken(responseBody);
@@ -69,7 +75,7 @@ public class CustomOAuth2AccessTokenResponseClient implements OAuth2AccessTokenR
         return OAuth2AccessTokenResponse.withToken(accessToken)
                 .tokenType(OAuth2AccessToken.TokenType.BEARER)
                 .expiresIn(expiresIn)
-                .additionalParameters(Map.of("refresh_token", refreshToken))
+                .additionalParameters(Map.of(REFRESH_TOKEN_KEY, refreshToken))
                 .build();
     }
 
@@ -78,9 +84,9 @@ public class CustomOAuth2AccessTokenResponseClient implements OAuth2AccessTokenR
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(responseBody);
-            return jsonNode.get("access_token").asText();
+            return jsonNode.get(ACCESS_TOKEN_KEY).asText();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to parse access_token from response", e);
+            throw new UserException(ExceptionCode.TOKEN_NOT_FOUND);
         }
     }
 
@@ -89,9 +95,9 @@ public class CustomOAuth2AccessTokenResponseClient implements OAuth2AccessTokenR
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(responseBody);
-            return jsonNode.get("refresh_token") != null ? jsonNode.get("refresh_token").asText() : null;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to parse refresh_token from response", e);
+            return jsonNode.get(REFRESH_TOKEN_KEY).asText();
+        }catch (Exception e) {
+            throw new UserException(ExceptionCode.TOKEN_NOT_FOUND);
         }
     }
 
@@ -100,9 +106,9 @@ public class CustomOAuth2AccessTokenResponseClient implements OAuth2AccessTokenR
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(responseBody);
-            return jsonNode.get("expires_in") != null ? jsonNode.get("expires_in").asLong() : 3600; // 기본값 3600
+                return jsonNode.get(EXPIRES_IN).asLong();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to parse expires_in from response", e);
+            throw new UserException(ExceptionCode.EXPIRES_IN_NOT_FOUND);
         }
     }
 }

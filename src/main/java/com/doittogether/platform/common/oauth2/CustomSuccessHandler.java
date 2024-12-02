@@ -21,6 +21,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+    private final Long TWO_HOUR = 2*30*24L;
     private final TokenService TokenService;
 
     @Override
@@ -37,7 +38,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String refreshToken = userDTO.getRefreshToken();  // 리프레시 토큰 정보 (있으면)
 
         // Refresh Token 만료 기간 설정 (2달)
-        Duration refreshTokenExpiration = Duration.ofHours(2 * 30 * 24); // 리프레시 토큰의 만료 기간 설정 (2달)
+        Duration refreshTokenExpiration = Duration.ofHours(TWO_HOUR); // 리프레시 토큰의 만료 기간 설정 (2달)
 
         // Refresh Token 저장
         TokenService.refreshTokenStoreData(kakaoId, refreshToken, refreshTokenExpiration);
