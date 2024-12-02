@@ -25,18 +25,18 @@ public class TemporaryAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        String path = request.getRequestURI();
-        if (path.startsWith("/api/")) {
-            String token = request.getHeader("Authorization");
-            if (token != null && !token.isBlank()) {
-                User temporaryUser = userRepository.findByEmail("doto@gmail.com").orElseThrow(() ->
-                        new TemporaryLoginException(ExceptionCode.TEMPORARY_USER_NOT_FOUND));
-
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        temporaryUser, null, null);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        }
-        chain.doFilter(request, response);
+//        String path = request.getRequestURI();
+//        if (path.startsWith("/api/")) {
+//            String token = request.getHeader("Authorization");
+//            if (token != null && !token.isBlank()) {
+//                User temporaryUser = userRepository.findByEmail("doto@gmail.com").orElseThrow(() ->
+//                        new TemporaryLoginException(ExceptionCode.TEMPORARY_USER_NOT_FOUND));
+//
+//                Authentication authentication = new UsernamePasswordAuthenticationToken(
+//                        temporaryUser, null, null);
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+//            }
+//        }
+//        chain.doFilter(request, response);
     }
 }
