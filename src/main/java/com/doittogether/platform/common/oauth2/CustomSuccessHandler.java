@@ -1,8 +1,6 @@
 package com.doittogether.platform.common.oauth2;
 
 import com.doittogether.platform.business.token.TokenService;
-import com.doittogether.platform.common.jwt.filter.TokenUtil;
-import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.presentation.dto.OAuth.CustomOAuth2User;
 import com.doittogether.platform.presentation.dto.OAuth.UserDTO;
 import jakarta.servlet.ServletException;

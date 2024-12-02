@@ -1,4 +1,4 @@
-package com.doittogether.platform.common.jwt.filter;
+package com.doittogether.platform.common.token.filter;
 
 
 import com.doittogether.platform.business.token.TokenService;

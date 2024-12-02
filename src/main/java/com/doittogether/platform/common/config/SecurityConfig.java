@@ -4,8 +4,8 @@ import com.doittogether.platform.business.oauth2.CustomOAuth2AccessTokenResponse
 import com.doittogether.platform.business.oauth2.CustomOAuth2UserService;
 import com.doittogether.platform.business.redis.RedisSingleDataServiceImpl;
 import com.doittogether.platform.business.token.TokenService;
-import com.doittogether.platform.common.jwt.filter.TokenFilter;
-import com.doittogether.platform.common.jwt.filter.TokenUtil;
+import com.doittogether.platform.common.token.filter.TokenFilter;
+import com.doittogether.platform.common.token.filter.TokenUtil;
 import com.doittogether.platform.common.oauth2.CustomLogoutSuccessHandler;
 import com.doittogether.platform.common.oauth2.CustomSuccessHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
