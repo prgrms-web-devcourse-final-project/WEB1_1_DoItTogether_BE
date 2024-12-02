@@ -1,17 +1,12 @@
 package com.doittogether.platform.domain.entity;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -24,6 +19,10 @@ public class ProfileImage extends BaseEntity {
     @Lob
     @Column(columnDefinition = "TEXT")
     private String url;
+
+    public static ProfileImage from(String url) {
+        return new ProfileImage(url);
+    }
 
     @Builder
     public ProfileImage(String url) {
