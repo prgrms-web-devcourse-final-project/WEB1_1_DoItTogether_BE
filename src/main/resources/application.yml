@@ -44,3 +44,6 @@ openai:
   secret-key: ${OPENAI_SECRET_KEY}
   model:
     key: ${OPENAI_SECRET_KEY}
+
+front:
+  url: https://web-1-1-do-it-together-fe.vercel.app
