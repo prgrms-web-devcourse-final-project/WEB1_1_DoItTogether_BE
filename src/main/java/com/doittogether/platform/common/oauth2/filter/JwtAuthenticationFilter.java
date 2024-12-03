@@ -1,4 +1,4 @@
-package com.doittogether.platform.common.auth.filter;
+package com.doittogether.platform.common.oauth2.filter;
 
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.user.UserException;

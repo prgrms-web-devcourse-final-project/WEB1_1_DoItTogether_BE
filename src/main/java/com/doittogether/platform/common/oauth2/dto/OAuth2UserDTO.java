@@ -1,4 +1,4 @@
-package com.doittogether.platform.presentation.dto.user;
+package com.doittogether.platform.common.oauth2.dto;
 
 import com.doittogether.platform.domain.entity.ProfileImage;
 
