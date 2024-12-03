@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import java.security.Principal;
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +29,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/api/v1/channels/{channelId}/houseworks")
 public interface HouseworkController {
+
     @GetMapping("/{targetDate}/{pageNumber}/{pageSize}")
     @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
     ResponseEntity<SuccessResponse<HouseworkSliceResponse>> findHouseworksByDate(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
             @RequestParam("targetDate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -43,7 +45,7 @@ public interface HouseworkController {
     @GetMapping("/{targetDate}/{pageNumber}/{pageSize}/{assigneeId}")
     @Operation(summary = "집안일 담당자별 목록 조회", description = "일자별 담당자별 집안일 목록을 조회합니다.")
     ResponseEntity<SuccessResponse<HouseworkSliceResponse>> findHouseworksByDateAndAssignee(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
             @RequestParam("targetDate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -53,14 +55,13 @@ public interface HouseworkController {
             @RequestParam("pageSize") Integer pageSize
     );
 
-
     @GetMapping("/{houseworkId}")
     @Operation(summary = "집안일 Id별 상세 정보 조회", description = "집안일 Id별 상세 정보를 조회합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "202", description = "수정 성공")
     })
     ResponseEntity<SuccessResponse<HouseworkResponse>> findHouseworkByChannelIdAndHouseworkId(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
             @PathVariable("houseworkId") Long houseworkId);
 
@@ -69,7 +70,7 @@ public interface HouseworkController {
     @ApiResponses({
             @ApiResponse(responseCode = "202", description = "추가 성공")
     })
-    ResponseEntity<SuccessResponse<Void>> addHousework(@AuthenticationPrincipal User user,
+    ResponseEntity<SuccessResponse<Void>> addHousework(Principal principal,
                                                        @PathVariable("channelId") Long channelId,
                                                        @RequestBody HouseworkRequest request);
 
@@ -87,9 +88,9 @@ public interface HouseworkController {
             )
     })
     ResponseEntity<SuccessResponse<Void>> updateHousework(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
-            @PathVariable(name = "houseworkId") Long houseworkId,
+            @PathVariable("houseworkId") Long houseworkId,
             @RequestBody @Valid HouseworkRequest request);
 
     @PutMapping("/{houseworkId}/changeStatus")
@@ -106,10 +107,10 @@ public interface HouseworkController {
             )
     })
     ResponseEntity<SuccessResponse<Void>> changeStatus(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
             @PathVariable("houseworkId") Long houseworkId
-            );
+    );
 
     @DeleteMapping("/{houseworkId}")
     @Operation(summary = "집안일  삭제", description = "기존 집안일을 삭제합니다.")
@@ -124,7 +125,7 @@ public interface HouseworkController {
             @Content(schema = @Schema(implementation = ExceptionResponse.class))
             )
     })
-    ResponseEntity<SuccessResponse<Void>> deleteHousework(@AuthenticationPrincipal User user,
+    ResponseEntity<SuccessResponse<Void>> deleteHousework(Principal principal,
                                                           @PathVariable("channelId") Long channelId,
                                                           @PathVariable(name = "houseworkId") Long houseworkId);
 }
