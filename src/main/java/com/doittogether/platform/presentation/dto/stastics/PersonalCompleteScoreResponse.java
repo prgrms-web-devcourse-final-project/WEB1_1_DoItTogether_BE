@@ -11,7 +11,10 @@ public record PersonalCompleteScoreResponse(
 
         @NotNull
         @Schema(description = "완료 개수", example = "10")
-        Integer completeCount
+        Integer completeCount,
+
+        @Schema(description = "사용자 프로필 url", example = "https://example.com/profile-image.jpg")
+        String profileImageUrl
 
 ) {
 }

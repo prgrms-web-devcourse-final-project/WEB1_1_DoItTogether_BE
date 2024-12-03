@@ -27,4 +27,8 @@ public record SingleDayStatisticsResponse(
         CompletionStatus status
 
 ) {
+
+        public LocalDate retrieveDate(){
+                return date;
+        }
 }
