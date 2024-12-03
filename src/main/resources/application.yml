@@ -68,7 +68,7 @@ openai:
     key: ${OPENAI_SECRET_KEY}
 
 front:
-  url: https://web-1-1-do-it-together-fe.vercel.app
+  url: http://localhost:5173
 
 jwt:
   secret: ${JWT_SECRET}

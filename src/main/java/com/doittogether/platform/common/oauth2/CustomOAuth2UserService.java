@@ -1,13 +1,13 @@
-package com.doittogether.platform.business.user;
+package com.doittogether.platform.common.oauth2;
 
 import com.doittogether.platform.domain.entity.ProfileImage;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.infrastructure.persistence.ProfileImageRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
-import com.doittogether.platform.presentation.dto.user.CustomOAuth2User;
-import com.doittogether.platform.presentation.dto.user.KakaoOAuth2Response;
-import com.doittogether.platform.presentation.dto.user.OAuth2Response;
-import com.doittogether.platform.presentation.dto.user.OAuth2UserDTO;
+import com.doittogether.platform.common.oauth2.dto.CustomOAuth2User;
+import com.doittogether.platform.common.oauth2.dto.KakaoOAuth2Response;
+import com.doittogether.platform.common.oauth2.dto.OAuth2Response;
+import com.doittogether.platform.common.oauth2.dto.OAuth2UserDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

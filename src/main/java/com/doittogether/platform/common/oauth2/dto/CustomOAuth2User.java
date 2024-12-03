@@ -1,4 +1,4 @@
-package com.doittogether.platform.presentation.dto.user;
+package com.doittogether.platform.common.oauth2.dto;
 
 import java.util.Collection;
 import java.util.Map;

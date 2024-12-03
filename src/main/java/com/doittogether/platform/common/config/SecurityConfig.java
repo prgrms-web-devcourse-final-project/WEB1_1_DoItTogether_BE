@@ -1,7 +1,7 @@
 package com.doittogether.platform.common.config;
 
-import com.doittogether.platform.business.user.CustomAuthenticationSuccessHandler;
-import com.doittogether.platform.common.auth.filter.JwtAuthenticationFilter;
+import com.doittogether.platform.common.oauth2.CustomAuthenticationSuccessHandler;
+import com.doittogether.platform.common.oauth2.filter.JwtAuthenticationFilter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,7 +58,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of((frontUrl + "/*"), "https://accounts.kakao.com/*"));
+        configuration.setAllowedOriginPatterns(List.of((frontUrl + "/*"), "https://accounts.kakao.com/*", "http://localhost:5173/*"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
         configuration.setAllowedMethods(List.of("GET", "POST", "FETCH", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
