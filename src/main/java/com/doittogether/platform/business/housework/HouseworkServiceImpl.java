@@ -3,11 +3,7 @@ package com.doittogether.platform.business.housework;
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.housework.HouseworkException;
 import com.doittogether.platform.business.channel.ChannelValidator;
-import com.doittogether.platform.domain.entity.Assignee;
-import com.doittogether.platform.domain.entity.Channel;
-import com.doittogether.platform.domain.entity.Housework;
-import com.doittogether.platform.domain.entity.HouseworkCategory;
-import com.doittogether.platform.domain.entity.User;
+import com.doittogether.platform.domain.entity.*;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.AssigneeRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.HouseworkRepository;
@@ -15,12 +11,13 @@ import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -58,8 +55,15 @@ public class HouseworkServiceImpl implements HouseworkService {
     }
 
     @Override
-    public HouseworkResponse findHouseworkByChannelIdAndHouseworkId(User user, Long houseworkId, Long channelId) {
-        return null;
+    public HouseworkResponse findHouseworkByChannelIdAndHouseworkId(final User loginUser, final Long houseworkId,
+                                                                    final Long channelId) {
+        channelValidator.validateExistChannel(channelId);
+        houseworkValidator.validateExistHousework(houseworkId);
+        Housework housework = houseworkRepository.findById(houseworkId)
+                .orElseThrow(() -> new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL));
+        houseworkValidator.validateEditableUser(housework, loginUser);
+
+        return HouseworkResponse.from(housework);
     }
 
     @Override
@@ -105,7 +109,13 @@ public class HouseworkServiceImpl implements HouseworkService {
 
     @Override
     public void updateStatus(User loginUser, Long houseworkId, Long channelId) {
-
+        channelValidator.validateExistChannel(channelId);
+        houseworkValidator.validateExistHousework(houseworkId);
+        final Housework housework = houseworkRepository.findById(houseworkId)
+                .orElseThrow(() -> new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL));
+        houseworkValidator.validateEditableUser(housework, loginUser);
+        housework.updateStatus();
+        houseworkRepository.save(housework);
     }
 
     @Override
