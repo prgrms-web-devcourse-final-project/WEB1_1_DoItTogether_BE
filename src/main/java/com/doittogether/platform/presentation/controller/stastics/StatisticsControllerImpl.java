@@ -11,18 +11,15 @@ import com.doittogether.platform.presentation.dto.stastics.MonthlyStatisticsResp
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -78,7 +75,7 @@ public class StatisticsControllerImpl implements StatisticsController {
             @Parameter(description = "선택 월 (yyyy-MM 형식)", example = "2024-11") String targetMonth
     ) {
         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        LocalDate targetDate = LocalDate.parse(targetMonth+"-00");
+        LocalDate targetDate = LocalDate.parse(targetMonth + "-01");
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
@@ -96,7 +93,7 @@ public class StatisticsControllerImpl implements StatisticsController {
             @Parameter(description = "선택 월 (yyyy-MM 형식)", example = "2024-11") String targetMonth
     ) {
         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        LocalDate targetDate = LocalDate.parse(targetMonth+"-00");
+        LocalDate targetDate = LocalDate.parse(targetMonth + "-01");
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
