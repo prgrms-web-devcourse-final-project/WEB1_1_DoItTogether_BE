@@ -49,6 +49,4 @@ public interface HouseworkRepository extends JpaRepository<Housework, Long> {
                                                                   @Param("startDate") final LocalDate startDate);
 
     List<Housework> findByStartDateBetweenAndChannel_ChannelId(LocalDate startDate, LocalDate endDate, Long channelId);
-
-
 }
