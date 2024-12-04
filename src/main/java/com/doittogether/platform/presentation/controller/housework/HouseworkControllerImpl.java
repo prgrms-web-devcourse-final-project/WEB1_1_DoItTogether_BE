@@ -4,6 +4,7 @@ import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.ExceptionResponse;
 import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.business.housework.HouseworkService;
+import com.doittogether.platform.business.user.UserService;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
@@ -36,13 +37,14 @@ public class HouseworkControllerImpl implements
         HouseworkController {
 
     private final HouseworkService houseworkService;
+    private final UserService userService;
 
 
     @GetMapping("/{targetDate}/{pageNumber}/{pageSize}")
     @Operation(summary = "집안일 목록 조회", description = "일자별 집안일 목록을 조회합니다.")
     @Override
     public ResponseEntity<SuccessResponse<HouseworkSliceResponse>> findHouseworksByDate(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
             @RequestParam("targetDate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -51,7 +53,8 @@ public class HouseworkControllerImpl implements
             @RequestParam("pageSize") Integer pageSize
     ) {
         final Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User loginUser = userService.findByIdOrThrow(userId);
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
@@ -63,7 +66,7 @@ public class HouseworkControllerImpl implements
     @Operation(summary = "집안일 담당자별 목록 조회", description = "일자별 담당자별 집안일 목록을 조회합니다.")
     @Override
     public ResponseEntity<SuccessResponse<HouseworkSliceResponse>> findHouseworksByDateAndAssignee(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
             @RequestParam("targetDate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -73,7 +76,8 @@ public class HouseworkControllerImpl implements
             @RequestParam("pageSize") Integer pageSize
     ) {
         final Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User user = userService.findByIdOrThrow(userId);
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
@@ -89,10 +93,11 @@ public class HouseworkControllerImpl implements
     })
     @Override
     public ResponseEntity<SuccessResponse<HouseworkResponse>> findHouseworkByChannelIdAndHouseworkId(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
             @PathVariable("houseworkId") Long houseworkId){
-        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User user = userService.findByIdOrThrow(userId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,
                         houseworkService.findHouseworkByChannelIdAndHouseworkId(loginUser, channelId, houseworkId)));
@@ -104,10 +109,11 @@ public class HouseworkControllerImpl implements
             @ApiResponse(responseCode = "202", description = "추가 성공")
     })
     @Override
-    public ResponseEntity<SuccessResponse<Void>> addHousework(@AuthenticationPrincipal User user,
+    public ResponseEntity<SuccessResponse<Void>> addHousework(Principal principal,
                                                               @PathVariable("channelId") Long channelId,
                                                               @RequestBody HouseworkRequest request) {
-        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User loginUser = userService.findByIdOrThrow(userId);
         houseworkService.addHousework(channelId, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.onSuccess());
@@ -128,11 +134,12 @@ public class HouseworkControllerImpl implements
     })
     @Override
     public ResponseEntity<SuccessResponse<Void>> updateHousework(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
             @PathVariable("houseworkId") Long houseworkId,
             @RequestBody @Valid HouseworkRequest request) {
-        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User loginUser = userService.findByIdOrThrow(userId);
         houseworkService.updateHousework(loginUser, houseworkId, channelId, request);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess());
@@ -154,11 +161,12 @@ public class HouseworkControllerImpl implements
     })
     @Override
     public ResponseEntity<SuccessResponse<Void>> changeStatus(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
             @PathVariable("houseworkId") Long houseworkId
-            ) {
-        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    ) {
+        Long userId = Long.parseLong(principal.getName());
+        User loginUser = userService.findByIdOrThrow(userId);
         houseworkService.updateStatus(loginUser, channelId, houseworkId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess());
@@ -179,10 +187,11 @@ public class HouseworkControllerImpl implements
             )
     })
     @Override
-    public ResponseEntity<SuccessResponse<Void>> deleteHousework(@AuthenticationPrincipal User user,
+    public ResponseEntity<SuccessResponse<Void>> deleteHousework(Principal principal,
                                                                  @PathVariable("channelId") Long channelId,
                                                                  @PathVariable(name = "houseworkId") Long houseworkId) {
-        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User loginUser = userService.findByIdOrThrow(userId);
         houseworkService.deleteHousework(loginUser, houseworkId, channelId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._NO_CONTENT));

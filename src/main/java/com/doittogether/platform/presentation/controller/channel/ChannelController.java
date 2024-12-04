@@ -3,6 +3,7 @@ package com.doittogether.platform.presentation.controller.channel;
 import com.doittogether.platform.application.global.code.SuccessCode;
 import com.doittogether.platform.application.global.response.SuccessResponse;
 import com.doittogether.platform.business.channel.ChannelService;
+import com.doittogether.platform.business.user.UserService;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
@@ -20,22 +21,25 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/v1/channels")
 @RequiredArgsConstructor
 @Tag(name = "채널 API", description = "채널 관리 API")
 public class ChannelController {
 
+    private final UserService userService;
     private final ChannelService channelService;
 
     @GetMapping("/my")
     @Operation(summary = "나의 채널 목록 조회", description = "내가 속한 채널 목록을 조회합니다.")
     public ResponseEntity<SuccessResponse<ChannelListResponse>> getChannel(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @ParameterObject Pageable pageable) {
 
-        if(user.retrieveUserId() == null) // 임시 로그인
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User user = userService.findByIdOrThrow(userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 SuccessResponse.onSuccess(
@@ -47,11 +51,11 @@ public class ChannelController {
     @PostMapping
     @Operation(summary = "채널 생성", description = "관리자 유저가 새로운 채널을 생성합니다.")
     public ResponseEntity<SuccessResponse<ChannelRegisterResponse>> createChannel(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @RequestBody @Valid ChannelRegisterRequest request) {
 
-        if(user.retrieveEmail() == null) // 임시 로그인
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User user = userService.findByIdOrThrow(userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 SuccessResponse.onSuccess(
@@ -63,11 +67,11 @@ public class ChannelController {
     @PutMapping("/{channelId}/name")
     @Operation(summary = "채널명 변경", description = "관리자 유저가 채널명을 변경합니다.")
     public ResponseEntity<SuccessResponse<ChannelUpdateResponse>> updateChannelName(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId, @RequestBody @Valid ChannelUpdateRequest request) {
 
-        if(user.retrieveEmail() == null) // 임시 로그인
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User user = userService.findByIdOrThrow(userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
@@ -79,12 +83,12 @@ public class ChannelController {
     @GetMapping("/{channelId}/users")
     @Operation(summary = "채널 사용자 조회", description = "채널에 포함된 모든 사용자를 조회합니다.")
     public ResponseEntity<SuccessResponse<ChannelUserListResponse>> getChannelUsers(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId,
             @ParameterObject Pageable pageable) {
 
-        if(user.retrieveEmail() == null) // 임시 로그인
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User user = userService.findByIdOrThrow(userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
@@ -108,11 +112,11 @@ public class ChannelController {
     @PostMapping("/join/{inviteLink}")
     @Operation(summary = "초대 링크로 방 입장", description = "초대 링크를 통해 채널에 입장합니다.")
     public ResponseEntity<SuccessResponse<ChannelJoinResponse>> joinChannelViaInviteLink(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("inviteLink") String inviteLink) {
 
-        if(user.retrieveEmail() == null) // 임시 로그인
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User user = userService.findByIdOrThrow(userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 SuccessResponse.onSuccess(
@@ -124,11 +128,11 @@ public class ChannelController {
     @PostMapping("/{channelId}/kick")
     @Operation(summary = "특정 유저 추방", description = "특정 유저를 채널에서 강퇴합니다.")
     public ResponseEntity<SuccessResponse<ChannelKickUserResponse>> kickUserFromChannel(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId, @Valid @RequestBody ChannelKickUserRequest request) {
 
-        if(user.retrieveEmail() == null) // 임시 로그인
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User user = userService.findByIdOrThrow(userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
@@ -140,11 +144,11 @@ public class ChannelController {
     @DeleteMapping("/{channelId}/leave")
     @Operation(summary = "일반 참가자가 채널 나가기", description = "일반 참가자가 채널을 나가면 연관된 데이터가 삭제됩니다.")
     public ResponseEntity<SuccessResponse<Void>> leaveChannel(
-            @AuthenticationPrincipal User user,
+            Principal principal,
             @PathVariable("channelId") Long channelId) {
 
-        if (user.retrieveEmail() == null) // 임시 로그인 처리
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User user = userService.findByIdOrThrow(userId);
 
         channelService.leaveChannel(user, channelId);
 
