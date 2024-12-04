@@ -76,11 +76,11 @@ public class HouseworkControllerImpl implements
     ) {
         final Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Long userId = Long.parseLong(principal.getName());
-        User user = userService.findByIdOrThrow(userId);
+        User loginUser = userService.findByIdOrThrow(userId);
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
                         SuccessCode._OK,
-                        houseworkService.findAllByChannelIdAndTargetDateAndAssigneeId(channelId, targetDate,
+                        houseworkService.findAllByChannelIdAndTargetDateAndAssigneeId(loginUser, channelId, targetDate,
                                 assigneeId, pageable)
                 ));
     }
@@ -96,10 +96,10 @@ public class HouseworkControllerImpl implements
             @PathVariable("channelId") Long channelId,
             @PathVariable("houseworkId") Long houseworkId){
         Long userId = Long.parseLong(principal.getName());
-        User user = userService.findByIdOrThrow(userId);
+        User loginUser = userService.findByIdOrThrow(userId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,
-                        houseworkService.findHouseworkByChannelIdAndHouseworkId(user, channelId, houseworkId)));
+                        houseworkService.findHouseworkByChannelIdAndHouseworkId(loginUser, channelId, houseworkId)));
     }
 
     @PostMapping
@@ -113,7 +113,7 @@ public class HouseworkControllerImpl implements
                                                               @RequestBody HouseworkRequest request) {
         Long userId = Long.parseLong(principal.getName());
         User loginUser = userService.findByIdOrThrow(userId);
-        houseworkService.addHousework(channelId, request);
+        houseworkService.addHousework(loginUser, channelId, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.onSuccess());
     }
