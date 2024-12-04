@@ -1,4 +1,4 @@
-package com.doittogether.platform.domain.entity;
+package com.doittogether.platform.domain.enumeration;
 
 public enum Status {
     UN_COMPLETE,
