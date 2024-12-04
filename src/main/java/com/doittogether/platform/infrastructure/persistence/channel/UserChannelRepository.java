@@ -1,4 +1,4 @@
-package com.doittogether.platform.infrastructure.persistence;
+package com.doittogether.platform.infrastructure.persistence.channel;
 
 import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.enumeration.Role;
