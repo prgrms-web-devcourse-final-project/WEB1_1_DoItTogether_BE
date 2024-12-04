@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface HouseworkRepository extends JpaRepository<Housework, Long> {
     @Query(value = "select h from Housework h where "
@@ -49,4 +50,6 @@ public interface HouseworkRepository extends JpaRepository<Housework, Long> {
                                                                   @Param("startDate") final LocalDate startDate);
 
     List<Housework> findByStartDateBetweenAndChannel_ChannelId(LocalDate startDate, LocalDate endDate, Long channelId);
+
+    Optional<Housework> findByChannelChannelIdAndHouseworkId (Long channelId, Long houseworkId);
 }

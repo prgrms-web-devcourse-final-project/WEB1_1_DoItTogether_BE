@@ -23,10 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 
 @RestController
@@ -100,7 +99,7 @@ public class HouseworkControllerImpl implements
         User user = userService.findByIdOrThrow(userId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,
-                        houseworkService.findHouseworkByChannelIdAndHouseworkId(loginUser, channelId, houseworkId)));
+                        houseworkService.findHouseworkByChannelIdAndHouseworkId(user, channelId, houseworkId)));
     }
 
     @PostMapping

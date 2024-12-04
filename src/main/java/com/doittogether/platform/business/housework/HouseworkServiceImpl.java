@@ -60,9 +60,9 @@ public class HouseworkServiceImpl implements HouseworkService {
                                                                     final Long houseworkId) {
         channelValidator.validateExistChannel(channelId);
         houseworkValidator.validateExistHousework(houseworkId);
+        // 같은 채널에 있는 지 확인 로직 추가 필요
         Housework housework = houseworkRepository.findByChannelChannelIdAndHouseworkId(channelId, houseworkId)
                 .orElseThrow(() -> new HouseworkException(ExceptionCode.HOUSEWORK_NOT_FOUND));
-        houseworkValidator.validateEditableUser(housework, loginUser);
 
         return HouseworkResponse.from(housework);
     }
