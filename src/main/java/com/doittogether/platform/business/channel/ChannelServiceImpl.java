@@ -100,7 +100,9 @@ public class ChannelServiceImpl implements ChannelService {
         Pageable resolvedPageable = resolveSort(pageable);
         Page<UserChannel> userChannels = userChannelRepository.findByChannel(channel, resolvedPageable);
 
-        Page<UserChannelResponse> userChannelResponses = userChannels.map(UserChannelResponse::from);
+        Page<UserChannelResponse> userChannelResponses = userChannels.map(userChannel ->
+                UserChannelResponse.from(userChannel, userChannel.getUser().equals(user))
+        );
 
         return ChannelUserListResponse.of(channel, userChannelResponses);
     }
