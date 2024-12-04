@@ -1,7 +1,7 @@
 package com.doittogether.platform.business.stastics;
 
 import com.doittogether.platform.application.global.code.ExceptionCode;
-import com.doittogether.platform.application.global.exception.housework.HouseworkException;
+import com.doittogether.platform.application.global.exception.statistics.StatisticsException;
 import com.doittogether.platform.business.channel.ChannelValidator;
 import com.doittogether.platform.domain.entity.Assignee;
 import com.doittogether.platform.domain.entity.Housework;
@@ -15,7 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +43,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             final List<PersonalCompleteScoreResponse> statisticsList = generateWeeklyStatistics(houseworkList);
             return CompleteScoreResponse.of(statisticsList);
         } catch (IllegalArgumentException e) {
-            throw new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL);
+            throw new StatisticsException(ExceptionCode.HOUSEWORK_NOT_NULL);
         }
     }
 
@@ -62,7 +65,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             List<SingleDayStatisticsResponse> statisticsList = generateMonthlyStatistics(houseworkList);
             return MonthlyStatisticsResponse.of(statisticsList);
         } catch (IllegalArgumentException e) {
-            throw new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL);
+            throw new StatisticsException(ExceptionCode.HOUSEWORK_NOT_NULL);
         }
     }
 
@@ -90,10 +93,10 @@ public class StatisticsServiceImpl implements StatisticsService {
             Long completedTasks = dailyHouseworks.stream()
                     .filter(housework -> housework.retrieveStatus() == Status.COMPLETE)
                     .count();
-            Optional<String> url = userRepository.findProfileImageUrlByNickName(nickName);
+            String url = userRepository.findProfileImageUrlByNickName(nickName).orElse("");
 
             // 사용자 별 응답 객체 생성
-            statisticsList.add(new PersonalCompleteScoreResponse(nickName, Math.toIntExact(completedTasks), url.orElse(null)));
+            statisticsList.add(new PersonalCompleteScoreResponse(nickName, Math.toIntExact(completedTasks), url));
         }
 
         // 집안일 완료 개수 내림차 순으로 정렬
