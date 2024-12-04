@@ -1,4 +1,4 @@
-package com.doittogether.platform.infrastructure.config;
+package com.doittogether.platform.common.config;
 
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.redis.EmbeddedRedisException;

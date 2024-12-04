@@ -1,4 +1,4 @@
-package com.doittogether.platform.infrastructure.config;
+package com.doittogether.platform.common.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
