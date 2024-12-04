@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -78,7 +77,8 @@ public class StatisticsControllerImpl implements StatisticsController {
             @RequestParam("targetMonth")
             @Parameter(description = "선택 월 (yyyy-MM 형식)", example = "2024-11") String targetMonth
     ) {
-        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = Long.parseLong(principal.getName());
+        User loginUser = userService.findByIdOrThrow(userId);
         LocalDate targetDate = LocalDate.parse(targetMonth + "-01");
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(
