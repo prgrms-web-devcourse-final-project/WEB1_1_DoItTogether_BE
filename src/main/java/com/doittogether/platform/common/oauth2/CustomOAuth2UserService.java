@@ -2,8 +2,8 @@ package com.doittogether.platform.common.oauth2;
 
 import com.doittogether.platform.domain.entity.ProfileImage;
 import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.infrastructure.persistence.ProfileImageRepository;
-import com.doittogether.platform.infrastructure.persistence.UserRepository;
+import com.doittogether.platform.infrastructure.persistence.user.ProfileImageRepository;
+import com.doittogether.platform.infrastructure.persistence.user.UserRepository;
 import com.doittogether.platform.common.oauth2.dto.CustomOAuth2User;
 import com.doittogether.platform.common.oauth2.dto.KakaoOAuth2Response;
 import com.doittogether.platform.common.oauth2.dto.OAuth2Response;

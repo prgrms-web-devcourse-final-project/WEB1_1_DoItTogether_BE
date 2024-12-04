@@ -8,7 +8,7 @@ import com.doittogether.platform.domain.entity.Housework;
 import com.doittogether.platform.domain.enumeration.Status;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.enumeration.CompletionStatus;
-import com.doittogether.platform.infrastructure.persistence.UserRepository;
+import com.doittogether.platform.infrastructure.persistence.user.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.HouseworkRepository;
 import com.doittogether.platform.presentation.dto.stastics.*;
 import lombok.RequiredArgsConstructor;

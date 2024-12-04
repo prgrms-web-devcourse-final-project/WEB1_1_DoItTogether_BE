@@ -3,7 +3,7 @@ package com.doittogether.platform.common.oauth2;
 import com.doittogether.platform.common.config.jwt.JwtProvider;
 import com.doittogether.platform.common.config.jwt.UserAuthentication;
 import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.infrastructure.persistence.UserRepository;
+import com.doittogether.platform.infrastructure.persistence.user.UserRepository;
 import com.doittogether.platform.common.oauth2.dto.CustomOAuth2User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
