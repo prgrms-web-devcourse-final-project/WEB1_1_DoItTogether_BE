@@ -5,7 +5,7 @@ import com.doittogether.platform.application.global.exception.statistics.Statist
 import com.doittogether.platform.business.channel.ChannelValidator;
 import com.doittogether.platform.domain.entity.Assignee;
 import com.doittogether.platform.domain.entity.Housework;
-import com.doittogether.platform.domain.entity.Status;
+import com.doittogether.platform.domain.enumeration.Status;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.enumeration.CompletionStatus;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;

@@ -5,6 +5,7 @@ import com.doittogether.platform.application.global.exception.channel.ChannelExc
 import com.doittogether.platform.business.invite.InviteLinkService;
 import com.doittogether.platform.business.preset.PresetService;
 import com.doittogether.platform.domain.entity.*;
+import com.doittogether.platform.domain.enumeration.Role;
 import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;

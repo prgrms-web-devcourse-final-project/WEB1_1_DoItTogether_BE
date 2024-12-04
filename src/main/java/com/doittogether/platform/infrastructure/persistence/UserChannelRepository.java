@@ -1,7 +1,7 @@
 package com.doittogether.platform.infrastructure.persistence;
 
 import com.doittogether.platform.domain.entity.Channel;
-import com.doittogether.platform.domain.entity.Role;
+import com.doittogether.platform.domain.enumeration.Role;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.entity.UserChannel;
 import org.springframework.data.domain.Page;

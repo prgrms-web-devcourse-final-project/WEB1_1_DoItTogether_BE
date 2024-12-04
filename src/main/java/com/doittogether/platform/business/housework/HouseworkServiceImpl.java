@@ -4,6 +4,7 @@ import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.housework.HouseworkException;
 import com.doittogether.platform.business.channel.ChannelValidator;
 import com.doittogether.platform.domain.entity.*;
+import com.doittogether.platform.domain.enumeration.HouseworkCategory;
 import com.doittogether.platform.infrastructure.persistence.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.AssigneeRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.HouseworkRepository;
