@@ -32,6 +32,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String socialId;
 
+    @Column(nullable = false)
+    private boolean isSetup = false;
+
     @OneToOne(cascade = ALL, fetch = LAZY)
     @JoinColumn(name = "profile_image_id")
     private ProfileImage profileImage;
@@ -69,5 +72,17 @@ public class User extends BaseEntity {
 
     public ProfileImage retrieveProfileImage() {
         return profileImage;
+    }
+
+    public boolean isSetup() {
+        return isSetup;
+    }
+
+    public void completeSetup() {
+        isSetup = true;
+    }
+
+    public void updateNickName(String newNickName) {
+        nickName = newNickName;
     }
 }
