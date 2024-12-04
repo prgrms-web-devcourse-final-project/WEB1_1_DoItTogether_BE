@@ -7,9 +7,9 @@ import com.doittogether.platform.presentation.dto.user.response.UserUpdateRespon
 public interface UserService {
     User findByIdOrThrow(Long id);
 
-    boolean isProfileComplete(User user);
+    boolean isSetup(User user);
 
     UserUpdateResponse updateNickname(User user, UserUpdateRequest request);
 
-    void completeProfile(User user);
+    void completeSetup(User user);
 }

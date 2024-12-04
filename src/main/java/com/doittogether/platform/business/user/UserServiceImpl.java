@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isProfileComplete(User user) {
-        return user.isProfileComplete();
+    public boolean isSetup(User user) {
+        return user.isSetup();
     }
 
     @Transactional
@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void completeProfile(User user) {
-        user.completeProfileSetup();
+    public void completeSetup(User user) {
+        user.completeSetup();
         userRepository.save(user);
     }
 }

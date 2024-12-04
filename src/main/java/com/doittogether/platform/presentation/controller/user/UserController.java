@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @Operation(summary = "특정 사용자 정보 조회", description = "특정 사용자의 정보를 조회합니다.")
+    @Operation(summary = "특정 회원 정보 조회", description = "특정 회원의 정보를 조회합니다.")
     public ResponseEntity<SuccessResponse<UserResponse>> getUserById(@PathVariable("userId") Long userId) {
         User user = userService.findByIdOrThrow(userId);
 
@@ -66,26 +66,26 @@ public class UserController {
         );
     }
 
-    @GetMapping("/my/profile/complete")
-    @Operation(summary = "프로필 설정 완료 여부 조회", description = "사용자의 프로필 설정 완료 여부를 조회합니다.")
+    @GetMapping("/my/profile/setup")
+    @Operation(summary = "나의 초기 설정 상태 여부 조회", description = "나의 초기 설정 설정 여부를 조회합니다.")
     public ResponseEntity<SuccessResponse<Boolean>> isProfileComplete(Principal principal) {
         Long userId = Long.parseLong(principal.getName());
         User user = userService.findByIdOrThrow(userId);
 
-        boolean isComplete = userService.isProfileComplete(user);
+        boolean isComplete = userService.isSetup(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(SuccessCode._OK, isComplete)
         );
     }
 
-    @PatchMapping("/my/profile/complete")
-    @Operation(summary = "프로필 상태 업데이트", description = "사용자의 프로필 상태를 '완료'로 변경합니다.")
+    @PatchMapping("/my/profile/setup")
+    @Operation(summary = "나의 초기 설정 상태 수정", description = "나의 초기 설정 상태를 '완료'로 변경합니다.")
     public ResponseEntity<SuccessResponse<Void>> completeProfile(Principal principal) {
         Long userId = Long.parseLong(principal.getName());
         User user = userService.findByIdOrThrow(userId);
 
-        userService.completeProfile(user);
+        userService.completeSetup(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(SuccessCode._OK)

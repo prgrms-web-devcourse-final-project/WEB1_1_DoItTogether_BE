@@ -33,7 +33,7 @@ public class User extends BaseEntity {
     private String socialId;
 
     @Column(nullable = false)
-    private boolean isProfileComplete = false;
+    private boolean isSetup = false;
 
     @OneToOne(cascade = ALL, fetch = LAZY)
     @JoinColumn(name = "profile_image_id")
@@ -74,12 +74,12 @@ public class User extends BaseEntity {
         return profileImage;
     }
 
-    public boolean isProfileComplete() {
-        return isProfileComplete;
+    public boolean isSetup() {
+        return isSetup;
     }
 
-    public void completeProfileSetup() {
-        isProfileComplete = true;
+    public void completeSetup() {
+        isSetup = true;
     }
 
     public void updateNickName(String newNickName) {
