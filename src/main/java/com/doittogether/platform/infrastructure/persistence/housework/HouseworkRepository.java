@@ -1,13 +1,14 @@
 package com.doittogether.platform.infrastructure.persistence.housework;
 
 import com.doittogether.platform.domain.entity.Housework;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 public interface HouseworkRepository extends JpaRepository<Housework, Long> {
     @Query(value = "select h from Housework h where "
@@ -46,4 +47,6 @@ public interface HouseworkRepository extends JpaRepository<Housework, Long> {
                                                                   final
                                                                   Pageable pageable,
                                                                   @Param("startDate") final LocalDate startDate);
+
+    Optional<Housework> findByChannelChannelIdAndHouseworkId(Long channelId, Long HouseworkId);
 }

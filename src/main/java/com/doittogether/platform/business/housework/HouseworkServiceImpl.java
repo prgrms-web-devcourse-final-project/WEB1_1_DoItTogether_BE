@@ -55,12 +55,13 @@ public class HouseworkServiceImpl implements HouseworkService {
     }
 
     @Override
-    public HouseworkResponse findHouseworkByChannelIdAndHouseworkId(final User loginUser, final Long houseworkId,
-                                                                    final Long channelId) {
+    public HouseworkResponse findHouseworkByChannelIdAndHouseworkId(final User loginUser,
+                                                                    final Long channelId,
+                                                                    final Long houseworkId) {
         channelValidator.validateExistChannel(channelId);
         houseworkValidator.validateExistHousework(houseworkId);
-        Housework housework = houseworkRepository.findById(houseworkId)
-                .orElseThrow(() -> new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL));
+        Housework housework = houseworkRepository.findByChannelChannelIdAndHouseworkId(channelId, houseworkId)
+                .orElseThrow(() -> new HouseworkException(ExceptionCode.HOUSEWORK_NOT_FOUND));
         houseworkValidator.validateEditableUser(housework, loginUser);
 
         return HouseworkResponse.from(housework);
@@ -108,10 +109,10 @@ public class HouseworkServiceImpl implements HouseworkService {
     }
 
     @Override
-    public void updateStatus(User loginUser, Long houseworkId, Long channelId) {
+    public void updateStatus(User loginUser, Long channelId, Long houseworkId) {
         channelValidator.validateExistChannel(channelId);
         houseworkValidator.validateExistHousework(houseworkId);
-        final Housework housework = houseworkRepository.findById(houseworkId)
+        final Housework housework = houseworkRepository.findByChannelChannelIdAndHouseworkId(channelId, houseworkId)
                 .orElseThrow(() -> new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL));
         houseworkValidator.validateEditableUser(housework, loginUser);
         housework.updateStatus();
