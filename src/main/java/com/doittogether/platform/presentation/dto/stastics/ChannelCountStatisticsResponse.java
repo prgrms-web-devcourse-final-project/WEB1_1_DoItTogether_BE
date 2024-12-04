@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 public record ChannelCountStatisticsResponse(
+        @Schema(description = "채널 이름", example = "두투")
+        String channelName,
+
         @NotNull
         @Schema(description = "완료 개수", example = "2")
         Integer completeCount,
