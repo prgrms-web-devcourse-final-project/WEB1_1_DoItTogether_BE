@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.Objects;
+
 @RestControllerAdvice
 public class ExceptionAdvice {
     @ExceptionHandler(Exception.class)
@@ -26,7 +28,13 @@ public class ExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse<Void>> handleValidException(final MethodArgumentNotValidException exception) {
         final ExceptionCode validExceptionCode = ExceptionCode.NOT_VALIDATE_FILED;
-        final ExceptionCode validExceptionCodeWithFieldMessage = validExceptionCode.withUpdateMessage(exception.getMessage());
+
+        String fieldMessage = validExceptionCode.getMessage();
+        if (exception.getDetailMessageArguments() != null && exception.getDetailMessageArguments().length > 1) {
+            fieldMessage = Objects.toString(exception.getDetailMessageArguments()[1], fieldMessage);
+        }
+
+        final ExceptionCode validExceptionCodeWithFieldMessage = validExceptionCode.withUpdateMessage(fieldMessage);
         final ExceptionResponse<Void> body = ExceptionResponse.onFailure(validExceptionCodeWithFieldMessage);
         return new ResponseEntity<>(body, validExceptionCodeWithFieldMessage.getHttpStatus());
     }
