@@ -30,7 +30,7 @@ public interface StatisticsController {
             @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate
     );
 
-    @GetMapping("/weekly/{targetDate}/score")
+    @GetMapping("/weekly/score")
     @Operation(summary = "주간 통계, 이번주 완료 개수 랭킹", description = "주간통계 중, 이번주 완료 개수 랭킹을 반환합니다.")
     ResponseEntity<SuccessResponse<CompleteScoreResponse>> calculateWeeklyStatistics(
             Principal principal,
@@ -41,7 +41,7 @@ public interface StatisticsController {
     );
 
 
-    @GetMapping("/monthly/{targetMonth}/score")
+    @GetMapping("/monthly/score")
     @Operation(summary = "월간 통계, 캘린더 부분 조회", description = "월간통계 중, 캘린더 부분에 사용될 데이터를 반환합니다.")
     ResponseEntity<SuccessResponse<MonthlyStatisticsResponse>> calculateMonthlyStatistics(
             Principal principal,

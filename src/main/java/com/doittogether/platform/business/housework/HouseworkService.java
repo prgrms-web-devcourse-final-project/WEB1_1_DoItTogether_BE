@@ -10,16 +10,19 @@ import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+
 public interface HouseworkService {
     public HouseworkSliceResponse findAllByChannelIdAndTargetDate(final User loginUser, final Long channelId,
                                                                   final LocalDate targetDate, final Pageable pageable);
 
-    public HouseworkSliceResponse findAllByChannelIdAndTargetDateAndAssigneeId(final Long channelId,
+    public HouseworkSliceResponse findAllByChannelIdAndTargetDateAndAssigneeId(final User loginUser,
+                                                                               final Long channelId,
                                                                                final LocalDate targetDate,
                                                                                final Long assigneeId,
                                                                                final Pageable pageable);
 
-    public void addHousework(final Long channelId, final HouseworkRequest request);
+    public void addHousework(final User loginUser, final Long channelId, final HouseworkRequest request);
 
     public void updateHousework(final User loginUser, final Long houseworkId, final Long channelId,
                                 final HouseworkRequest request);

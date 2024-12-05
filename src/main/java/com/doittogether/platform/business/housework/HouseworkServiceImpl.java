@@ -39,9 +39,12 @@ public class HouseworkServiceImpl implements HouseworkService {
 
     @Override
     @Transactional(readOnly = true)
-    public HouseworkSliceResponse findAllByChannelIdAndTargetDate(final User loginUser, final Long channelId, final
-    LocalDate targetDate, final Pageable pageable) {
+    public HouseworkSliceResponse findAllByChannelIdAndTargetDate(final User loginUser,
+                                                                  final Long channelId,
+                                                                  final LocalDate targetDate,
+                                                                  final Pageable pageable) {
         channelValidator.validateExistChannel(channelId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
         final Slice<Housework> houseworks = houseworkRepository.findAllByChannelIdAndTargetDate(
                 channelId, loginUser.retrieveUserId(), pageable, targetDate);
 
@@ -50,11 +53,13 @@ public class HouseworkServiceImpl implements HouseworkService {
 
     @Override
     @Transactional(readOnly = true)
-    public HouseworkSliceResponse findAllByChannelIdAndTargetDateAndAssigneeId(final Long channelId, final
-    LocalDate targetDate,
+    public HouseworkSliceResponse findAllByChannelIdAndTargetDateAndAssigneeId(final User loginUser,
+                                                                               final Long channelId,
+                                                                               final LocalDate targetDate,
                                                                                final Long assigneeId,
                                                                                final Pageable pageable) {
         channelValidator.validateExistChannel(channelId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
         final Slice<Housework> houseworks = houseworkRepository.findAllByChannelIdAndTargetDateAndAssigneeId(channelId,
                 assigneeId, pageable, targetDate);
         return HouseworkSliceResponse.from(houseworks);
@@ -66,7 +71,7 @@ public class HouseworkServiceImpl implements HouseworkService {
                                                                     final Long houseworkId) {
         channelValidator.validateExistChannel(channelId);
         houseworkValidator.validateExistHousework(houseworkId);
-        // 같은 채널에 있는 지 확인 로직 추가 필요
+        channelValidator.checkChannelParticipation(loginUser, channelId);
         Housework housework = houseworkRepository.findByChannelChannelIdAndHouseworkId(channelId, houseworkId)
                 .orElseThrow(() -> new HouseworkException(ExceptionCode.HOUSEWORK_NOT_FOUND));
 
@@ -74,8 +79,9 @@ public class HouseworkServiceImpl implements HouseworkService {
     }
 
     @Override
-    public void addHousework(final Long channelId, final HouseworkRequest request) {
+    public void addHousework(final User loginUser, final Long channelId, final HouseworkRequest request) {
         channelValidator.validateExistChannel(channelId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
         final Channel channel = entityManager.getReference(Channel.class, channelId);
 
         try {
@@ -101,8 +107,8 @@ public class HouseworkServiceImpl implements HouseworkService {
                                 final HouseworkRequest request) {
         channelValidator.validateExistChannel(channelId);
         houseworkValidator.validateExistHousework(houseworkId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
         final Housework housework = entityManager.getReference(Housework.class, houseworkId);
-        houseworkValidator.validateEditableUser(housework, loginUser);
         try {
             final Assignee assignee = assigneeRepository.findByUserUserId(request.userId())
                     .orElseGet(() -> Assignee.assignAssignee(userRepository.findById(request.userId())
@@ -118,6 +124,7 @@ public class HouseworkServiceImpl implements HouseworkService {
     public void updateStatus(User loginUser, Long channelId, Long houseworkId) {
         channelValidator.validateExistChannel(channelId);
         houseworkValidator.validateExistHousework(houseworkId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
         final Housework housework = houseworkRepository.findByChannelChannelIdAndHouseworkId(channelId, houseworkId)
                 .orElseThrow(() -> new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL));
         houseworkValidator.validateEditableUser(housework, loginUser);
@@ -146,8 +153,8 @@ public class HouseworkServiceImpl implements HouseworkService {
     public void deleteHousework(final User loginUser, final Long houseworkId, final Long channelId) {
         channelValidator.validateExistChannel(channelId);
         houseworkValidator.validateExistHousework(houseworkId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
         final Housework housework = houseworkRepository.findById(houseworkId).orElseThrow();
-        houseworkValidator.validateEditableUser(housework, loginUser);
         try {
             houseworkRepository.delete(housework);
         } catch (IllegalArgumentException exception) {

@@ -8,16 +8,18 @@ import com.doittogether.platform.business.reaction.ReactionService;
 import com.doittogether.platform.domain.entity.Assignee;
 import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.Housework;
-import com.doittogether.platform.domain.enumeration.Status;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.enumeration.CompletionStatus;
-import com.doittogether.platform.infrastructure.persistence.user.UserRepository;
+import com.doittogether.platform.domain.enumeration.Status;
 import com.doittogether.platform.infrastructure.persistence.housework.HouseworkRepository;
+import com.doittogether.platform.infrastructure.persistence.user.UserRepository;
 import com.doittogether.platform.presentation.dto.stastics.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,7 +27,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StatisticsServiceImpl implements StatisticsService {
 
-    private final Long WEEKLY_DATE_DIFFERENCE = 3L;
     private final HouseworkRepository houseworkRepository;
     private final UserRepository userRepository;
     private final ChannelValidator channelValidator;
@@ -38,10 +39,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         channelValidator.validateExistChannel(channelId);
 
-        final LocalDate startDate = targetDate.minusDays(WEEKLY_DATE_DIFFERENCE);
-        final LocalDate endDate = targetDate.plusDays(WEEKLY_DATE_DIFFERENCE);
+        final LocalDate startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        final LocalDate endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
 
-        final List<Housework> houseworkList = houseworkRepository.findByStartDateBetweenAndChannel_ChannelId(startDate, endDate, channelId);
+        final List<Housework> houseworkList = houseworkRepository.findByChannelChannelIdAndStartDateBetween(channelId, startOfWeek, endOfWeek);
         try {
             final List<PersonalCompleteScoreResponse> statisticsList = generateWeeklyStatistics(houseworkList);
             return CompleteScoreResponse.of(statisticsList);
@@ -69,12 +70,15 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    public MonthlyStatisticsResponse calculateMonthlyStatistics(User loginUser, Long channelId, LocalDate targetDate) {
+
     public MonthlyStatisticsResponse calculateMonthlyStatistics(User loginUser, Long channelId, LocalDate startDate) {
         channelValidator.validateExistChannel(channelId);
 
-        final LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+        LocalDate firstDayOfMonth = targetDate.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate lastDayOfMonth = targetDate.with(TemporalAdjusters.lastDayOfMonth());
 
-        List<Housework> houseworkList = houseworkRepository.findByStartDateBetweenAndChannel_ChannelId(startDate, endDate, channelId);
+        List<Housework> houseworkList = houseworkRepository.findByChannelChannelIdAndStartDateBetween(channelId, firstDayOfMonth, lastDayOfMonth);
         try {
             List<SingleDayStatisticsResponse> statisticsList = generateMonthlyStatistics(houseworkList);
             return MonthlyStatisticsResponse.of(statisticsList);
@@ -107,7 +111,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
             // Response 필드 정보 조회
             String nickName = assignee.retrieveUser().retrieveNickName();
-            Long completedTasks = dailyHouseworks.stream()
+            long completedTasks = dailyHouseworks.stream()
                     .filter(housework -> housework.retrieveStatus() == Status.COMPLETE)
                     .count();
             String url = userRepository.findProfileImageUrlByNickName(nickName).orElse("");
