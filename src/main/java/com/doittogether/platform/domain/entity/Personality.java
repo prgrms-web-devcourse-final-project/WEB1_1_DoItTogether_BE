@@ -25,7 +25,10 @@ public class Personality extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Personality(String value) {
-        this.value = value;
+    public static Personality of(String value, User user) {
+        Personality personality = new Personality();
+        personality.value = value;
+        personality.user = user;
+        return personality;
     }
 }
