@@ -9,6 +9,7 @@ import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
+import com.doittogether.platform.presentation.dto.housework.IncompleteScoreResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -194,5 +195,24 @@ public class HouseworkControllerImpl implements
         houseworkService.deleteHousework(loginUser, houseworkId, channelId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._NO_CONTENT));
+    }
+
+    @GetMapping("/daily/incomplete")
+    @Operation(summary = "집안일 일간 미 완료 개수 조회", description = "집안일 일간 별로 미 완료 개수를 조회합니다.")
+    @Override
+    public ResponseEntity<SuccessResponse<IncompleteScoreResponse>>houseworkCalculateTotalCountByChannelId(
+            Principal principal,
+            @PathVariable("channelId") Long channelId,
+            @RequestParam("targetDate")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate
+    ){
+        Long userId = Long.parseLong(principal.getName());
+        User loginUser = userService.findByIdOrThrow(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(
+                        SuccessCode._OK,
+                        houseworkService.incompleteScoreResponse(loginUser, channelId, targetDate)
+                ));
     }
 }

@@ -4,34 +4,34 @@ import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
-import jakarta.validation.Valid;
-import java.time.LocalDate;
-import java.util.Map;
-
+import com.doittogether.platform.presentation.dto.housework.IncompleteScoreResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 public interface HouseworkService {
-    public HouseworkSliceResponse findAllByChannelIdAndTargetDate(final User loginUser, final Long channelId,
-                                                                  final LocalDate targetDate, final Pageable pageable);
+    HouseworkSliceResponse findAllByChannelIdAndTargetDate(final User loginUser, final Long channelId,
+                                                           final LocalDate targetDate, final Pageable pageable);
 
-    public HouseworkSliceResponse findAllByChannelIdAndTargetDateAndAssigneeId(final User loginUser,
-                                                                               final Long channelId,
-                                                                               final LocalDate targetDate,
-                                                                               final Long assigneeId,
-                                                                               final Pageable pageable);
+    HouseworkSliceResponse findAllByChannelIdAndTargetDateAndAssigneeId(final User loginUser,
+                                                                        final Long channelId,
+                                                                        final LocalDate targetDate,
+                                                                        final Long assigneeId,
+                                                                        final Pageable pageable);
 
-    public void addHousework(final User loginUser, final Long channelId, final HouseworkRequest request);
+    void addHousework(final User loginUser, final Long channelId, final HouseworkRequest request);
 
-    public void updateHousework(final User loginUser, final Long houseworkId, final Long channelId,
+    void updateHousework(final User loginUser, final Long houseworkId, final Long channelId,
                                 final HouseworkRequest request);
 
-    public void deleteHousework(final User loginUser, final Long houseworkId, final Long channelId);
+    void deleteHousework(final User loginUser, final Long houseworkId, final Long channelId);
 
-    public HouseworkResponse findHouseworkByChannelIdAndHouseworkId(final User user, final Long houseworkId, final Long channelId);
+    HouseworkResponse findHouseworkByChannelIdAndHouseworkId(final User user, final Long houseworkId, final Long channelId);
 
-    public void updateStatus(User loginUser, Long houseworkId, Long channelId);
+    void updateStatus(User loginUser, Long houseworkId, Long channelId);
 
-    public Map<String, Integer> calculateHouseworkStatisticsForWeek(Long channelId, LocalDate targetDate);
+    Map<String, Integer> calculateHouseworkStatisticsForWeek(Long channelId, LocalDate targetDate);
+
+    IncompleteScoreResponse incompleteScoreResponse(User loginuser, Long channelId, LocalDate targetDate);
 }
