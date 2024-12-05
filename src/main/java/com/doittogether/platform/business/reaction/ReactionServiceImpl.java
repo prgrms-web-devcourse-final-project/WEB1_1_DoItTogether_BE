@@ -42,7 +42,8 @@ public class ReactionServiceImpl implements ReactionService {
                 user,
                 targetUser,
                 channel,
-                reactionType
+                reactionType,
+                request.reactDate()
         );
 
         reactionRepository.save(reaction);
@@ -54,10 +55,10 @@ public class ReactionServiceImpl implements ReactionService {
         LocalDate endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY)); // 토 까지
 
         int complimentCount = reactionRepository.countReactionsByChannelAndTypeAndDateRange(
-                channelId, ReactionType.COMPLIMENT, startOfWeek.atStartOfDay(), endOfWeek.atStartOfDay());
+                channelId, ReactionType.COMPLIMENT, startOfWeek, endOfWeek);
 
         int pokeCount = reactionRepository.countReactionsByChannelAndTypeAndDateRange(
-                channelId, ReactionType.POKE, startOfWeek.atStartOfDay(), endOfWeek.atStartOfDay());
+                channelId, ReactionType.POKE, startOfWeek, endOfWeek);
 
         Map<String, Integer> statistics = new HashMap<>();
         statistics.put("complimentCount", complimentCount);
@@ -68,8 +69,8 @@ public class ReactionServiceImpl implements ReactionService {
     @Override
     public Map<String, Object> calculateReactionsStatisticsMVPForMonthly(Long channelId, LocalDate targetDate) {
         Map<String, Object> statistics = new HashMap<>();
-        LocalDateTime startDate = targetDate.withDayOfMonth(1).atStartOfDay();
-        LocalDateTime endDate = targetDate.withDayOfMonth(1).plusMonths(1).atStartOfDay();
+        LocalDate startDate = targetDate.withDayOfMonth(1);
+        LocalDate endDate = targetDate.withDayOfMonth(1).plusMonths(1);
         PageRequest pageRequest = PageRequest.of(0, 1);
 
         List<Object[]> complimentResults = reactionRepository.findTopUserByReactionType(
