@@ -3,7 +3,10 @@ package com.doittogether.platform.business.stastics;
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.statistics.StatisticsException;
 import com.doittogether.platform.business.channel.ChannelValidator;
+import com.doittogether.platform.business.housework.HouseworkService;
+import com.doittogether.platform.business.reaction.ReactionService;
 import com.doittogether.platform.domain.entity.Assignee;
+import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.Housework;
 import com.doittogether.platform.domain.enumeration.Status;
 import com.doittogether.platform.domain.entity.User;
@@ -15,10 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +29,9 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final HouseworkRepository houseworkRepository;
     private final UserRepository userRepository;
     private final ChannelValidator channelValidator;
+
+    private final HouseworkService houseworkService;
+    private final ReactionService reactionService;
 
     @Override
     public CompleteScoreResponse calculateWeeklyStatistics(User loginUser, Long channelId, LocalDate targetDate) {
@@ -50,12 +53,23 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public ChannelCountStatisticsResponse calculateTotalCountByChannelId(User loginUser, Long channelId,
                                                                          LocalDate targetDate) {
-        return null;
+        Channel channel = channelValidator.validateAndGetChannel(channelId);
+
+        Map<String, Integer> houseworkStatistics = houseworkService.calculateHouseworkStatisticsForWeek(channelId, targetDate);
+        Map<String, Integer> reactionStatistics = reactionService.calculateReactionStatisticsForWeek(channelId, targetDate);
+
+        Map<String, Object> statistics = new HashMap<>();
+        statistics.put("channelName", channel.retrieveName());
+        statistics.put("completeCount", houseworkStatistics.getOrDefault("completeCount", 0));
+        statistics.put("unCompletedCount", houseworkStatistics.getOrDefault("unCompletedCount", 0));
+        statistics.put("complimentCount", reactionStatistics.getOrDefault("complimentCount", 0));
+        statistics.put("pokeCount", reactionStatistics.getOrDefault("pokeCount", 0));
+
+        return ChannelCountStatisticsResponse.of(statistics);
     }
 
     @Override
     public MonthlyStatisticsResponse calculateMonthlyStatistics(User loginUser, Long channelId, LocalDate startDate) {
-
         channelValidator.validateExistChannel(channelId);
 
         final LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
@@ -71,7 +85,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public MonthlyMVPResponse calculateMonthlyMVP(User loginUser, Long channelId, LocalDate targetDate) {
-        return null;
+        channelValidator.validateExistChannel(channelId);
+        Map<String, Object> reactionStatistics = reactionService.calculateReactionsStatisticsMVPForMonthly(channelId, targetDate);
+
+        return MonthlyMVPResponse.of(reactionStatistics);
     }
 
     // 아래 메서드들 Util로 빼야 하는가?

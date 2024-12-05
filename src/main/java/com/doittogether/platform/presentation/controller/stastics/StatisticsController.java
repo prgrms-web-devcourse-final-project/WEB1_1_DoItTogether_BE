@@ -20,7 +20,7 @@ import java.time.LocalDate;
 @RequestMapping("/api/v1/channels/{channelId}/statistics")
 public interface StatisticsController {
 
-    @GetMapping("/weekly/{targetDate}/totalCount")
+    @GetMapping("/weekly/totalCount")
     @Operation(summary = "주간 통계관련 완료 미완료 칭찬 찌르기 개수 조회", description = "주간 통계에서 사용할, 이번주 완료 개수 랭킹을 반환합니다.")
     ResponseEntity<SuccessResponse<ChannelCountStatisticsResponse>> calculateTotalCountByChannelId(
             Principal principal,
@@ -50,7 +50,7 @@ public interface StatisticsController {
             @Parameter(description = "선택 월 (yyyy-MM 형식)", example = "2024-11") String targetDate
     );
 
-    @GetMapping("/monthly/{targetMonth}/score")
+    @GetMapping("/monthly/score")
     @Operation(summary = "월간 통계,MVP 부분 조회", description = "월간통계 중, MVP 부분에 사용될 데이터를 반환합니다.")
     ResponseEntity<SuccessResponse<MonthlyMVPResponse>> calculateMonthlyMVP(
             Principal principal,
