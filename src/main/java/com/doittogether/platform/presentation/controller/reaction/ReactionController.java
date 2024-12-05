@@ -6,9 +6,11 @@ import com.doittogether.platform.business.reaction.ReactionService;
 import com.doittogether.platform.business.user.UserService;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.enumeration.ReactionType;
+import com.doittogether.platform.presentation.dto.reaction.ReactionRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,12 +36,12 @@ public class ReactionController {
     public ResponseEntity<SuccessResponse<Void>> pokeUser(
             Principal principal,
             @PathVariable("channelId") Long channelId,
-            @RequestParam("targetUserId") @NotNull Long targetUserId
+            @RequestBody @Valid ReactionRequest request
     ) {
         Long userId = Long.parseLong(principal.getName());
         User user = userService.findByIdOrThrow(userId);
 
-        reactionService.react(user, targetUserId, channelId, ReactionType.POKE);
+        reactionService.react(user, channelId, request, ReactionType.POKE);
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(SuccessCode._OK)
         );
@@ -50,12 +52,12 @@ public class ReactionController {
     public ResponseEntity<SuccessResponse<Void>> complimentUser(
             Principal principal,
             @PathVariable("channelId") Long channelId,
-            @RequestParam("targetUserId") @NotNull Long targetUserId
+            @RequestBody @Valid ReactionRequest request
     ) {
         Long userId = Long.parseLong(principal.getName());
         User user = userService.findByIdOrThrow(userId);
 
-        reactionService.react(user, targetUserId, channelId, ReactionType.COMPLIMENT);
+        reactionService.react(user, channelId, request, ReactionType.COMPLIMENT);
         return ResponseEntity.status(HttpStatus.OK).body(
                 SuccessResponse.onSuccess(SuccessCode._OK)
         );
