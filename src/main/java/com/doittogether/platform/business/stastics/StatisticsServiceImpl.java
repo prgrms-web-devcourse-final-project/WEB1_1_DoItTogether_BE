@@ -39,15 +39,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         LocalDate startOfWeek;
         LocalDate endOfWeek;
 
-        if (targetDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
-            // targetDate가 일요일이면
-            startOfWeek = targetDate; // 그대로 반환
-            endOfWeek = targetDate.with(TemporalAdjusters.next(DayOfWeek.SATURDAY)); // 다음 주 토요일
-        } else {
-            // targetDate가 다른 요일이면
-            startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)); // 지난주 일요일
-            endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY)); // 이번 주 토요일
-        }
+        startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
 
         final List<Housework> houseworkList = houseworkRepository.findByChannelChannelIdAndStartDateBetween(channelId, startOfWeek, endOfWeek);
         try {
