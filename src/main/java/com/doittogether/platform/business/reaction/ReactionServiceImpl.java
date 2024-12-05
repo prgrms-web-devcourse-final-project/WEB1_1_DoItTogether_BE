@@ -9,6 +9,7 @@ import com.doittogether.platform.domain.enumeration.ReactionType;
 import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.reaction.ReactionRepository;
 import com.doittogether.platform.infrastructure.persistence.user.UserRepository;
+import com.doittogether.platform.presentation.dto.reaction.ReactionRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class ReactionServiceImpl implements ReactionService {
     private final ReactionRepository reactionRepository;
 
     @Override
-    public void react(User user, Long targetUserId, Long channelId, ReactionType reactionType) {
-        User targetUser = userRepository.findById(targetUserId)
+    public void react(User user, Long channelId, ReactionRequest request, ReactionType reactionType) {
+        User targetUser = userRepository.findById(request.targetUserId())
                 .orElseThrow(() -> new ReactionException(ExceptionCode.TARGET_USER_NOT_FOUND));
 
         Channel channel = channelRepository.findById(channelId)
