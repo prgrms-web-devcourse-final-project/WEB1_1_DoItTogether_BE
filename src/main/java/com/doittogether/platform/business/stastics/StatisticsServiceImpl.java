@@ -36,11 +36,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         channelValidator.validateExistChannel(channelId);
 
-        LocalDate startOfWeek;
-        LocalDate endOfWeek;
-
-        startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
-        endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+        final LocalDate startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        final LocalDate endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
 
         final List<Housework> houseworkList = houseworkRepository.findByChannelChannelIdAndStartDateBetween(channelId, startOfWeek, endOfWeek);
         try {
