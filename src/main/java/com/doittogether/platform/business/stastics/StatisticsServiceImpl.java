@@ -49,9 +49,6 @@ public class StatisticsServiceImpl implements StatisticsService {
             endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY)); // 이번 주 토요일
         }
 
-        System.out.println("startOfWeek = " + startOfWeek);
-        System.out.println("endOfWeek = " + endOfWeek);
-
         final List<Housework> houseworkList = houseworkRepository.findByChannelChannelIdAndStartDateBetween(channelId, startOfWeek, endOfWeek);
         try {
             final List<PersonalCompleteScoreResponse> statisticsList = generateWeeklyStatistics(houseworkList);
