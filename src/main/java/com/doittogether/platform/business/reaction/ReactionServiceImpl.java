@@ -75,19 +75,23 @@ public class ReactionServiceImpl implements ReactionService {
                 channelId, startDate, endDate, ReactionType.COMPLIMENT, pageRequest
         );
 
-        Object[] complimentTopResult = complimentResults.get(0);
-        statistics.put("complimentMVPUserId", (Long) complimentTopResult[0]);
-        statistics.put("complimentMVPNickName", (String) complimentTopResult[1]);
-        statistics.put("complimentMVPCount", (Long) complimentTopResult[2]);
+        if(!complimentResults.isEmpty()) {
+            Object[] complimentTopResult = complimentResults.get(0);
+            statistics.put("complimentMVPUserId", (Long) complimentTopResult[0]);
+            statistics.put("complimentMVPNickName", (String) complimentTopResult[1]);
+            statistics.put("complimentMVPCount", (Long) complimentTopResult[2]);
+        }
 
         List<Object[]> pokeResults  = reactionRepository.findTopUserByReactionType(
                 channelId, startDate, endDate, ReactionType.POKE, pageRequest
         );
 
-        Object[] pokeTopResult = pokeResults.get(0);
-        statistics.put("pokeMVPUserId", (Long) pokeTopResult[0]);
-        statistics.put("pokeMVPNickName", (String) pokeTopResult[1]);
-        statistics.put("pokeMVPCount", (Long) pokeTopResult[2]);
+        if(!pokeResults.isEmpty()) {
+            Object[] pokeTopResult = pokeResults.get(0);
+            statistics.put("pokeMVPUserId", (Long) pokeTopResult[0]);
+            statistics.put("pokeMVPNickName", (String) pokeTopResult[1]);
+            statistics.put("pokeMVPCount", (Long) pokeTopResult[2]);
+        }
 
         return statistics;
     }
