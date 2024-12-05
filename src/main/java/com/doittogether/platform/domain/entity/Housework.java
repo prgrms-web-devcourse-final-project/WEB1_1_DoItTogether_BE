@@ -3,6 +3,8 @@ package com.doittogether.platform.domain.entity;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+import com.doittogether.platform.domain.enumeration.HouseworkCategory;
+import com.doittogether.platform.domain.enumeration.Status;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

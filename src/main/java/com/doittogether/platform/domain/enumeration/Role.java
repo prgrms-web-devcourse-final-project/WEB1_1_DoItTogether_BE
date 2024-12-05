@@ -1,4 +1,4 @@
-package com.doittogether.platform.domain.entity;
+package com.doittogether.platform.domain.enumeration;
 
 import lombok.Getter;
 

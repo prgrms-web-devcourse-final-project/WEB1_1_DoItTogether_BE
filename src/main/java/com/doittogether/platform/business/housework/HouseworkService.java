@@ -4,6 +4,10 @@ import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
+import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.util.Map;
+
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
@@ -29,4 +33,5 @@ public interface HouseworkService {
 
     public void updateStatus(User loginUser, Long houseworkId, Long channelId);
 
+    public Map<String, Integer> calculateHouseworkStatisticsForWeek(Long channelId, LocalDate targetDate);
 }

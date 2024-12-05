@@ -1,4 +1,4 @@
-package com.doittogether.platform.domain.entity;
+package com.doittogether.platform.domain.enumeration;
 
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.housework.HouseworkException;

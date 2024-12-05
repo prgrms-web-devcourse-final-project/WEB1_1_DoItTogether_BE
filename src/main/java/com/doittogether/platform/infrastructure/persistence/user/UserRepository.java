@@ -1,4 +1,4 @@
-package com.doittogether.platform.infrastructure.persistence;
+package com.doittogether.platform.infrastructure.persistence.user;
 
 import com.doittogether.platform.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

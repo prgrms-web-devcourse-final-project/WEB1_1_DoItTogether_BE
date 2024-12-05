@@ -59,6 +59,9 @@ public enum ExceptionCode implements GlobalCode {
     NOT_VALIDATE_FILED(HttpStatus.BAD_REQUEST, "VALID_400", "유효성 검증에 실패하였습니다."),
     INVALID_CHANNEL_ID(HttpStatus.BAD_REQUEST, "VALID_400", "유효하지 않은 채널 ID입니다."),
     INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "VALID_400", "유효하지 않은 날짜 형식입니다."),
+    
+    // 칭찬하기, 찌르기 관련
+    TARGET_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "REACTION_404", "대상 사용자를 찾을 수 없습니다."),
 
     // Redis 관련 에러 코드
     EMBEDDED_REDIS_START_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_500", "Redis 서버 시작에 실패했습니다."),

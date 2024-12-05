@@ -1,6 +1,6 @@
 package com.doittogether.platform.infrastructure.handler.redis;
 
-import com.doittogether.platform.infrastructure.config.RedisConfig;
+import com.doittogether.platform.common.config.RedisConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;

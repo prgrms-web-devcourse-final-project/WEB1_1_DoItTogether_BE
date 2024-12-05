@@ -4,8 +4,8 @@ import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.channel.ChannelValidationException;
 import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.User;
-import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
 import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;
+import com.doittogether.platform.infrastructure.persistence.channel.UserChannelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +17,11 @@ public class ChannelValidator {
 
     public void validateExistChannel(final Long channelId) {
         channelRepository.findById(channelId)
+                .orElseThrow(() -> new ChannelValidationException(ExceptionCode.CHANNEL_NOT_FOUND));
+    }
+
+    public Channel validateAndGetChannel(final Long channelId) {
+        return channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelValidationException(ExceptionCode.CHANNEL_NOT_FOUND));
     }
 
