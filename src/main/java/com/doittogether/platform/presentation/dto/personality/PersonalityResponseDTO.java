@@ -1,8 +1,11 @@
 package com.doittogether.platform.presentation.dto.personality;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+
 import java.util.List;
 
+@Builder
 public record PersonalityResponseDTO(
         @Schema(description = "분석 결과 키워드", example = "[\n"
                 + "    \"무난함\uD83D\uDC4C\",\n"
@@ -12,4 +15,9 @@ public record PersonalityResponseDTO(
                 + "  ]")
         List<String> keywords
 ) {
+    public static PersonalityResponseDTO from(List<String> keywords) {
+        return PersonalityResponseDTO.builder()
+                .keywords(keywords)
+                .build();
+    }
 }
