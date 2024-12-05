@@ -1,6 +1,7 @@
 package com.doittogether.platform.infrastructure.persistence.housework;
 
 import com.doittogether.platform.domain.entity.Housework;
+import com.doittogether.platform.domain.enumeration.Status;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -52,4 +53,13 @@ public interface HouseworkRepository extends JpaRepository<Housework, Long> {
     List<Housework> findByStartDateBetweenAndChannel_ChannelId(LocalDate startDate, LocalDate endDate, Long channelId);
 
     Optional<Housework> findByChannelChannelIdAndHouseworkId (Long channelId, Long houseworkId);
+
+    @Query("SELECT COUNT(h) FROM Housework h " +
+            "WHERE h.channel.channelId = :channelId " +
+            "AND h.status = :status " +
+            "AND h.startDate BETWEEN :startOfWeek AND :endOfWeek")
+    int countByStatusAndDateRange(@Param("channelId") Long channelId,
+                                  @Param("status") Status status,
+                                  @Param("startOfWeek") LocalDate startOfWeek,
+                                  @Param("endOfWeek") LocalDate endOfWeek);
 }
