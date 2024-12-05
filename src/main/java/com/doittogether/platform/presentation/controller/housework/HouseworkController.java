@@ -2,10 +2,10 @@ package com.doittogether.platform.presentation.controller.housework;
 
 import com.doittogether.platform.application.global.response.ExceptionResponse;
 import com.doittogether.platform.application.global.response.SuccessResponse;
-import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
 import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
 import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
+import com.doittogether.platform.presentation.dto.housework.IncompleteScoreResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,19 +13,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import java.security.Principal;
-import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.time.LocalDate;
 
 @RequestMapping("/api/v1/channels/{channelId}/houseworks")
 public interface HouseworkController {
@@ -128,4 +121,13 @@ public interface HouseworkController {
     ResponseEntity<SuccessResponse<Void>> deleteHousework(Principal principal,
                                                           @PathVariable("channelId") Long channelId,
                                                           @PathVariable(name = "houseworkId") Long houseworkId);
+
+    @GetMapping("/daily/incomplete")
+    @Operation(summary = "집안일 일간 미 완료 개수 조회", description = "집안일 일간 별로 미 완료 개수를 조회합니다.")
+    ResponseEntity<SuccessResponse<IncompleteScoreResponse>>houseworkCalculateTotalCountByChannelId(
+            Principal principal,
+            @PathVariable("channelId") Long channelId,
+            @RequestParam("targetDate")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @Parameter(description = "선택 날짜 (yyyy-MM-dd 형식)", example = "2024-11-25") LocalDate targetDate);
 }
