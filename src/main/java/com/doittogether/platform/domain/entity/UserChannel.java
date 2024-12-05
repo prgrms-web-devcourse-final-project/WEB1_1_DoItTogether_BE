@@ -1,5 +1,6 @@
 package com.doittogether.platform.domain.entity;
 
+import com.doittogether.platform.domain.enumeration.Role;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
