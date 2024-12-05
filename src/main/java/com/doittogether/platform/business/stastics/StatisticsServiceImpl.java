@@ -71,8 +71,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public MonthlyStatisticsResponse calculateMonthlyStatistics(User loginUser, Long channelId, LocalDate targetDate) {
-
-    public MonthlyStatisticsResponse calculateMonthlyStatistics(User loginUser, Long channelId, LocalDate startDate) {
         channelValidator.validateExistChannel(channelId);
 
         LocalDate firstDayOfMonth = targetDate.with(TemporalAdjusters.firstDayOfMonth());
