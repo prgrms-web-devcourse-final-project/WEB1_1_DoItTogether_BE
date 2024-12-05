@@ -64,8 +64,9 @@ springdoc:
 
 openai:
   secret-key: ${OPENAI_SECRET_KEY}
-  model:
-    key: ${OPENAI_SECRET_KEY}
+  model: ${OPENAI_MODEL}
+  api:
+    url: https://api.openai.com/v1/chat/completions
 
 front:
   url: http://localhost:5173
