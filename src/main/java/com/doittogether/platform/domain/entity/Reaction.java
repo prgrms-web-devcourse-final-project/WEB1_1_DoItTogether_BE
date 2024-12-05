@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -35,15 +35,15 @@ public class Reaction extends BaseEntity {
     private ReactionType reactionType;
 
     @Column(nullable = false)
-    private LocalDateTime reactedAt;
+    private LocalDate reactDate;
 
-    public static Reaction of(User user, User targetUser, Channel channel, ReactionType reactionType) {
+    public static Reaction of(User user, User targetUser, Channel channel, ReactionType reactionType, LocalDate reactDate) {
         Reaction reaction = new Reaction();
         reaction.user = user;
         reaction.targetUser = targetUser;
         reaction.channel = channel;
         reaction.reactionType = reactionType;
-        reaction.reactedAt = LocalDateTime.now();
+        reaction.reactDate = reactDate;
         return reaction;
     }
 }
