@@ -1,4 +1,4 @@
-package com.doittogether.platform.infrastructure.persistence;
+package com.doittogether.platform.infrastructure.persistence.preset;
 
 import com.doittogether.platform.domain.entity.PresetCategory;
 import org.springframework.data.domain.Pageable;

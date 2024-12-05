@@ -3,7 +3,7 @@ package com.doittogether.platform.presentation.dto.housework;
 import static lombok.AccessLevel.PRIVATE;
 
 import com.doittogether.platform.domain.entity.Housework;
-import com.doittogether.platform.domain.entity.Status;
+import com.doittogether.platform.domain.enumeration.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;

@@ -2,11 +2,11 @@ package com.doittogether.platform.business.channel;
 
 import com.doittogether.platform.business.invite.InviteLinkService;
 import com.doittogether.platform.domain.entity.Channel;
-import com.doittogether.platform.domain.entity.Role;
+import com.doittogether.platform.domain.enumeration.Role;
 import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.entity.UserChannel;
-import com.doittogether.platform.infrastructure.persistence.UserChannelRepository;
-import com.doittogether.platform.infrastructure.persistence.UserRepository;
+import com.doittogether.platform.infrastructure.persistence.channel.UserChannelRepository;
+import com.doittogether.platform.infrastructure.persistence.user.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelKickUserRequest;
 import com.doittogether.platform.presentation.dto.channel.request.ChannelRegisterRequest;
@@ -48,7 +48,7 @@ public class ChannelServiceTest {
     @Test
     void 내가_속한_채널_리스트_조회() {
         String email = "doto@gmail.com";
-        User mockUser = User.of("Test User", email, null);
+        User mockUser = User.of("Test User", email, null, null);
         setField(mockUser, "userId", 1L);
 
         Channel mockChannel = Channel.of("Test Channel");
@@ -79,7 +79,7 @@ public class ChannelServiceTest {
         String email = "doto@gmail.com";
         String channelName = "Test Channel";
 
-        User mockUser = User.of("Test User", email, null);
+        User mockUser = User.of("Test User", email, null, null);
         setField(mockUser, "userId", 1L);
 
         ChannelRegisterRequest request = ChannelRegisterRequest.of(channelName);
@@ -107,7 +107,7 @@ public class ChannelServiceTest {
         Long channelId = 1L;
         String newChannelName = "Updated Channel Name";
 
-        User mockUser = User.of("Test User", email, null);
+        User mockUser = User.of("Test User", email, null, null);
         setField(mockUser, "userId", 1L);
 
         Channel mockChannel = Channel.of("Old Channel Name");
@@ -142,7 +142,7 @@ public class ChannelServiceTest {
         String email = "doto1@gmail.com";
         Long channelId = 1L;
 
-        User mockUser = User.of("Test User", email, null);
+        User mockUser = User.of("Test User", email, null, null);
         setField(mockUser, "userId", 1L);
 
         Channel mockChannel = Channel.of("Test Channel");
@@ -153,7 +153,7 @@ public class ChannelServiceTest {
 
         Pageable pageable = PageRequest.of(0, 10);
         UserChannel anotherUserChannel = UserChannel.of(
-                User.of("Another User", "doto2@gmail.com", null),
+                User.of("Another User", "doto2@gmail.com", null, null),
                 mockChannel,
                 Role.PARTICIPANT
         );
@@ -207,7 +207,7 @@ public class ChannelServiceTest {
         String inviteLink = "http://test.com/invite/abc123";
         Long channelId = 1L;
 
-        User mockUser = User.of("Test User", email, null);
+        User mockUser = User.of("Test User", email, null, null);
         setField(mockUser, "userId", 1L);
 
         Channel mockChannel = Channel.of("Test Channel");
@@ -236,10 +236,10 @@ public class ChannelServiceTest {
         String targetEmail = "doto@example.com";
         Long channelId = 1L;
 
-        User adminUser = User.of("Admin User", adminEmail, null);
+        User adminUser = User.of("Admin User", adminEmail, null, null);
         setField(adminUser, "userId", 1L);
 
-        User targetUser = User.of("Target User", targetEmail, null);
+        User targetUser = User.of("Target User", targetEmail, null, null);
         setField(targetUser, "userId", 2L);
 
         Channel mockChannel = Channel.of("Test Channel");
@@ -276,7 +276,7 @@ public class ChannelServiceTest {
     @Test
     void 일반_사용자가_채널_나가기() {
         String email = "doto@example.com";
-        User mockUser = User.of("Test User", email, null);
+        User mockUser = User.of("Test User", email, null, null);
         setField(mockUser, "userId", 1L);
 
         Channel mockChannel = Channel.of("Test Channel");
@@ -302,7 +302,7 @@ public class ChannelServiceTest {
     @Test
     void 관리자가_채널_나가기_혼자_남은_경우() {
         String email = "admin@example.com";
-        User mockAdmin = User.of("Admin User", email, null);
+        User mockAdmin = User.of("Admin User", email, null, null);
         setField(mockAdmin, "userId", 1L);
 
         Channel mockChannel = Mockito.mock(Channel.class);
@@ -334,10 +334,10 @@ public class ChannelServiceTest {
         String adminEmail = "admin@example.com";
         String userEmail = "user@example.com";
 
-        User mockAdmin = User.of("Admin User", adminEmail, null);
+        User mockAdmin = User.of("Admin User", adminEmail, null, null);
         setField(mockAdmin, "userId", 1L);
 
-        User mockUser = User.of("Regular User", userEmail, null);
+        User mockUser = User.of("Regular User", userEmail, null, null);
         setField(mockUser, "userId", 2L);
 
         Channel mockChannel = Mockito.mock(Channel.class);

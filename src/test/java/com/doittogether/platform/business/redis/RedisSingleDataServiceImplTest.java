@@ -1,6 +1,6 @@
 package com.doittogether.platform.business.redis;
 
-import com.doittogether.platform.infrastructure.config.RedisConfig;
+import com.doittogether.platform.common.config.RedisConfig;
 import com.doittogether.platform.infrastructure.handler.redis.RedisHandler;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -4,7 +4,9 @@ import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.housework.HouseworkException;
 import com.doittogether.platform.business.channel.ChannelValidator;
 import com.doittogether.platform.domain.entity.*;
-import com.doittogether.platform.infrastructure.persistence.UserRepository;
+import com.doittogether.platform.domain.enumeration.HouseworkCategory;
+import com.doittogether.platform.domain.enumeration.Status;
+import com.doittogether.platform.infrastructure.persistence.user.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.AssigneeRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.HouseworkRepository;
 import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
@@ -17,7 +19,11 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -124,6 +130,23 @@ public class HouseworkServiceImpl implements HouseworkService {
         houseworkValidator.validateEditableUser(housework, loginUser);
         housework.updateStatus();
         houseworkRepository.save(housework);
+    }
+
+    @Override
+    public Map<String, Integer> calculateHouseworkStatisticsForWeek(Long channelId, LocalDate targetDate) {
+        LocalDate startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)); // 일 부터
+        LocalDate endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY)); // 토 까지
+
+        int completedCount = houseworkRepository.countByStatusAndDateRange(
+                channelId, Status.COMPLETE, startOfWeek, endOfWeek);
+
+        int uncompletedCount = houseworkRepository.countByStatusAndDateRange(
+                channelId, Status.UN_COMPLETE, startOfWeek, endOfWeek);
+
+        Map<String, Integer> statistics = new HashMap<>();
+        statistics.put("completeCount", completedCount);
+        statistics.put("unCompletedCount", uncompletedCount);
+        return statistics;
     }
 
     @Override
