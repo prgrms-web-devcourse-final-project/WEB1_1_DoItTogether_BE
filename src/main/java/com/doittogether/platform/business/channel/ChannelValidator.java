@@ -16,8 +16,7 @@ public class ChannelValidator {
     private final UserChannelRepository userChannelRepository;
 
     public void validateExistChannel(final Long channelId) {
-        channelRepository.findById(channelId)
-                .orElseThrow(() -> new ChannelValidationException(ExceptionCode.CHANNEL_NOT_FOUND));
+        validateAndGetChannel(channelId);
     }
 
     public Channel validateAndGetChannel(final Long channelId) {
@@ -26,11 +25,17 @@ public class ChannelValidator {
     }
 
     public void checkChannelParticipation(final User loginUser, final Long channelId) {
+        checkChannelParticipationAndGetChannel(loginUser, channelId);
+    }
+
+    public Channel checkChannelParticipationAndGetChannel(final User loginUser, final Long channelId) {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new ChannelValidationException(ExceptionCode.CHANNEL_NOT_FOUND));
 
         userChannelRepository.findByUserAndChannel(loginUser, channel)
                 .orElseThrow(() -> new ChannelValidationException(ExceptionCode.USER_NOT_IN_CHANNEL));
+
+        return channel;
     }
 
 }
