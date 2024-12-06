@@ -38,6 +38,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     public CompleteScoreResponse calculateWeeklyStatistics(User loginUser, Long channelId, LocalDate targetDate) {
 
         channelValidator.validateExistChannel(channelId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
 
         final LocalDate startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         final LocalDate endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
@@ -55,6 +56,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     public ChannelCountStatisticsResponse calculateTotalCountByChannelId(User loginUser, Long channelId,
                                                                          LocalDate targetDate) {
         Channel channel = channelValidator.validateAndGetChannel(channelId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
 
         Map<String, Integer> houseworkStatistics = houseworkService.calculateHouseworkStatisticsForWeek(channelId, targetDate);
         Map<String, Integer> reactionStatistics = reactionService.calculateReactionStatisticsForWeek(channelId, targetDate);
@@ -72,6 +74,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public MonthlyStatisticsResponse calculateMonthlyStatistics(User loginUser, Long channelId, LocalDate targetDate) {
         channelValidator.validateExistChannel(channelId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
 
         LocalDate firstDayOfMonth = targetDate.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate lastDayOfMonth = targetDate.with(TemporalAdjusters.lastDayOfMonth());
@@ -88,6 +91,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public MonthlyMVPResponse calculateMonthlyMVP(User loginUser, Long channelId, LocalDate targetDate) {
         channelValidator.validateExistChannel(channelId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
         Map<String, Object> reactionStatistics = reactionService.calculateReactionsStatisticsMVPForMonthly(channelId, targetDate);
 
         return MonthlyMVPResponse.of(reactionStatistics);
