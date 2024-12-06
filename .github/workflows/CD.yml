@@ -5,7 +5,6 @@ env:
   DOCKER_HUB_REPOSITORY: eundeang/doto-dev
 
 # 워크플로우 실행 조건
-jobs:
   on:
     workflow_dispatch:
       push:
@@ -14,7 +13,8 @@ jobs:
       paths:
         - "**"
         - ".github/workflows/CD.yml"
-
+        
+jobs:
   # 깃허브에서 제공하는 최신 우분투 서버에서 실행
   backend-docker-build-and-push:
     runs-on: ubuntu-latest
