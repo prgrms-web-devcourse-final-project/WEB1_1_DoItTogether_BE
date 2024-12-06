@@ -4,7 +4,6 @@ import com.doittogether.platform.business.openai.dto.ChatGPTRequest;
 import com.doittogether.platform.business.openai.dto.ChatGPTResponse;
 import com.doittogether.platform.business.openai.util.TemplateUtil;
 import com.doittogether.platform.presentation.dto.personality.PersonalityRequestDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -26,7 +25,7 @@ public class ChatGPTService {
     }
 
     public ChatGPTResponse chat(final PersonalityRequestDto request) {
-        String personalizedQuestion = TemplateUtil.replaceSurveyResultWithJson(Prompt.PERSONALITY_QUESTION, request.surveyResultText());
+        String personalizedQuestion = TemplateUtil.replaceSurveyResultWithJson(Prompt.PERSONALITY_PROMPT, request.surveyResultText());
 
         ChatGPTRequest question = new ChatGPTRequest(model, personalizedQuestion);
         return template.postForObject(apiURL, question, ChatGPTResponse.class);

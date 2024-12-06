@@ -1,7 +1,7 @@
 package com.doittogether.platform.business.openai;
 
 public class Prompt {
-    public static String PERSONALITY_QUESTION =
+    public static String PERSONALITY_PROMPT =
             """
             Below is a set of survey responses. Based on these responses, extract 2-4 personality keywords that best represent the respondent's traits. 
             Follow these specific guidelines:
