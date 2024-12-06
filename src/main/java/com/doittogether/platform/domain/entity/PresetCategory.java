@@ -28,7 +28,7 @@ public class PresetCategory extends BaseEntity {
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
-    @OneToMany(mappedBy = "presetCategory", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "presetCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PresetItem> presetItems;
 
     public static PresetCategory of(String category, Channel channel) {

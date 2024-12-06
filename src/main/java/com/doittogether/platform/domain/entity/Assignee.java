@@ -14,6 +14,9 @@ import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Assignee {
@@ -25,6 +28,9 @@ public class Assignee {
     @OneToOne(cascade = ALL, fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "assignee", cascade = ALL, orphanRemoval = true)
+    private List<Housework> houseworks = new ArrayList<>();
 
     public static Assignee assignAssignee(User user){
         final Assignee assignee = new Assignee();

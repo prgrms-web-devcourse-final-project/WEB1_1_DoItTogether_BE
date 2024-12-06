@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserChannelRepository extends JpaRepository<UserChannel, Long> {
@@ -22,4 +23,6 @@ public interface UserChannelRepository extends JpaRepository<UserChannel, Long> 
     void deleteByUserAndChannel(User user, Channel channel);
 
     Optional<UserChannel> findFirstByChannelAndRoleNot(Channel channel, Role role);
+
+    List<UserChannel> findAllByUser(User user);
 }
