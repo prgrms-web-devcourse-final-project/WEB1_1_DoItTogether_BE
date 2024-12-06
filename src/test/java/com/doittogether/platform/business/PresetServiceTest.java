@@ -4,6 +4,7 @@ import com.doittogether.platform.business.preset.PresetServiceImpl;
 import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.PresetCategory;
 import com.doittogether.platform.domain.entity.PresetItem;
+import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.infrastructure.persistence.preset.PresetCategoryRepository;
 import com.doittogether.platform.infrastructure.persistence.preset.PresetItemRepository;
 import com.doittogether.platform.infrastructure.persistence.channel.ChannelRepository;
@@ -39,6 +40,10 @@ public class PresetServiceTest {
 
     @Test
     void 전체_프리셋_키워드_리스트_조회() {
+        String email = "doto@gmail.com";
+        User mockUser = User.of("Test User", email, null, null);
+        setField(mockUser, "userId", 1L);
+
         Long validChannelId = 1L;
 
         Channel channel = Channel.of("Test Channel");
@@ -57,7 +62,7 @@ public class PresetServiceTest {
         lenient().when(channelRepository.findById(validChannelId)).thenReturn(Optional.of(channel));
         lenient().when(presetItemRepository.findAllByChannelId(validChannelId, PageRequest.of(0, 10))).thenReturn(page);
 
-        PresetKeywordListResponse response = presetService.getFlatPresetList(validChannelId, PageRequest.of(0, 10));
+        PresetKeywordListResponse response = presetService.getFlatPresetList(mockUser, validChannelId, PageRequest.of(0, 10));
 
         assertNotNull(response);
         assertEquals(2, response.presetKeywordList().size());
@@ -78,6 +83,15 @@ public class PresetServiceTest {
 
     @Test
     void 특정_프리셋_카테고리의_아이템_리스트_조회() {
+        String email = "doto@gmail.com";
+        User mockUser = User.of("Test User", email, null, null);
+        setField(mockUser, "userId", 1L);
+
+        Long validChannelId = 1L;
+
+        Channel channel = Channel.of("Test Channel");
+        setField(channel, "channelId", validChannelId);
+
         Long presetCategoryId = 1L;
         PageRequest pageable = PageRequest.of(0, 10);
 
@@ -95,7 +109,7 @@ public class PresetServiceTest {
         lenient().when(presetCategoryRepository.findById(presetCategoryId)).thenReturn(Optional.of(category));
         lenient().when(presetItemRepository.findAllByPresetCategoryId(presetCategoryId, pageable)).thenReturn(items);
 
-        CategoryPresetResponse response = presetService.getPresetsByCategory(presetCategoryId, pageable);
+        CategoryPresetResponse response = presetService.getPresetsByCategory(mockUser, validChannelId, presetCategoryId, pageable);
 
         assertNotNull(response);
         assertEquals(presetCategoryId, response.presetCategoryId());
@@ -116,6 +130,10 @@ public class PresetServiceTest {
 
     @Test
     void 모든_프리셋_카테고리_이름_조회() {
+        String email = "doto@gmail.com";
+        User mockUser = User.of("Test User", email, null, null);
+        setField(mockUser, "userId", 1L);
+
         Long channelId = 1L;
         PageRequest pageable = PageRequest.of(0, 10);
 
@@ -133,7 +151,7 @@ public class PresetServiceTest {
         lenient().when(channelRepository.findById(channelId)).thenReturn(Optional.of(channel));
         lenient().when(presetCategoryRepository.findAllByChannelId(channelId, pageable)).thenReturn(categories);
 
-        CategoryListResponse response = presetService.getAllCategories(channelId, pageable);
+        CategoryListResponse response = presetService.getAllCategories(mockUser, channelId, pageable);
 
         assertNotNull(response);
         assertEquals(2, response.categoryList().size());
@@ -152,6 +170,10 @@ public class PresetServiceTest {
 
     @Test
     void 프리셋_카테고리_생성() {
+        String email = "doto@gmail.com";
+        User mockUser = User.of("Test User", email, null, null);
+        setField(mockUser, "userId", 1L);
+
         Long channelId = 1L;
         String categoryName = "거실";
 
@@ -168,7 +190,7 @@ public class PresetServiceTest {
         lenient().when(channelRepository.findById(channelId)).thenReturn(Optional.of(channel));
         lenient().when(presetCategoryRepository.save(any(PresetCategory.class))).thenReturn(category);
 
-        PresetCategoryRegisterResponse response = presetService.createPresetCategory(channelId, request);
+        PresetCategoryRegisterResponse response = presetService.createPresetCategory(mockUser, channelId, request);
 
         assertNotNull(response);
         assertEquals(100L, response.presetCategoryId());
@@ -180,6 +202,15 @@ public class PresetServiceTest {
 
     @Test
     void 프리셋_아이템_생성() {
+        String email = "doto@gmail.com";
+        User mockUser = User.of("Test User", email, null, null);
+        setField(mockUser, "userId", 1L);
+
+        Long channelId = 1L;
+
+        Channel channel = Channel.of("Test Channel");
+        setField(channel, "channelId", channelId);
+
         Long presetCategoryId = 1L;
         String presetValue = "청소";
 
@@ -196,7 +227,7 @@ public class PresetServiceTest {
         lenient().when(presetCategoryRepository.findById(presetCategoryId)).thenReturn(Optional.of(category));
         lenient().when(presetItemRepository.save(any(PresetItem.class))).thenReturn(item);
 
-        PresetItemRegisterResponse response = presetService.createPreset(presetCategoryId, request);
+        PresetItemRegisterResponse response = presetService.createPreset(mockUser, channelId, presetCategoryId, request);
 
         assertNotNull(response);
         assertEquals(presetCategoryId, response.presetCategoryId());
@@ -209,6 +240,15 @@ public class PresetServiceTest {
 
     @Test
     void 프리셋_카테고리_삭제() {
+        String email = "doto@gmail.com";
+        User mockUser = User.of("Test User", email, null, null);
+        setField(mockUser, "userId", 1L);
+
+        Long channelId = 1L;
+
+        Channel channel = Channel.of("Test Channel");
+        setField(channel, "channelId", channelId);
+
         Long presetCategoryId = 1L;
 
         PresetCategory category = PresetCategory.of("거실", null);
@@ -216,7 +256,7 @@ public class PresetServiceTest {
 
         when(presetCategoryRepository.findById(presetCategoryId)).thenReturn(Optional.of(category));
 
-        PresetCategoryDeleteResponse response = presetService.deletePresetCategory(presetCategoryId);
+        PresetCategoryDeleteResponse response = presetService.deletePresetCategory(mockUser, channelId, presetCategoryId);
 
         assertNotNull(response);
         assertEquals(presetCategoryId, response.presetCategoryId());
@@ -227,6 +267,20 @@ public class PresetServiceTest {
     
     @Test
     void 프리셋_아이템_삭제() {
+        String email = "doto@gmail.com";
+        User mockUser = User.of("Test User", email, null, null);
+        setField(mockUser, "userId", 1L);
+
+        Long channelId = 1L;
+
+        Channel channel = Channel.of("Test Channel");
+        setField(channel, "channelId", channelId);
+
+        Long presetCategoryId = 1L;
+
+        PresetCategory category = PresetCategory.of("거실", null);
+        setField(category, "presetCategoryId", presetCategoryId);
+
         Long presetItemId = 1L;
 
         PresetItem item = PresetItem.of("청소", null);
@@ -234,7 +288,7 @@ public class PresetServiceTest {
 
         when(presetItemRepository.findById(presetItemId)).thenReturn(Optional.of(item));
 
-        PresetItemDeleteResponse response = presetService.deletePresetDetail(presetItemId);
+        PresetItemDeleteResponse response = presetService.deletePresetDetail(mockUser, channelId, presetCategoryId, presetItemId);
 
         assertNotNull(response);
         assertEquals(presetItemId, response.presetItemId());
