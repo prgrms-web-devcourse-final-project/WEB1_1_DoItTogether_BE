@@ -91,4 +91,15 @@ public class UserController {
                 SuccessResponse.onSuccess(SuccessCode._OK)
         );
     }
+
+    @DeleteMapping("/my")
+    @Operation(summary = "회원 탈퇴", description = "현재 회원의 계정을 삭제합니다.")
+    public ResponseEntity<SuccessResponse<Void>> deleteAccount(Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        userService.deleteUser(userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                SuccessResponse.onSuccess(SuccessCode._NO_CONTENT)
+        );
+    }
 }

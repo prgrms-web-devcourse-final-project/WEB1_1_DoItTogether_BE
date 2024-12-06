@@ -12,4 +12,6 @@ public interface UserService {
     UserUpdateResponse updateNickname(User user, UserUpdateRequest request);
 
     void completeSetup(User user);
+
+    void deleteUser(Long userId);
 }
