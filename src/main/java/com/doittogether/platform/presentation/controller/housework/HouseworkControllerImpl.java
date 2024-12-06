@@ -176,7 +176,7 @@ public class HouseworkControllerImpl implements
     @DeleteMapping("/{houseworkId}")
     @Operation(summary = "집안일  삭제", description = "기존 집안일을 삭제합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "수정 성공", content =
+            @ApiResponse(responseCode = "204", description = "수정 성공", content =
             @Content(schema = @Schema(implementation = SuccessResponse.class))
             ),
             @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음", content =
