@@ -38,4 +38,12 @@ public class ChannelValidator {
         return channel;
     }
 
+    public void checkChannelInAssignee(final User assignee, final Long channelId) {
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new ChannelValidationException(ExceptionCode.CHANNEL_NOT_FOUND));
+
+        userChannelRepository.findByUserAndChannel(assignee, channel)
+                .orElseThrow(() -> new ChannelValidationException(ExceptionCode.ASSIGNEE_NOT_IN_CHANNEL));
+    }
+
 }
