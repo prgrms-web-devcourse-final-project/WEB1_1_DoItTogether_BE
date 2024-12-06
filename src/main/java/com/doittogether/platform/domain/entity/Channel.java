@@ -1,5 +1,7 @@
 package com.doittogether.platform.domain.entity;
 
+import static jakarta.persistence.CascadeType.REMOVE;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import jakarta.persistence.CascadeType;
@@ -26,13 +28,13 @@ public class Channel extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "channel", cascade = REMOVE, fetch = LAZY, orphanRemoval = true)
     private List<UserChannel> userChannels;
 
-    @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "channel", cascade = REMOVE, fetch = LAZY, orphanRemoval = true)
     private List<Housework> houseworks;
 
-    @OneToMany(mappedBy = "channel", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "channel", cascade = REMOVE, fetch = LAZY, orphanRemoval = true)
     private List<PresetCategory> presetCategories;
 
     public static Channel of(String name) {
