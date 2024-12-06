@@ -12,10 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -29,14 +26,28 @@ public class PersonalityController {
     private final UserService userService;
 
     @PostMapping
-    @Operation(summary = "사용자 성향 조회",
+    @Operation(summary = "사용자 성향 분석(GPT API)",
             description = "설문조사 내용을 분석하여 키워드를 반환합니다.")
     public ResponseEntity<SuccessResponse<PersonalityResponseDTO>> findKeywordsFromGPT(
             Principal principal, @RequestBody PersonalityRequestDto request) {
         Long userId = Long.parseLong(principal.getName());
         User loginUser = userService.findByIdOrThrow(userId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.onSuccess(SuccessCode._OK,
                         personalityService.findKeywordsFromGPT(loginUser, request)));
+    }
+
+    @GetMapping
+    @Operation(summary = "사용자 성향 조회",
+            description = "로그인된 사용자의 성향 정보를 조회합니다.")
+    public ResponseEntity<SuccessResponse<PersonalityResponseDTO>> getUserPersonalities(
+            Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        User loginUser = userService.findByIdOrThrow(userId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.onSuccess(SuccessCode._OK,
+                        personalityService.getUserPersonalities(loginUser)));
     }
 }
