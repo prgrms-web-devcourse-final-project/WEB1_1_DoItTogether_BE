@@ -3,11 +3,8 @@ package com.doittogether.platform.domain.entity;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.doittogether.platform.domain.enumeration.PersonalityStatus;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -25,10 +22,19 @@ public class Personality extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Personality of(String value, User user) {
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PersonalityStatus status;
+
+    public static Personality of(String value, User user, PersonalityStatus status) {
         Personality personality = new Personality();
         personality.value = value;
         personality.user = user;
+        personality.status = status;
         return personality;
+    }
+
+    public String retrieveValue() {
+        return value;
     }
 }
