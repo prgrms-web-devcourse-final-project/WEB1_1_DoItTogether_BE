@@ -168,8 +168,9 @@ public class HouseworkServiceImpl implements HouseworkService {
     }
 
     @Override
-    public IncompleteScoreResponse incompleteScoreResponse(User loginuser, Long channelId, LocalDate targetDate){
+    public IncompleteScoreResponse incompleteScoreResponse(User loginUser, Long channelId, LocalDate targetDate){
         channelValidator.validateExistChannel(channelId);
+        channelValidator.checkChannelParticipation(loginUser, channelId);
 
         final LocalDate startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         final LocalDate endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));

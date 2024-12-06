@@ -2,6 +2,7 @@ package com.doittogether.platform.business.reaction;
 
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.reaction.ReactionException;
+import com.doittogether.platform.business.channel.ChannelValidator;
 import com.doittogether.platform.domain.entity.Channel;
 import com.doittogether.platform.domain.entity.Reaction;
 import com.doittogether.platform.domain.entity.User;
@@ -29,9 +30,13 @@ public class ReactionServiceImpl implements ReactionService {
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
     private final ReactionRepository reactionRepository;
+    private final ChannelValidator channelValidator;
 
     @Override
     public void react(User user, Long channelId, ReactionRequest request, ReactionType reactionType) {
+
+        channelValidator.checkChannelParticipation(user, channelId);
+
         User targetUser = userRepository.findById(request.targetUserId())
                 .orElseThrow(() -> new ReactionException(ExceptionCode.TARGET_USER_NOT_FOUND));
 
