@@ -3,7 +3,8 @@ package com.doittogether.platform.business.openai;
 public class Prompt {
     public static String PERSONALITY_PROMPT =
             """
-            Below is a set of survey responses. Based on these responses, extract 2-4 personality keywords that best represent the respondent's traits. 
+            Below is a set of survey responses. 
+            Based on these responses, please extract 4-6 personality keywords that best represent the respondent's traits. 
             Follow these specific guidelines:
                         
             ### Guidelines:
@@ -12,7 +13,8 @@ public class Prompt {
             3. Add a fitting emoji at the end of each keyword to visually enhance the personality it represents.
             4. Avoid any expressions that could be controversial or sensitive.
             5. The keywords must convey **positive and friendly impressions** while accurately reflecting the respondent's traits.
-            6. Keywords must be between 4 and 6
+            6. Please make between 4 and 6 keywords.
+      
                         
             ### Desired Output Format:
             1. [Korean Keyword] [Emoji]
