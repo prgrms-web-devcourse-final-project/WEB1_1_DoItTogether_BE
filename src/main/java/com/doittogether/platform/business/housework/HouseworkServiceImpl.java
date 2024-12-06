@@ -2,16 +2,18 @@ package com.doittogether.platform.business.housework;
 
 import com.doittogether.platform.application.global.code.ExceptionCode;
 import com.doittogether.platform.application.global.exception.housework.HouseworkException;
+import com.doittogether.platform.application.global.exception.statistics.StatisticsException;
 import com.doittogether.platform.business.channel.ChannelValidator;
-import com.doittogether.platform.domain.entity.*;
+import com.doittogether.platform.domain.entity.Assignee;
+import com.doittogether.platform.domain.entity.Channel;
+import com.doittogether.platform.domain.entity.Housework;
+import com.doittogether.platform.domain.entity.User;
 import com.doittogether.platform.domain.enumeration.HouseworkCategory;
 import com.doittogether.platform.domain.enumeration.Status;
-import com.doittogether.platform.infrastructure.persistence.user.UserRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.AssigneeRepository;
 import com.doittogether.platform.infrastructure.persistence.housework.HouseworkRepository;
-import com.doittogether.platform.presentation.dto.housework.HouseworkRequest;
-import com.doittogether.platform.presentation.dto.housework.HouseworkResponse;
-import com.doittogether.platform.presentation.dto.housework.HouseworkSliceResponse;
+import com.doittogether.platform.infrastructure.persistence.user.UserRepository;
+import com.doittogether.platform.presentation.dto.housework.*;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -160,5 +162,61 @@ public class HouseworkServiceImpl implements HouseworkService {
         } catch (IllegalArgumentException exception) {
             throw new HouseworkException(ExceptionCode.HOUSEWORK_NOT_NULL);
         }
+    }
+
+    @Override
+    public IncompleteScoreResponse incompleteScoreResponse(User loginuser, Long channelId, LocalDate targetDate){
+        channelValidator.validateExistChannel(channelId);
+
+        final LocalDate startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        final LocalDate endOfWeek = targetDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+
+        List<Housework> houseworkList = houseworkRepository.findByChannelChannelIdAndStartDateBetween(channelId, startOfWeek, endOfWeek);
+        try {
+            List<PersonalIncompleteScoreResponse> HouseworkList = houseworkDailyIncompleteCountCheck(houseworkList, startOfWeek, endOfWeek);
+            return IncompleteScoreResponse.of(HouseworkList);
+        } catch (IllegalArgumentException e) {
+            throw new StatisticsException(ExceptionCode.HOUSEWORK_NOT_NULL);
+        }
+    }
+
+    public List<PersonalIncompleteScoreResponse> houseworkDailyIncompleteCountCheck(
+            List<Housework> houseworkList, LocalDate startDate, LocalDate endDate) {
+
+        // 날짜별 집안일 그룹화
+        Map<LocalDate, List<Housework>> groupedByDate = houseworkList.stream()
+                .collect(Collectors.groupingBy(Housework::retrieveStartDate));
+
+        // 날짜 범위 내 모든 날짜 초기화
+        List<PersonalIncompleteScoreResponse> houseworkCheckList = new ArrayList<>();
+
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            List<Housework> dailyHouseworks = groupedByDate.getOrDefault(currentDate, Collections.emptyList());
+
+            // 전체 집안일 개수
+            int totalTasks = dailyHouseworks.size();
+
+            // 미진행 집안일 개수
+            int incompletedTasks = (int) dailyHouseworks.stream()
+                    .filter(housework -> housework.retrieveStatus() == Status.UN_COMPLETE)
+                    .count();
+
+            // 상태 계산
+            boolean status = calculateCompletionStatus(totalTasks, incompletedTasks);
+
+            // 응답 객체 생성
+            houseworkCheckList.add(new PersonalIncompleteScoreResponse(currentDate, incompletedTasks, status));
+
+            currentDate = currentDate.plusDays(1); // 다음 날짜로 이동
+        }
+
+        // 날짜 오름차순 정렬 (이미 정렬된 경우 생략 가능)
+        houseworkCheckList.sort(Comparator.comparing(PersonalIncompleteScoreResponse::retrieveDate));
+        return houseworkCheckList;
+    }
+
+    private boolean calculateCompletionStatus(int totalTasks, int incompletedTasks) {
+        return totalTasks != 0 && incompletedTasks == 0;
     }
 }
