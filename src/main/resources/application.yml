@@ -1,6 +1,12 @@
 server:
   port: 8080
 
+logging:
+  level:
+    root: INFO
+  file:
+    name: application.log
+
 spring:
   profiles:
     active: local

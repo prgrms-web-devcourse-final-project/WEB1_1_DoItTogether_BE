@@ -84,6 +84,9 @@ public class HouseworkServiceImpl implements HouseworkService {
     public void addHousework(final User loginUser, final Long channelId, final HouseworkRequest request) {
         channelValidator.validateExistChannel(channelId);
         channelValidator.checkChannelParticipation(loginUser, channelId);
+        User houseworkAssignee = userRepository.findById(request.userId())
+                .orElseThrow(() -> new HouseworkException(ExceptionCode.USER_NOT_FOUND));
+        channelValidator.checkChannelInAssignee(houseworkAssignee, channelId);
         final Channel channel = entityManager.getReference(Channel.class, channelId);
 
         try {
