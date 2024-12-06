@@ -75,7 +75,7 @@ openai:
     url: https://api.openai.com/v1/chat/completions
 
 front:
-  url: http://localhost:5173
+  url: ${FRONT_SERVER}
 
 jwt:
   secret: ${JWT_SECRET}
