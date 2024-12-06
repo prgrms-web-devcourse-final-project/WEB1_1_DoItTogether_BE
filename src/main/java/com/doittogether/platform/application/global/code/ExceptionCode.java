@@ -48,6 +48,7 @@ public enum ExceptionCode implements GlobalCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "사용자를 찾을 수 없습니다."),
     USER_ALREADY_IN_CHANNEL(HttpStatus.CONFLICT, "USER_409", "사용자가 이미 채널에 포함되어 있습니다."),
     USER_NOT_IN_CHANNEL(HttpStatus.BAD_REQUEST, "USER_400", "사용자가 채널에 포함되어 있지 않습니다."),
+    ASSIGNEE_NOT_IN_CHANNEL(HttpStatus.BAD_REQUEST, "ASSIGNEE_400", "담당자가 채널에 포함되어 있지 않습니다."),
 
     // 초대 링크 관련
     INVITE_LINK_INVALID(HttpStatus.BAD_REQUEST, "INVITE_400", "유효하지 않거나 만료된 초대 링크입니다."),
