@@ -64,7 +64,7 @@ jobs:
           context: .
           file: ./Dockerfile-dev
           push: true
-          platforms: linux/arm64
+          platforms: linux/amd64
           tags: ${{ env.DOCKER_HUB_REPOSITORY }}:latest
 
   # self-hosted로 설정된 개발용 서버에서 실행, 이전 job이 성공적으로 실행되었을 경우 실행
