@@ -20,4 +20,14 @@ public class ChatGPTConfig {
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
     }
+
+    @Bean
+    public RestTemplate template(){
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getInterceptors().add((request, body, execution) -> {
+            request.getHeaders().add("Authorization", "Bearer " + secretKey);
+            return execution.execute(request, body);
+        });
+        return restTemplate;
+    }
 }
