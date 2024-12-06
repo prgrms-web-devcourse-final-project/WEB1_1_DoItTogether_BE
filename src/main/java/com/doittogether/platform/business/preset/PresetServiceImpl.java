@@ -157,7 +157,7 @@ public class PresetServiceImpl implements PresetService {
     }
 
     @Override
-    public PresetItemDeleteResponse deletePresetDetail(User user, Long presetCategoryId, Long channelId, Long presetItemId) {
+    public PresetItemDeleteResponse deletePresetDetail(User user, Long channelId, Long presetCategoryId, Long presetItemId) {
         channelValidator.checkChannelParticipation(user, channelId);
 
         presetCategoryRepository.findById(presetCategoryId)
