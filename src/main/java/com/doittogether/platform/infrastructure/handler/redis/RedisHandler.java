@@ -2,6 +2,7 @@ package com.doittogether.platform.infrastructure.handler.redis;
 
 import com.doittogether.platform.common.config.RedisConfig;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class RedisHandler {
 
     private final RedisConfig redisConfig;
@@ -28,7 +30,7 @@ public class RedisHandler {
             operation.run();
             return 1;
         } catch (Exception e) {
-            System.out.println("Redis 작업 오류 발생 :: " + e.getMessage());
+            log.error("Redis 작업 오류 발생 : {}", e.getMessage());
             return 0;
         }
     }
