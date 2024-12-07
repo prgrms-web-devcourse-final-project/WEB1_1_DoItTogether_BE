@@ -1,6 +1,8 @@
+name: ✨ Doto backend DEV CD ✨
+
 on:
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "release" ]
 
 jobs:
   build:
@@ -18,7 +20,7 @@ jobs:
         distribution: 'corretto'
         java-version: '17'
 
-    - name: 빌드
+    - name: 🏠 build
       run: |
           chmod +x gradlew
           ./gradlew build -x test
