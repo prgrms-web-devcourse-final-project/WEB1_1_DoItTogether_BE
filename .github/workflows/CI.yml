@@ -1,4 +1,4 @@
-name: ✨ Doto backend DEV CD ✨
+name: ✨ Doto backend DEV CI ✨
 
 on:
   pull_request:
@@ -21,8 +21,8 @@ jobs:
           java-version: '17'
 
     - name: 🏠 build
+      working-directory: ${{ env.working-directory }}
       run: |
           chmod +x gradlew
           ./gradlew build -x test
-      working-directory: ${{ env.working-directory }}
       shell: bash
