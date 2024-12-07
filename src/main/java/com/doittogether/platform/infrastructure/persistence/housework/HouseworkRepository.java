@@ -5,6 +5,7 @@ import com.doittogether.platform.domain.enumeration.Status;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -63,4 +64,7 @@ public interface HouseworkRepository extends JpaRepository<Housework, Long> {
                                   @Param("startOfWeek") LocalDate startOfWeek,
                                   @Param("endOfWeek") LocalDate endOfWeek);
 
+    @Modifying
+    @Query("DELETE FROM Housework h WHERE h.assignee.assigneeId = :assigneeId")
+    void deleteByAssigneeId(@Param("assigneeId") Long assigneeId);
 }

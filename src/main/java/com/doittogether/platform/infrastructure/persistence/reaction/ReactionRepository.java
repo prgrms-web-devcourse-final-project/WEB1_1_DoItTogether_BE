@@ -4,6 +4,7 @@ import com.doittogether.platform.domain.entity.Reaction;
 import com.doittogether.platform.domain.enumeration.ReactionType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -39,5 +40,9 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
             @Param("reactionType") ReactionType reactionType,
             Pageable pageable
     );
+
+    @Modifying
+    @Query("DELETE FROM Reaction r WHERE r.user.userId = :userId OR r.targetUser.userId = :userId")
+    void deleteByUserIdOrTargetUserId(@Param("userId") Long userId);
 
 }
