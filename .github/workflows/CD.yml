@@ -10,9 +10,6 @@ on:
   push:
     branches:
       - release
-    paths:
-      - "**"
-      - ".github/workflows/CD.yml"
 
 jobs:
   # 깃허브에서 제공하는 최신 우분투 서버에서 실행
