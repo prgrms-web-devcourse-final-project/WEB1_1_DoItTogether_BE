@@ -15,9 +15,7 @@ jobs:
   # 깃허브에서 제공하는 최신 우분투 서버에서 실행
   backend-docker-build-and-push:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .
+
     steps:
       - name: ✨ Checkout repository
         # 깃헙 액션스의 필수 액션 중 하나, 장소의 코드를 런너 환경으로 다운로드
