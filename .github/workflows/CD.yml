@@ -46,13 +46,9 @@ jobs:
 
       # 루트를 빌드컨텍스트로 사용하고, Dockerfile-dev로 이미지를 빌드하고 도커허브에 푸시
       - name: ✨ Docker Image 빌드 후 DockerHub에 Push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./Dockerfile-dev
-          push: true
-          platforms: linux/amd64
-          tags: ${{ env.DOCKER_HUB_REPOSITORY }}:latest
+        run: |
+          docker build --platform linux/amd64 -t ${{ env.DOCKER_HUB_REPOSITORY }} .
+          docker push ${{ env.DOCKER_HUB_REPOSITORY }}
 
   # self-hosted로 설정된 개발용 서버에서 실행, 이전 job이 성공적으로 실행되었을 경우 실행
   backend-docker-pull-and-run:
